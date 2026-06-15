@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PlataformaListas
 
-## Getting Started
+Ferramenta para professores criarem listas de exercícios e provas em PDF: banco de questões, equações em LaTeX, layout de página personalizável e (em breve) geração assistida por IA.
 
-First, run the development server:
+- **Stack:** Next.js 16 (App Router) + TypeScript + Tailwind CSS v4, Supabase (Postgres/Auth), KaTeX + MathLive, dnd-kit.
+- **Idioma:** pt-BR. **Tamanho de página:** A4.
+
+## Rodando localmente
 
 ```bash
+npm install
+cp .env.local.example .env.local   # preencha com as chaves do seu projeto Supabase — veja SETUP.md
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Sem as chaves do Supabase preenchidas, as páginas carregam mas login, cadastro e qualquer operação no banco vão falhar. Siga o **[SETUP.md](./SETUP.md)** para criar o projeto Supabase, rodar a migração e configurar o `.env.local`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Estrutura
 
-## Learn More
+```
+src/
+├── app/
+│   ├── (auth)/login, (auth)/signup       # autenticação
+│   ├── auth/callback                     # troca de código (magic link/OAuth)
+│   ├── (app)/dashboard                   # lista de listas do usuário
+│   ├── (app)/sheets/[id]                 # editor de uma lista
+│   └── sheets/[id]/print(/gabarito)      # visualização para impressão/PDF
+├── components/
+│   ├── ui/                # Button, Input, Card, etc.
+│   ├── math/               # Latex (KaTeX) e MathFieldInput (MathLive)
+│   ├── sheets/              # editor de questões, lista, preview, documento
+│   ├── auth/, dashboard/, layout/
+├── lib/
+│   ├── supabase/           # clientes browser/server (@supabase/ssr)
+│   ├── actions/             # Server Actions (auth, sheets, questions)
+│   ├── data/                 # leituras de dados (sheets)
+│   ├── types/                # tipos do banco + tipos de questão
+│   ├── sheets/defaults.ts    # configurações padrão de página/capa
+│   └── ai/provider.ts         # interface de IA (Fase 4, ainda não implementada)
+supabase/migrations/0001_init.sql  # schema + RLS
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Status
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Fase 0 — Fundação:** concluída (auth, app shell, design system "caderno").
+- **Fase 1 — MVP de lista:** concluída (CRUD de listas, editor de questões dos 6 tipos com LaTeX, reordenação, configurações de página, preview ao vivo, impressão/PDF de prova e gabarito).
+- **Fases 2–5** (editor de layout, banco de questões, IA, polimento): em andamento.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploy
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Veja **[SETUP.md](./SETUP.md)** para o passo a passo de deploy na Vercel e limites dos planos gratuitos.
