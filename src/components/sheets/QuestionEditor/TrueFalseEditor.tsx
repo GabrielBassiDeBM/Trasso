@@ -18,7 +18,7 @@ export function TrueFalseEditor({ content, onChange }: TrueFalseEditorProps) {
 
       <div>
         <span className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Resposta correta</span>
-        <div className="mt-2 inline-flex rounded-full border border-ink/10 bg-canvas p-1 text-sm">
+        <div className="mt-2 inline-flex rounded-full border border-line bg-canvas p-1 text-sm">
           <button
             type="button"
             onClick={() => onChange({ ...content, answer: true })}

@@ -1,29 +1,61 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import type { SheetRow } from "@/lib/data/sheets";
 import type { CoverLayout, PageSettings } from "@/lib/sheets/defaults";
+import type { ExamType } from "@/lib/types/database";
 import { renameSheetAction, updateCoverLayoutAction } from "@/lib/actions/sheets";
 import { buttonStyles } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { CoverDesigner } from "./CoverDesigner";
-import { PageSettingsPanel } from "./PageSettingsPanel";
+import { PageSettingsPanel, type AccessibilitySettings } from "./PageSettingsPanel";
 import { QuestionList, type QuestionItem } from "./QuestionList";
 import { SheetDocument } from "./SheetDocument";
+import type { GroupItem } from "./QuestionGroupEditor";
+import { ScanModal } from "@/components/ai/ScanModal";
+import { GenerateModal } from "@/components/ai/GenerateModal";
+import { PrintConfigModal } from "./PrintConfigModal";
+import { addQuestionAction } from "@/lib/actions/questions";
+import { Wand2, Camera, Printer } from "lucide-react";
+
+const EXAM_TYPE_LABELS: Record<ExamType, string> = {
+  prova: "Test",
+  lista: "Problem Set",
+  simulado: "Practice Test",
+  recuperacao: "Review",
+};
 
 interface SheetEditorProps {
   sheet: SheetRow;
   initialItems: QuestionItem[];
+  initialGroups: GroupItem[];
   initialPageSettings: PageSettings;
   coverLayout: CoverLayout;
 }
 
-export function SheetEditor({ sheet, initialItems, initialPageSettings, coverLayout: initialCoverLayout }: SheetEditorProps) {
+export function SheetEditor({
+  sheet,
+  initialItems,
+  initialGroups,
+  initialPageSettings,
+  coverLayout: initialCoverLayout,
+}: SheetEditorProps) {
+  const searchParams = useSearchParams();
+  const aiParam = searchParams.get("ai");
+
   const [title, setTitle] = useState(sheet.title);
   const [items, setItems] = useState<QuestionItem[]>(initialItems);
+  const [groups, setGroups] = useState<GroupItem[]>(initialGroups);
   const [pageSettings, setPageSettings] = useState<PageSettings>(initialPageSettings);
   const [coverLayout, setCoverLayout] = useState<CoverLayout>(initialCoverLayout);
+  const [accessibility, setAccessibility] = useState<AccessibilitySettings | undefined>(
+    sheet.accessibility ? (sheet.accessibility as unknown as AccessibilitySettings) : undefined
+  );
+  const [scanOpen, setScanOpen] = useState(aiParam === "scan");
+  const [generateOpen, setGenerateOpen] = useState(aiParam === "generate");
+  const [printConfigOpen, setPrintConfigOpen] = useState(false);
   const [, startTransition] = useTransition();
 
   const coverSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -61,29 +93,100 @@ export function SheetEditor({ sheet, initialItems, initialPageSettings, coverLay
     });
   }
 
+  async function handleAiAccept(questions: import("@/lib/types/question").QuestionContent[]) {
+    for (const q of questions) {
+      const result = await addQuestionAction(sheet.id, q.type, q);
+      if ("error" in result) continue;
+      setItems((prev) => [
+        ...prev,
+        {
+          sheetQuestionId: result.sheetQuestionId,
+          questionId: result.questionId,
+          points: 1,
+          content: result.content,
+        },
+      ]);
+    }
+  }
+
+  const examLabel = sheet.exam_type ? EXAM_TYPE_LABELS[sheet.exam_type] : null;
+  const hasAccessibility = !!(accessibility?.enabled);
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-8 py-7">
+      {/* Header */}
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <Link href="/dashboard" className="text-xs font-medium text-ink-faint transition-colors hover:text-ink">
-            ← Minhas listas
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-1 text-xs font-medium text-ink-faint transition-colors hover:text-ink"
+          >
+            ← Dashboard
           </Link>
-          <input
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-            onBlur={handleRename}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") event.currentTarget.blur();
-            }}
-            className="-mx-1 mt-1 block w-full rounded-md border border-transparent bg-transparent px-1 font-display text-2xl font-semibold text-ink transition-colors focus:border-ink/15 focus:bg-canvas focus:outline-none sm:text-3xl"
-          />
+          <div className="mt-1 flex flex-wrap items-baseline gap-3">
+            <input
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              onBlur={handleRename}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") event.currentTarget.blur();
+              }}
+              aria-label="Sheet title"
+              className="-mx-1 block min-w-0 flex-1 rounded-md border border-transparent bg-transparent px-1 font-display text-2xl font-semibold text-ink transition-colors focus:border-line focus:bg-canvas focus:outline-none sm:text-3xl"
+            />
+          </div>
+          {/* Metadata chips */}
+          <div className="mt-1.5 flex flex-wrap items-center gap-2">
+            {examLabel && (
+              <span className="rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-semibold text-brand-dark">
+                {examLabel}
+              </span>
+            )}
+            {sheet.grade_level && (
+              <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-[#1187f0]">
+                {sheet.grade_level}
+              </span>
+            )}
+            {sheet.turma && (
+              <span className="rounded-full bg-[#f1f0f5] px-2.5 py-0.5 text-xs font-semibold text-ink-soft">
+                {sheet.turma}
+              </span>
+            )}
+          </div>
         </div>
-        <div className="flex shrink-0 gap-2">
-          <a href={`/sheets/${sheet.id}/print`} target="_blank" rel="noreferrer" className={buttonStyles("outline", "sm")}>
-            Imprimir prova
-          </a>
-          <a href={`/sheets/${sheet.id}/print/gabarito`} target="_blank" rel="noreferrer" className={buttonStyles("outline", "sm")}>
-            Imprimir gabarito
+
+        <div className="flex shrink-0 flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setGenerateOpen(true)}
+            className={buttonStyles("outline", "sm")}
+          >
+            <Wand2 size={14} />
+            Generate with AI
+          </button>
+          <button
+            type="button"
+            onClick={() => setScanOpen(true)}
+            className={buttonStyles("outline", "sm")}
+          >
+            <Camera size={14} />
+            Scan photo
+          </button>
+          <button
+            type="button"
+            onClick={() => setPrintConfigOpen(true)}
+            className={buttonStyles("primary", "sm")}
+          >
+            <Printer size={14} />
+            Print
+          </button>
+          <a
+            href={`/sheets/${sheet.id}/print/gabarito`}
+            target="_blank"
+            rel="noreferrer"
+            className={buttonStyles("outline", "sm")}
+          >
+            Answer Key
           </a>
         </div>
       </div>
@@ -92,27 +195,63 @@ export function SheetEditor({ sheet, initialItems, initialPageSettings, coverLay
         <div className="space-y-6">
           <Card className="space-y-4 p-5">
             <div>
-              <h2 className="font-display text-base font-semibold text-ink">Capa</h2>
+              <h2 className="font-display text-base font-semibold text-ink">Cover</h2>
               <p className="mt-1 text-sm text-ink-soft">
-                Arraste, redimensione e edite os blocos da primeira página: título, campos do aluno, instruções, nota
-                e logo.
+                Drag, resize, and edit the blocks on the first page: title, student fields, instructions, score box, and logo.
               </p>
             </div>
             <CoverDesigner title={title} layout={coverLayout} onChange={setCoverLayout} />
           </Card>
-          <PageSettingsPanel sheetId={sheet.id} settings={pageSettings} onChange={setPageSettings} />
-          <QuestionList sheetId={sheet.id} items={items} onItemsChange={setItems} />
+          <PageSettingsPanel
+            sheetId={sheet.id}
+            settings={pageSettings}
+            accessibility={accessibility}
+            onChange={setPageSettings}
+            onAccessibilityChange={setAccessibility}
+          />
+          <QuestionList
+            sheetId={sheet.id}
+            items={items}
+            groups={groups}
+            onItemsChange={setItems}
+            onGroupsChange={setGroups}
+          />
         </div>
 
         <div className="lg:sticky lg:top-8 lg:self-start">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-soft">Pré-visualização</p>
-          <div className="overflow-hidden rounded-2xl border border-ink/10 bg-canvas p-4">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-soft">
+            Preview
+          </p>
+          <div className="overflow-hidden rounded-2xl border border-line bg-canvas p-4">
             <div style={{ zoom: 0.5 }}>
-              <SheetDocument title={title} pageSettings={pageSettings} coverLayout={coverLayout} items={items} mode="preview" />
+              <SheetDocument
+                title={title}
+                pageSettings={pageSettings}
+                coverLayout={coverLayout}
+                items={items}
+                mode="preview"
+              />
             </div>
           </div>
         </div>
       </div>
+
+      <ScanModal
+        open={scanOpen}
+        onClose={() => setScanOpen(false)}
+        onAccept={handleAiAccept}
+      />
+      <GenerateModal
+        open={generateOpen}
+        onClose={() => setGenerateOpen(false)}
+        onAccept={handleAiAccept}
+      />
+      <PrintConfigModal
+        sheetId={sheet.id}
+        open={printConfigOpen}
+        onClose={() => setPrintConfigOpen(false)}
+        hasAccessibility={hasAccessibility}
+      />
     </div>
   );
 }

@@ -52,7 +52,7 @@ Não bloqueiam o uso atual (Fases 0–1). Quando a Fase 4 (IA) for implementada,
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
    - `SUPABASE_SERVICE_ROLE_KEY` (marcar como secreta)
-   - `NEXT_PUBLIC_SITE_URL` → a URL pública do deploy (ex. `https://plataforma-listas.vercel.app`) — usada para montar os links de magic link/callback de auth.
+   - `NEXT_PUBLIC_SITE_URL` → a URL pública do deploy (ex. `https://trasso.vercel.app`) — usada para montar os links de magic link/callback de auth.
    - `GEMINI_API_KEY` / `GROQ_API_KEY` quando a Fase 4 estiver pronta.
 4. Clique em **Deploy**.
 

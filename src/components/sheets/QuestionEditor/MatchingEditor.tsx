@@ -63,21 +63,21 @@ export function MatchingEditor({ content, onChange }: MatchingEditorProps) {
       <StatementEditor value={content.statement} onChange={(statement) => onChange({ ...content, statement })} />
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <MatchingColumn title="Coluna A" items={content.left} onUpdate={(index, text) => updateItem("left", index, text)} onAdd={() => addItem("left")} onRemove={(index) => removeItem("left", index)} />
-        <MatchingColumn title="Coluna B" items={content.right} onUpdate={(index, text) => updateItem("right", index, text)} onAdd={() => addItem("right")} onRemove={(index) => removeItem("right", index)} />
+        <MatchingColumn title="Column A" items={content.left} onUpdate={(index, text) => updateItem("left", index, text)} onAdd={() => addItem("left")} onRemove={(index) => removeItem("left", index)} />
+        <MatchingColumn title="Column B" items={content.right} onUpdate={(index, text) => updateItem("right", index, text)} onAdd={() => addItem("right")} onRemove={(index) => removeItem("right", index)} />
       </div>
 
       <div className="space-y-2">
-        <span className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Gabarito (associações)</span>
+        <span className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Answer key (matches)</span>
         <div className="space-y-2">
           {content.left.map((item) => (
             <div key={item.key} className="flex flex-wrap items-center gap-2 text-sm">
               <span className="min-w-0 truncate font-medium text-ink">
                 {item.key}. {item.text || "—"}
               </span>
-              <span className="text-ink-faint">corresponde a</span>
+              <span className="text-ink-faint">matches</span>
               <Select value={content.pairs[item.key] ?? ""} onChange={(event) => setPair(item.key, event.target.value)} className="w-auto">
-                <option value="">Selecione…</option>
+                <option value="">Select…</option>
                 {content.right.map((right) => (
                   <option key={right.key} value={right.key}>
                     {right.key.toUpperCase()}. {right.text || "—"}
@@ -114,7 +114,7 @@ function MatchingColumn({ title, items, onUpdate, onAdd, onRemove }: MatchingCol
         </div>
       ))}
       <Button type="button" variant="outline" size="sm" onClick={onAdd}>
-        + Adicionar item
+        + Add item
       </Button>
     </div>
   );

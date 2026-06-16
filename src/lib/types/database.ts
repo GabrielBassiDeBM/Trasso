@@ -19,6 +19,10 @@ export type Difficulty = "easy" | "medium" | "hard";
 export type SheetStatus = "draft" | "ready";
 export type AssetKind = "logo" | "screenshot" | "question_image" | "pdf";
 export type AiUsageKind = "extract" | "generate" | "classify";
+export type ExamType = "prova" | "lista" | "simulado" | "recuperacao";
+export type OrgRole = "dono" | "admin" | "membro";
+export type InvitationStatus = "pendente" | "aceito" | "expirado";
+export type AdaptationType = "dislexia" | "baixa_visao" | "linguagem_simples" | "ampliada";
 
 export interface Database {
   public: {
@@ -60,6 +64,8 @@ export interface Database {
         Row: {
           id: string;
           owner_id: string | null;
+          org_id: string | null;
+          parent_question_id: string | null;
           statement: string;
           statement_format: StatementFormat;
           type: QuestionType;
@@ -71,11 +77,18 @@ export interface Database {
           has_math: boolean;
           source: string | null;
           tags: string[];
+          bncc_code: string | null;
+          is_adapted: boolean;
+          is_public: boolean;
+          adaptation_type: AdaptationType | null;
+          adapted_from: string | null;
           created_at: string;
         };
         Insert: {
           id?: string;
           owner_id?: string | null;
+          org_id?: string | null;
+          parent_question_id?: string | null;
           statement: string;
           statement_format?: StatementFormat;
           type: QuestionType;
@@ -87,6 +100,11 @@ export interface Database {
           has_math?: boolean;
           source?: string | null;
           tags?: string[];
+          bncc_code?: string | null;
+          is_adapted?: boolean;
+          is_public?: boolean;
+          adaptation_type?: AdaptationType | null;
+          adapted_from?: string | null;
         };
         Update: {
           statement?: string;
@@ -100,6 +118,11 @@ export interface Database {
           has_math?: boolean;
           source?: string | null;
           tags?: string[];
+          bncc_code?: string | null;
+          is_adapted?: boolean;
+          is_public?: boolean;
+          adaptation_type?: AdaptationType | null;
+          adapted_from?: string | null;
         };
         Relationships: [];
       };
@@ -107,26 +130,76 @@ export interface Database {
         Row: {
           id: string;
           owner_id: string;
+          org_id: string | null;
+          folder_id: string | null;
           title: string;
           status: SheetStatus;
+          subject_id: string | null;
+          grade_level: string | null;
+          turma: string | null;
+          exam_type: ExamType | null;
+          categories: string[];
           page_settings: Json;
           cover_layout: Json;
+          accessibility: Json;
           created_at: string;
           updated_at: string;
         };
         Insert: {
           id?: string;
           owner_id: string;
+          org_id?: string | null;
+          folder_id?: string | null;
           title: string;
           status?: SheetStatus;
+          subject_id?: string | null;
+          grade_level?: string | null;
+          turma?: string | null;
+          exam_type?: ExamType | null;
+          categories?: string[];
           page_settings?: Json;
           cover_layout?: Json;
+          accessibility?: Json;
         };
         Update: {
           title?: string;
           status?: SheetStatus;
+          org_id?: string | null;
+          folder_id?: string | null;
+          subject_id?: string | null;
+          grade_level?: string | null;
+          turma?: string | null;
+          exam_type?: ExamType | null;
+          categories?: string[];
           page_settings?: Json;
           cover_layout?: Json;
+          accessibility?: Json;
+        };
+        Relationships: [];
+      };
+      question_groups: {
+        Row: {
+          id: string;
+          sheet_id: string;
+          instructions: string | null;
+          passage: string | null;
+          passage_format: string;
+          position: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          sheet_id: string;
+          instructions?: string | null;
+          passage?: string | null;
+          passage_format?: string;
+          position: number;
+        };
+        Update: {
+          instructions?: string | null;
+          passage?: string | null;
+          passage_format?: string;
+          position?: number;
         };
         Relationships: [];
       };
@@ -135,6 +208,7 @@ export interface Database {
           id: string;
           sheet_id: string;
           question_id: string | null;
+          group_id: string | null;
           position: number;
           points: number | null;
           overrides: Json;
@@ -143,15 +217,181 @@ export interface Database {
           id?: string;
           sheet_id: string;
           question_id?: string | null;
+          group_id?: string | null;
           position: number;
           points?: number | null;
           overrides?: Json;
         };
         Update: {
           question_id?: string | null;
+          group_id?: string | null;
           position?: number;
           points?: number | null;
           overrides?: Json;
+        };
+        Relationships: [];
+      };
+      sheet_variants: {
+        Row: {
+          id: string;
+          sheet_id: string;
+          label: string;
+          seed: number;
+          answer_key: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          sheet_id: string;
+          label: string;
+          seed: number;
+          answer_key?: Json;
+        };
+        Update: {
+          label?: string;
+          seed?: number;
+          answer_key?: Json;
+        };
+        Relationships: [];
+      };
+      class_rosters: {
+        Row: {
+          id: string;
+          owner_id: string;
+          turma: string;
+          students: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          owner_id: string;
+          turma: string;
+          students?: Json;
+        };
+        Update: {
+          turma?: string;
+          students?: Json;
+        };
+        Relationships: [];
+      };
+      exam_results: {
+        Row: {
+          id: string;
+          sheet_id: string;
+          variant_id: string | null;
+          student_name: string | null;
+          registry_no: string | null;
+          answers: Json | null;
+          score: number | null;
+          per_question: Json | null;
+          graded_at: string;
+        };
+        Insert: {
+          id?: string;
+          sheet_id: string;
+          variant_id?: string | null;
+          student_name?: string | null;
+          registry_no?: string | null;
+          answers?: Json | null;
+          score?: number | null;
+          per_question?: Json | null;
+        };
+        Update: {
+          answers?: Json | null;
+          score?: number | null;
+          per_question?: Json | null;
+        };
+        Relationships: [];
+      };
+      organizations: {
+        Row: {
+          id: string;
+          name: string;
+          slug: string | null;
+          default_cover_layout: Json | null;
+          created_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          slug?: string | null;
+          default_cover_layout?: Json | null;
+          created_by?: string | null;
+        };
+        Update: {
+          name?: string;
+          slug?: string | null;
+          default_cover_layout?: Json | null;
+        };
+        Relationships: [];
+      };
+      organization_members: {
+        Row: {
+          org_id: string;
+          user_id: string;
+          role: OrgRole;
+          created_at: string;
+        };
+        Insert: {
+          org_id: string;
+          user_id: string;
+          role?: OrgRole;
+        };
+        Update: {
+          role?: OrgRole;
+        };
+        Relationships: [];
+      };
+      invitations: {
+        Row: {
+          id: string;
+          org_id: string;
+          email: string;
+          role: OrgRole;
+          token: string;
+          status: InvitationStatus;
+          invited_by: string | null;
+          expires_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          org_id: string;
+          email: string;
+          role?: OrgRole;
+          token: string;
+          status?: InvitationStatus;
+          invited_by?: string | null;
+          expires_at?: string | null;
+        };
+        Update: {
+          status?: InvitationStatus;
+          role?: OrgRole;
+        };
+        Relationships: [];
+      };
+      folders: {
+        Row: {
+          id: string;
+          org_id: string | null;
+          owner_id: string | null;
+          parent_id: string | null;
+          name: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          org_id?: string | null;
+          owner_id?: string | null;
+          parent_id?: string | null;
+          name: string;
+        };
+        Update: {
+          org_id?: string | null;
+          owner_id?: string | null;
+          parent_id?: string | null;
+          name?: string;
         };
         Relationships: [];
       };

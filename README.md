@@ -1,4 +1,4 @@
-# PlataformaListas
+# trasso
 
 Ferramenta para professores criarem listas de exercícios e provas em PDF: banco de questões, equações em LaTeX, layout de página personalizável e (em breve) geração assistida por IA.
 

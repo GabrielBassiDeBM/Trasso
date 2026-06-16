@@ -1,18 +1,64 @@
 @import "tailwindcss";
 @import "katex/dist/katex.min.css";
 
+/* ─── OpenDyslexic — accessibility font ──────────────────────── */
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@master/compiled/OpenDyslexic-Regular.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@master/compiled/OpenDyslexic-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@master/compiled/OpenDyslexic-Bold.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@master/compiled/OpenDyslexic-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Applied to the print wrapper when ?a11y=1 is present */
+.a11y-print {
+  font-family: 'OpenDyslexic', Arial, sans-serif !important;
+}
+.a11y-print * {
+  font-family: 'OpenDyslexic', Arial, sans-serif !important;
+  letter-spacing: 0.05em !important;
+  word-spacing: 0.15em !important;
+}
+.a11y-print.a11y-font-large { font-size: 14pt !important; }
+.a11y-print.a11y-font-large * { font-size: inherit !important; }
+.a11y-print.a11y-font-xlarge { font-size: 16pt !important; }
+.a11y-print.a11y-font-xlarge * { font-size: inherit !important; }
+.a11y-print.a11y-spacing-relaxed { line-height: 1.8 !important; }
+.a11y-print.a11y-spacing-relaxed * { line-height: inherit !important; }
+.a11y-print.a11y-spacing-loose { line-height: 2.2 !important; }
+.a11y-print.a11y-spacing-loose * { line-height: inherit !important; }
+
 :root {
-  --color-canvas: #f2ede1;
-  --color-surface: #fffdf8;
-  --color-ink: #1e2722;
-  --color-ink-soft: #5c6a61;
-  --color-ink-faint: #97a399;
-  --color-brand: #2f5d50;
-  --color-brand-dark: #1f4038;
-  --color-brand-soft: #e3ede8;
-  --color-accent: #d5572c;
-  --color-accent-soft: #fbe6dc;
-  --color-line: #e1d6c3;
+  /* Violet (primary brand) */
+  --color-brand: #a71efb;
+  --color-brand-dark: #8f12e0;
+  --color-brand-soft: #f7f0ff;
+
+  /* Blue (secondary / accent) */
+  --color-accent: #29a1ff;
+  --color-accent-soft: #ecf6ff;
+
+  /* Ink — cool violet-tinted neutrals */
+  --color-canvas: #f9f8fc;
+  --color-surface: #ffffff;
+  --color-ink: #1b1430;
+  --color-ink-soft: #5f5878;
+  /* Darkened from #807a94 to pass WCAG AA 4.5:1 against canvas */
+  --color-ink-faint: #68617d;
+  --color-line: #e3e1ea;
+
+  /* Semantic status */
+  --color-success: #16a34a;
+  --color-danger: #e0394b;
 }
 
 @theme inline {
@@ -27,20 +73,85 @@
   --color-accent: var(--color-accent);
   --color-accent-soft: var(--color-accent-soft);
   --color-line: var(--color-line);
-  --font-display: var(--font-fraunces);
-  --font-sans: var(--font-source-sans);
+  --color-success: var(--color-success);
+  --color-danger: var(--color-danger);
+
+  --font-display: var(--font-jakarta);
+  --font-sans: var(--font-jakarta);
+  --font-mono: var(--font-spline-mono);
+
+  /* Violet-tinted shadows */
+  --shadow-xs: 0 1px 2px rgba(27, 20, 48, 0.06);
+  --shadow-sm: 0 1px 3px rgba(27, 20, 48, 0.07), 0 1px 2px rgba(27, 20, 48, 0.04);
+  --shadow-md: 0 4px 14px rgba(27, 20, 48, 0.08), 0 2px 4px rgba(27, 20, 48, 0.04);
+  --shadow-lg: 0 12px 32px rgba(27, 20, 48, 0.10), 0 4px 8px rgba(27, 20, 48, 0.05);
+  --shadow-brand: 0 8px 24px rgba(167, 30, 251, 0.25);
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
 }
 
 body {
   background-color: var(--color-canvas);
   color: var(--color-ink);
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent,
-    transparent 35px,
-    color-mix(in srgb, var(--color-line) 55%, transparent) 35px,
-    color-mix(in srgb, var(--color-line) 55%, transparent) 36px
-  );
+}
+
+/* ─── Gradient primary button ─────────────────────────────── */
+.btn-gradient {
+  background: linear-gradient(120deg, #a71efb 10%, #29a1ff 95%);
+  box-shadow: 0 8px 24px rgba(167, 30, 251, 0.22);
+}
+.btn-gradient:hover {
+  opacity: 0.92;
+  box-shadow: 0 8px 28px rgba(167, 30, 251, 0.32);
+}
+.btn-gradient:active {
+  transform: translateY(1px);
+  opacity: 1;
+}
+
+/* ─── Modal animations ────────────────────────────────────── */
+@keyframes modal-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes modal-content-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-overlay {
+  animation: modal-overlay-in 180ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+.modal-content {
+  animation: modal-content-in 200ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+/* ─── Sidebar mobile slide ────────────────────────────────── */
+@keyframes sidebar-in {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes sidebar-out {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+
+/* ─── Balanced headings ───────────────────────────────────── */
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+/* ─── Reduced motion ──────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @media print {
@@ -48,9 +159,7 @@ body {
     size: A4;
     margin: 0;
   }
-
   body {
-    background-image: none;
     background-color: #fff;
   }
 }

@@ -63,9 +63,9 @@ export async function signInAction(_prev: AuthActionState, formData: FormData): 
 
   if (error) {
     if (error.code === "email_not_confirmed") {
-      return { error: "Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada (e o spam)." };
+      return { error: "Please confirm your email before signing in. Check your inbox (and spam)." };
     }
-    return { error: "E-mail ou senha inválidos." };
+    return { error: "Invalid email or password." };
   }
 
   redirect(safeRedirectTarget(formData));

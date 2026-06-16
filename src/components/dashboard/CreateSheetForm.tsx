@@ -13,13 +13,13 @@ export function CreateSheetForm() {
   return (
     <form action={formAction} className="flex flex-col gap-3 sm:flex-row sm:items-end">
       <div className="flex-1">
-        <Label htmlFor="title">Nova lista</Label>
-        <Input id="title" name="title" placeholder="Ex.: Avaliação de Matemática — 9º ano" />
+        <Label htmlFor="title">New sheet</Label>
+        <Input id="title" name="title" placeholder="e.g. SAT Math Practice — Algebra" />
       </div>
-      <Button type="submit" variant="accent" disabled={pending}>
-        {pending ? "Criando…" : "Criar lista"}
+      <Button type="submit" disabled={pending}>
+        {pending ? "Creating…" : "Create sheet"}
       </Button>
-      {state.error && <p className="text-sm text-accent sm:basis-full">{state.error}</p>}
+      {state.error && <p className="text-sm text-danger sm:basis-full">{state.error}</p>}
     </form>
   );
 }

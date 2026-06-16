@@ -14,20 +14,20 @@ export function SignupForm() {
 
   return (
     <Card className="p-8">
-      <h1 className="font-display text-2xl font-semibold text-ink">Criar conta</h1>
-      <p className="mt-1 text-sm text-ink-soft">Monte suas listas e provas em minutos, com gabarito incluído.</p>
+      <h1 className="font-display text-2xl font-semibold text-ink">Create account</h1>
+      <p className="mt-1 text-sm text-ink-soft">Build tests and worksheets in minutes, with an answer key included.</p>
 
       <form action={formAction} className="mt-6 space-y-4">
         <div>
-          <Label htmlFor="displayName">Nome</Label>
-          <Input id="displayName" name="displayName" type="text" autoComplete="name" placeholder="Seu nome" />
+          <Label htmlFor="displayName">Name</Label>
+          <Input id="displayName" name="displayName" type="text" autoComplete="name" placeholder="Your name" />
         </div>
         <div>
-          <Label htmlFor="email">E-mail</Label>
-          <Input id="email" name="email" type="email" required autoComplete="email" placeholder="voce@escola.com.br" />
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" name="email" type="email" required autoComplete="email" placeholder="you@school.edu" />
         </div>
         <div>
-          <Label htmlFor="password">Senha</Label>
+          <Label htmlFor="password">Password</Label>
           <Input
             id="password"
             name="password"
@@ -35,20 +35,20 @@ export function SignupForm() {
             required
             minLength={6}
             autoComplete="new-password"
-            placeholder="Mínimo de 6 caracteres"
+            placeholder="At least 6 characters"
           />
         </div>
-        {state.error && <p className="text-sm text-accent">{state.error}</p>}
-        {state.success && <p className="text-sm text-brand">{state.success}</p>}
+        {state.error && <p role="alert" className="text-sm text-danger">{state.error}</p>}
+        {state.success && <p role="status" className="text-sm text-brand">{state.success}</p>}
         <Button type="submit" className="w-full" disabled={pending}>
-          {pending ? "Criando conta…" : "Criar conta"}
+          {pending ? "Creating account…" : "Create account"}
         </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-ink-soft">
-        Já tem conta?{" "}
+        Already have an account?{" "}
         <Link href="/login" className="font-semibold text-brand hover:underline">
-          Entrar
+          Sign in
         </Link>
       </p>
     </Card>

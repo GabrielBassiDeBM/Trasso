@@ -63,14 +63,14 @@ export function MultipleChoiceEditor({ content, onChange }: MultipleChoiceEditor
               )}
             </div>
             <Button type="button" variant="ghost" size="sm" onClick={() => removeOption(index)} disabled={content.options.length <= 2}>
-              Remover
+              Remove
             </Button>
           </div>
         ))}
         <Button type="button" variant="outline" size="sm" onClick={addOption} disabled={content.options.length >= LETTERS.length}>
-          + Adicionar alternativa
+          + Add option
         </Button>
-        <p className="text-xs text-ink-faint">Marque a caixa ao lado da letra para indicar a alternativa correta no gabarito.</p>
+        <p className="text-xs text-ink-faint">Check the box next to the letter to mark the correct answer.</p>
       </div>
     </div>
   );

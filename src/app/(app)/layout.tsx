@@ -1,11 +1,17 @@
 import type { ReactNode } from "react";
-import { Navbar } from "@/components/layout/Navbar";
+import { createClient } from "@/lib/supabase/server";
+import { AppShell } from "@/components/layout/AppShell";
 
-export default function AppLayout({ children }: { children: ReactNode }) {
+export default async function AppLayout({ children }: { children: ReactNode }) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
   return (
-    <div className="flex min-h-screen flex-1 flex-col">
-      <Navbar />
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6">{children}</main>
-    </div>
+    <AppShell
+      userName={user?.user_metadata?.display_name ?? null}
+      userEmail={user?.email ?? null}
+    >
+      {children}
+    </AppShell>
   );
 }

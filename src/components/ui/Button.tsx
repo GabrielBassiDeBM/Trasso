@@ -5,10 +5,10 @@ export type ButtonVariant = "primary" | "accent" | "outline" | "ghost";
 export type ButtonSize = "sm" | "md" | "lg";
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: "bg-brand text-surface hover:bg-brand-dark",
-  accent: "bg-accent text-surface hover:bg-[#b9461f]",
-  outline: "border border-ink/15 text-ink hover:bg-brand-soft",
-  ghost: "text-ink-soft hover:text-ink hover:bg-brand-soft/60",
+  primary: "btn-gradient text-white",
+  accent: "bg-accent text-white hover:bg-[#1187f0]",
+  outline: "border border-line bg-surface text-ink hover:bg-brand-soft",
+  ghost: "text-brand hover:bg-brand-soft",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -19,7 +19,7 @@ const sizeStyles: Record<ButtonSize, string> = {
 
 export function buttonStyles(variant: ButtonVariant = "primary", size: ButtonSize = "md", className?: string) {
   return cn(
-    "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand focus-visible:ring-offset-canvas",
+    "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-[opacity,box-shadow,background-color,transform] duration-150 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand/40 focus-visible:ring-offset-canvas",
     variantStyles[variant],
     sizeStyles[size],
     className,

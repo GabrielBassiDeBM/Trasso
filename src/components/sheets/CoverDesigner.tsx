@@ -24,10 +24,10 @@ interface BlockPreset {
 }
 
 const BLOCK_LIBRARY: BlockPreset[] = [
-  { type: "title", label: "Título", w: 174, h: 20, props: { text: "Avaliação", subtitle: "" } },
-  { type: "student_field", label: "Campo do aluno", w: 80, h: 10, props: { label: "Campo" } },
-  { type: "score_box", label: "Caixa de nota", w: 50, h: 10, props: { label: "Nota" } },
-  { type: "instructions", label: "Instruções", w: 174, h: 24, props: { text: "" } },
+  { type: "title", label: "Title", w: 174, h: 20, props: { text: "Assessment", subtitle: "" } },
+  { type: "student_field", label: "Student field", w: 80, h: 10, props: { label: "Field" } },
+  { type: "score_box", label: "Score box", w: 50, h: 10, props: { label: "Score" } },
+  { type: "instructions", label: "Instructions", w: 174, h: 24, props: { text: "" } },
   { type: "logo", label: "Logo", w: 30, h: 30, props: {} },
 ];
 
@@ -106,7 +106,7 @@ export function CoverDesigner({ title, layout, onChange }: CoverDesignerProps) {
   return (
     <div className="space-y-4">
       <div>
-        <span className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Adicionar bloco à capa</span>
+        <span className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Add block to cover</span>
         <div className="mt-2 flex flex-wrap gap-2">
           {BLOCK_LIBRARY.map((preset) => (
             <Button key={preset.type} type="button" variant="outline" size="sm" onClick={() => addBlock(preset)}>
@@ -170,8 +170,7 @@ export function CoverDesigner({ title, layout, onChange }: CoverDesignerProps) {
         />
       ) : (
         <p className="text-sm text-ink-soft">
-          Clique em um bloco para editar o conteúdo, arraste para reposicionar e use a alça no canto para
-          redimensionar.
+          Click a block to edit its content, drag to reposition, and use the corner handle to resize.
         </p>
       )}
     </div>
@@ -187,23 +186,23 @@ interface BlockInspectorProps {
 
 function BlockInspector({ block, onChangeProps, onChangeGeometry, onRemove }: BlockInspectorProps) {
   return (
-    <div className="space-y-4 rounded-xl border border-ink/10 bg-canvas p-4">
+    <div className="space-y-4 rounded-xl border border-line bg-canvas p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-ink">{blockTypeLabel(block.type)}</h3>
         <Button type="button" variant="ghost" size="sm" onClick={onRemove}>
-          Remover bloco
+          Remove block
         </Button>
       </div>
 
       <BlockFields block={block} onChangeProps={onChangeProps} />
 
       <div>
-        <span className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Posição e tamanho (mm)</span>
+        <span className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Position and size (mm)</span>
         <div className="mt-2 grid grid-cols-4 gap-2">
           <GeometryInput label="X" value={block.x} onChange={(value) => onChangeGeometry({ x: value })} />
           <GeometryInput label="Y" value={block.y} onChange={(value) => onChangeGeometry({ y: value })} />
-          <GeometryInput label="Largura" value={block.w} onChange={(value) => onChangeGeometry({ w: value })} />
-          <GeometryInput label="Altura" value={block.h} onChange={(value) => onChangeGeometry({ h: value })} />
+          <GeometryInput label="Width" value={block.w} onChange={(value) => onChangeGeometry({ w: value })} />
+          <GeometryInput label="Height" value={block.h} onChange={(value) => onChangeGeometry({ h: value })} />
         </div>
       </div>
     </div>
@@ -213,13 +212,13 @@ function BlockInspector({ block, onChangeProps, onChangeGeometry, onRemove }: Bl
 function blockTypeLabel(type: CoverBlockType): string {
   switch (type) {
     case "title":
-      return "Bloco de título";
+      return "Title block";
     case "student_field":
-      return "Campo do aluno";
+      return "Student field";
     case "score_box":
-      return "Caixa de nota";
+      return "Score box";
     case "instructions":
-      return "Instruções";
+      return "Instructions";
     case "logo":
       return "Logo";
   }
@@ -246,51 +245,51 @@ function BlockFields({ block, onChangeProps }: { block: CoverBlock; onChangeProp
       return (
         <div className="space-y-3">
           <div>
-            <Label htmlFor="cover-kicker">Texto de destaque (acima do título)</Label>
+            <Label htmlFor="cover-kicker">Kicker text (above the title)</Label>
             <Input
               id="cover-kicker"
               value={block.props.text ?? ""}
               onChange={(event) => onChangeProps({ text: event.target.value })}
-              placeholder="Ex.: Avaliação Bimestral"
+              placeholder="e.g. Quarterly Assessment"
             />
           </div>
           <div>
-            <Label htmlFor="cover-subtitle">Subtítulo</Label>
+            <Label htmlFor="cover-subtitle">Subtitle</Label>
             <Input
               id="cover-subtitle"
               value={block.props.subtitle ?? ""}
               onChange={(event) => onChangeProps({ subtitle: event.target.value })}
-              placeholder="Ex.: 9º ano — Matemática"
+              placeholder="e.g. 10th Grade — Algebra"
             />
           </div>
-          <p className="text-xs text-ink-faint">O título principal é o nome da lista, editável no topo da página.</p>
+          <p className="text-xs text-ink-faint">The main title is the sheet name, editable at the top of the page.</p>
         </div>
       );
     case "student_field":
     case "score_box":
       return (
         <div>
-          <Label htmlFor="cover-label">Rótulo</Label>
+          <Label htmlFor="cover-label">Label</Label>
           <Input
             id="cover-label"
             value={block.props.label ?? ""}
             onChange={(event) => onChangeProps({ label: event.target.value })}
-            placeholder="Ex.: Nome"
+            placeholder="e.g. Name"
           />
         </div>
       );
     case "instructions":
       return (
         <div className="space-y-2">
-          <Label htmlFor="cover-instructions">Texto das instruções</Label>
+          <Label htmlFor="cover-instructions">Instructions text</Label>
           <Textarea
             id="cover-instructions"
             value={block.props.text ?? ""}
             onChange={(event) => onChangeProps({ text: event.target.value })}
-            placeholder="Ex.: Leia atentamente cada questão. Use $\\LaTeX$ para equações."
+            placeholder="e.g. Read each question carefully. Use $\\LaTeX$ for equations."
           />
           {block.props.text ? (
-            <div className="rounded-md border border-ink/10 bg-surface p-2 text-xs text-ink-soft">
+            <div className="rounded-md border border-line bg-surface p-2 text-xs text-ink-soft">
               <Latex text={block.props.text} />
             </div>
           ) : null}
@@ -328,26 +327,26 @@ function LogoField({ block, onChangeProps }: { block: CoverBlock; onChangeProps:
 
   return (
     <div className="space-y-2">
-      <Label>Imagem do logo</Label>
+      <Label>Logo image</Label>
       {block.props.url ? (
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={block.props.url} alt="Logo" className="h-14 w-14 rounded-md border border-ink/10 object-contain" />
+          <img src={block.props.url} alt="Logo" className="h-14 w-14 rounded-md border border-line object-contain" />
           <Button type="button" variant="outline" size="sm" onClick={() => onChangeProps({ url: "" })}>
-            Remover imagem
+            Remove image
           </Button>
         </div>
       ) : (
-        <p className="text-xs text-ink-faint">Nenhuma imagem enviada ainda.</p>
+        <p className="text-xs text-ink-faint">No image uploaded yet.</p>
       )}
       <div>
         <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
         <Button type="button" variant="outline" size="sm" disabled={isPending} onClick={() => fileInputRef.current?.click()}>
-          {isPending ? "Enviando…" : block.props.url ? "Trocar imagem" : "Enviar imagem"}
+          {isPending ? "Uploading…" : block.props.url ? "Replace image" : "Upload image"}
         </Button>
       </div>
-      {error && <p className="text-sm text-accent">{error}</p>}
-      <p className="text-xs text-ink-faint">PNG, JPG ou SVG, até 2 MB.</p>
+      {error && <p className="text-sm text-danger">{error}</p>}
+      <p className="text-xs text-ink-faint">PNG, JPG, or SVG, up to 2 MB.</p>
     </div>
   );
 }

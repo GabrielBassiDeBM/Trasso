@@ -1,22 +1,23 @@
 import type { Metadata } from "next";
-import { Fraunces, Source_Sans_3 } from "next/font/google";
+import { Plus_Jakarta_Sans, Spline_Sans_Mono } from "next/font/google";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
-  axes: ["opsz", "SOFT"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const sourceSans = Source_Sans_3({
-  variable: "--font-source-sans",
+const splineMono = Spline_Sans_Mono({
+  variable: "--font-spline-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  title: "PlataformaListas — Listas e provas em minutos",
+  title: "trasso",
   description:
-    "Crie listas de exercícios e provas em PDF, com questões, equações em LaTeX e layout personalizado.",
+    "Create SAT and AP STEM tests and problem sets in PDF, with questions, LaTeX equations, and a custom layout.",
 };
 
 export default function RootLayout({
@@ -25,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${fraunces.variable} ${sourceSans.variable} h-full`}>
+    <html lang="en" className={`${plusJakarta.variable} ${splineMono.variable} h-full`}>
       <body className="min-h-full flex flex-col font-sans antialiased">{children}</body>
     </html>
   );

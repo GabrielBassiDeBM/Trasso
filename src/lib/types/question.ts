@@ -1,12 +1,12 @@
 import type { Json, QuestionType, StatementFormat } from "@/lib/types/database";
 
 export const QUESTION_TYPE_LABELS: Record<QuestionType, string> = {
-  open: "Resposta aberta",
-  multiple_choice: "Múltipla escolha",
-  true_false: "Verdadeiro ou falso",
-  fill_blank: "Preencher lacunas",
-  matching: "Associação de colunas",
-  essay: "Dissertativa",
+  open: "Short Answer",
+  multiple_choice: "Multiple Choice",
+  true_false: "True / False",
+  fill_blank: "Fill in the Blank",
+  matching: "Matching",
+  essay: "Essay",
 };
 
 export const QUESTION_TYPES: QuestionType[] = [
@@ -59,7 +59,7 @@ export function defaultContentForType(type: QuestionType): QuestionContent {
     case "true_false":
       return { type, statement: "", answer: true };
     case "fill_blank":
-      return { type, statement: "A capital do Brasil é {{1}}.", blanks: { "1": "" } };
+      return { type, statement: "The capital of France is {{1}}.", blanks: { "1": "" } };
     case "matching":
       return {
         type,

@@ -35,13 +35,13 @@ export function OpenQuestionEditor({ content, onChange }: OpenQuestionEditorProp
       </div>
 
       <div>
-        <Label htmlFor={answerId}>Resposta esperada (gabarito)</Label>
+        <Label htmlFor={answerId}>Expected answer (key)</Label>
         <Textarea
           id={answerId}
           rows={2}
           value={content.sampleAnswer}
           onChange={(event) => onChange({ ...content, sampleAnswer: event.target.value })}
-          placeholder="Opcional — aparece apenas na versão com gabarito"
+          placeholder="Optional — only shown in the answer key version"
         />
       </div>
     </div>

@@ -28,13 +28,13 @@ export default async function SheetGabaritoPage({ params }: { params: Promise<{ 
     <div className="print-page min-h-screen overflow-x-auto bg-[#e7e2d4] py-8 print:bg-white print:py-0">
       <PrintToolbar
         sheetId={sheet.id}
-        title={`${sheet.title} — Gabarito`}
+        title={`${sheet.title} — Answer Key`}
         altHref={`/sheets/${sheet.id}/print`}
-        altLabel="Ver prova"
+        altLabel="View test"
       />
       <div className="mx-auto w-fit">
         <SheetDocument
-          title={`${sheet.title} — Gabarito`}
+          title={`${sheet.title} — Answer Key`}
           pageSettings={pageSettings}
           coverLayout={coverLayout}
           items={items}
