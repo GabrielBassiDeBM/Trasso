@@ -20,7 +20,7 @@ export function AppShell({ children, userName, userEmail, subjects = [], allTopi
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-canvas">
+    <div className="fixed inset-0 flex overflow-hidden bg-canvas">
       {/* Mobile backdrop */}
       {sidebarOpen && (
         <div

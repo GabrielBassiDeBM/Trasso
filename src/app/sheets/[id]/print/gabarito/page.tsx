@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getSheet, getSheetQuestions } from "@/lib/data/sheets";
+import { getSheet, getSheetQuestions, getSheetGroups } from "@/lib/data/sheets";
 import { fromDbRow } from "@/lib/types/question";
 import { DEFAULT_COVER_LAYOUT, DEFAULT_PAGE_SETTINGS, type CoverLayout, type PageSettings } from "@/lib/sheets/defaults";
 import { SheetDocument } from "@/components/sheets/SheetDocument";
@@ -11,7 +11,7 @@ export default async function SheetGabaritoPage({ params }: { params: Promise<{ 
   const sheet = await getSheet(id);
   if (!sheet) notFound();
 
-  const sheetQuestions = await getSheetQuestions(id);
+  const [sheetQuestions, groups] = await Promise.all([getSheetQuestions(id), getSheetGroups(id)]);
   const items: QuestionItem[] = sheetQuestions
     .filter((sheetQuestion) => sheetQuestion.question !== null)
     .map((sheetQuestion) => ({
@@ -19,6 +19,7 @@ export default async function SheetGabaritoPage({ params }: { params: Promise<{ 
       questionId: sheetQuestion.question!.id,
       points: sheetQuestion.points,
       content: fromDbRow(sheetQuestion.question!),
+      position: sheetQuestion.position,
     }));
 
   const pageSettings = (sheet.page_settings as unknown as PageSettings | null) ?? DEFAULT_PAGE_SETTINGS;
@@ -38,6 +39,7 @@ export default async function SheetGabaritoPage({ params }: { params: Promise<{ 
           pageSettings={pageSettings}
           coverLayout={coverLayout}
           items={items}
+          groups={groups}
           mode="print"
           showAnswers
         />

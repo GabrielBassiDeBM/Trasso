@@ -21,7 +21,7 @@ import { BankQuestionCard } from "./BankQuestionCard";
 import { cn } from "@/lib/utils/cn";
 import { useT, useLocale } from "@/lib/i18n/client";
 import { translateTopicName } from "@/lib/i18n/translations";
-import { deleteManyFromBankAction, pullManyFromBankAction } from "@/lib/actions/questions";
+import { deleteManyFromBankAction, pullManyFromBankAction, getBankQuestionForEditAction, type BankQuestionForEdit } from "@/lib/actions/questions";
 import { AddToBankModal } from "./AddToBankModal";
 
 type QuestionWithTaxonomy = {
@@ -298,7 +298,7 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
     filters.types.length || filters.difficulties.length || filters.adapted
   );
   const [filtersOpen, setFiltersOpen] = useState(hasInitialFilters);
-  const [cols, setCols] = useState<1 | 2 | 3>(1);
+  const [cols, setCols] = useState<1 | 2 | 3>(3);
   const [local, setLocal] = useState<LocalFilters>({
     subjects: filters.subjects,
     topics: filters.topics,
@@ -310,6 +310,13 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
 
   // Modal state
   const [addModalOpen, setAddModalOpen] = useState(false);
+  const [editing, setEditing] = useState<(BankQuestionForEdit & { questionId: string }) | null>(null);
+
+  async function handleEdit(questionId: string) {
+    const result = await getBankQuestionForEditAction(questionId);
+    if ("error" in result) return;
+    setEditing({ ...result, questionId });
+  }
 
   // Selection state
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -893,6 +900,7 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
                             selected={selectedIds.has(q.id)}
                             inSelectionMode={inSelectionMode}
                             onToggleSelect={toggleSelect}
+                            onEdit={handleEdit}
                           />
                         ))}
                       </div>
@@ -927,6 +935,16 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
         subjects={subjects}
         allTopics={allTopics}
         sheets={sheets}
+      />
+
+      {/* Edit question modal */}
+      <AddToBankModal
+        open={!!editing}
+        onClose={() => setEditing(null)}
+        subjects={subjects}
+        allTopics={allTopics}
+        sheets={sheets}
+        editing={editing}
       />
 
       {/* Floating multi-select action bar */}

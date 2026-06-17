@@ -142,6 +142,7 @@ const en = {
   "bank.questions.count_one": "{n} question",
   "bank.questions.count_many": "{n} questions",
   "bank.questions.empty": "No questions found.",
+  "bank.question.edit": "Edit question",
   "bank.question.delete": "Delete question",
   "bank.question.deleteConfirm": "Delete this question? It will be removed from all sheets. This cannot be undone.",
   "bank.question.showFull": "Show more",
@@ -162,6 +163,7 @@ const en = {
   "bank.selection.noSheets": "No sheets found.",
   "bank.selection.searchSheets": "Search sheets…",
   "bank.addModal.title": "New Question",
+  "bank.addModal.editTitle": "Edit Question",
   "bank.addModal.type": "Question type",
   "bank.addModal.statement": "Statement",
   "bank.addModal.statementPlaceholder": "Enter the question text…",
@@ -192,6 +194,7 @@ const en = {
   "bank.addModal.searchSheet": "Search sheets…",
   "bank.addModal.noSheets": "No sheets found.",
   "bank.addModal.saveAndAdd": "Save & add to sheet",
+  "bank.addModal.saveChanges": "Save changes",
 
   // Settings
   "settings.title": "Settings",
@@ -418,6 +421,7 @@ const pt: Record<keyof typeof en, string> = {
   "bank.questions.count_one": "{n} questão",
   "bank.questions.count_many": "{n} questões",
   "bank.questions.empty": "Nenhuma questão encontrada.",
+  "bank.question.edit": "Editar questão",
   "bank.question.delete": "Excluir questão",
   "bank.question.deleteConfirm": "Excluir esta questão? Ela será removida de todas as listas. Esta ação não pode ser desfeita.",
   "bank.question.showFull": "Ver mais",
@@ -438,6 +442,7 @@ const pt: Record<keyof typeof en, string> = {
   "bank.selection.noSheets": "Nenhuma lista encontrada.",
   "bank.selection.searchSheets": "Buscar listas…",
   "bank.addModal.title": "Nova Questão",
+  "bank.addModal.editTitle": "Editar Questão",
   "bank.addModal.type": "Tipo de questão",
   "bank.addModal.statement": "Enunciado",
   "bank.addModal.statementPlaceholder": "Digite o texto da questão…",
@@ -468,6 +473,7 @@ const pt: Record<keyof typeof en, string> = {
   "bank.addModal.searchSheet": "Buscar listas…",
   "bank.addModal.noSheets": "Nenhuma lista encontrada.",
   "bank.addModal.saveAndAdd": "Salvar e adicionar à lista",
+  "bank.addModal.saveChanges": "Salvar alterações",
 
   // Settings
   "settings.title": "Configurações",

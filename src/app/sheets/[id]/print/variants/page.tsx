@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getSheet, getSheetQuestions, getSheetVariants } from "@/lib/data/sheets";
+import { getSheet, getSheetQuestions, getSheetVariants, getSheetGroups } from "@/lib/data/sheets";
 import { fromDbRow } from "@/lib/types/question";
 import { DEFAULT_COVER_LAYOUT, DEFAULT_PAGE_SETTINGS, type CoverLayout, type PageSettings } from "@/lib/sheets/defaults";
 import { SheetDocument } from "@/components/sheets/SheetDocument";
@@ -9,10 +9,11 @@ import type { QuestionItem } from "@/components/sheets/QuestionList";
 
 export default async function VariantsPrintPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [sheet, sheetQuestions, variants] = await Promise.all([
+  const [sheet, sheetQuestions, variants, groups] = await Promise.all([
     getSheet(id),
     getSheetQuestions(id),
     getSheetVariants(id),
+    getSheetGroups(id),
   ]);
 
   if (!sheet) notFound();
@@ -24,6 +25,7 @@ export default async function VariantsPrintPage({ params }: { params: Promise<{ 
       questionId: sq.question!.id,
       points: sq.points,
       content: fromDbRow(sq.question!),
+      position: sq.position,
     }));
 
   const pageSettings = (sheet.page_settings as unknown as PageSettings | null) ?? DEFAULT_PAGE_SETTINGS;
@@ -59,6 +61,7 @@ export default async function VariantsPrintPage({ params }: { params: Promise<{ 
                 pageSettings={pageSettings}
                 coverLayout={coverLayout}
                 items={items}
+                groups={groups}
                 mode="print"
               />
               {mcqCount > 0 && (

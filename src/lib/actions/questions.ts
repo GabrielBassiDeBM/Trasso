@@ -2,14 +2,15 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { getSheet } from "@/lib/data/sheets";
-import { defaultContentForType, toDbColumns, type QuestionContent } from "@/lib/types/question";
+import { getSheet, getBankQuestions, type BankFilters } from "@/lib/data/sheets";
+import { defaultContentForType, fromDbRow, toDbColumns, type QuestionContent } from "@/lib/types/question";
 import type { Difficulty, QuestionType } from "@/lib/types/database";
 
 export interface AddQuestionResult {
   sheetQuestionId: string;
   questionId: string;
   content: QuestionContent;
+  position: number;
 }
 
 export type ActionResult<T> = T | { error: string };
@@ -18,7 +19,6 @@ export async function addQuestionAction(
   sheetId: string,
   type: QuestionType,
   prefillContent?: QuestionContent,
-  groupId?: string | null,
 ): Promise<ActionResult<AddQuestionResult>> {
   const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
@@ -62,7 +62,6 @@ export async function addQuestionAction(
       question_id: question.id,
       position: nextPosition,
       points: 1,
-      group_id: groupId ?? null,
     })
     .select("id")
     .single();
@@ -72,7 +71,7 @@ export async function addQuestionAction(
   }
 
   revalidatePath(`/sheets/${sheetId}`);
-  return { sheetQuestionId: link.id, questionId: question.id, content };
+  return { sheetQuestionId: link.id, questionId: question.id, content, position: nextPosition };
 }
 
 export async function updateQuestionAction(
@@ -98,19 +97,6 @@ export async function updateQuestionPointsAction(
   revalidatePath(`/sheets/${sheetId}`);
 }
 
-export async function reorderQuestionsAction(
-  sheetId: string,
-  orderedSheetQuestionIds: string[],
-): Promise<void> {
-  const supabase = await createClient();
-  await Promise.all(
-    orderedSheetQuestionIds.map((id, index) =>
-      supabase.from("sheet_questions").update({ position: index }).eq("id", id)
-    ),
-  );
-  revalidatePath(`/sheets/${sheetId}`);
-}
-
 export async function removeQuestionAction(
   sheetId: string,
   sheetQuestionId: string,
@@ -121,6 +107,37 @@ export async function removeQuestionAction(
 }
 
 // ─── Question bank actions ────────────────────────────────────────────────────
+
+export interface BankSearchQuestion {
+  id: string;
+  statement: string;
+  type: QuestionType;
+  difficulty: Difficulty | null;
+  subject: { id: string; name: string } | null;
+  topic: { id: string; name: string } | null;
+}
+
+export async function searchBankQuestionsAction(
+  scope: "public" | "personal",
+  filters: BankFilters,
+): Promise<BankSearchQuestion[]> {
+  const rows = (await getBankQuestions(filters, scope)) as unknown as Array<{
+    id: string;
+    statement: string;
+    type: QuestionType;
+    difficulty: Difficulty | null;
+    subject: { id: string; name: string } | null;
+    topic: { id: string; name: string } | null;
+  }>;
+  return rows.map((row) => ({
+    id: row.id,
+    statement: row.statement,
+    type: row.type,
+    difficulty: row.difficulty,
+    subject: row.subject,
+    topic: row.topic,
+  }));
+}
 
 export async function deleteQuestionFromBankAction(questionId: string): Promise<{ error: string | null }> {
   const supabase = await createClient();
@@ -178,6 +195,81 @@ export async function createBankQuestionAction({
   if (error || !question) return { error: error?.message ?? "Could not create question." };
   revalidatePath("/banco");
   return { error: null, questionId: question.id };
+}
+
+export interface BankQuestionForEdit {
+  content: QuestionContent;
+  subjectId: string | null;
+  topicId: string | null;
+  difficulty: string | null;
+}
+
+export async function getBankQuestionForEditAction(
+  questionId: string,
+): Promise<ActionResult<BankQuestionForEdit>> {
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return { error: "Session expired." };
+
+  const { data: question, error } = await supabase
+    .from("questions")
+    .select("*")
+    .eq("id", questionId)
+    .single();
+
+  if (error || !question) return { error: "Question not found." };
+  if (question.owner_id !== userData.user.id) return { error: "Access denied." };
+
+  return {
+    content: fromDbRow(question),
+    subjectId: question.subject_id ?? null,
+    topicId: question.topic_id ?? null,
+    difficulty: question.difficulty ?? null,
+  };
+}
+
+export async function updateBankQuestionAction({
+  questionId,
+  content,
+  subjectId,
+  topicId,
+  difficulty,
+}: {
+  questionId: string;
+  content: QuestionContent;
+  subjectId?: string | null;
+  topicId?: string | null;
+  difficulty?: string | null;
+}): Promise<{ error: string | null }> {
+  if (!content.statement.trim()) return { error: "Statement is required." };
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return { error: "Session expired." };
+
+  const { data: question } = await supabase
+    .from("questions")
+    .select("owner_id")
+    .eq("id", questionId)
+    .maybeSingle();
+
+  if (!question || question.owner_id !== userData.user.id) {
+    return { error: "Question not found or access denied." };
+  }
+
+  const columns = toDbColumns(content);
+  const { error } = await supabase
+    .from("questions")
+    .update({
+      ...columns,
+      subject_id: subjectId ?? null,
+      topic_id: topicId ?? null,
+      difficulty: (difficulty as Difficulty | null) ?? null,
+    })
+    .eq("id", questionId);
+
+  if (error) return { error: error.message };
+  revalidatePath("/banco");
+  return { error: null };
 }
 
 export async function deleteManyFromBankAction(questionIds: string[]): Promise<{ error: string | null }> {
@@ -284,5 +376,5 @@ export async function pullFromBankAction(
 
   const { fromDbRow } = await import("@/lib/types/question");
   revalidatePath(`/sheets/${sheetId}`);
-  return { sheetQuestionId: link.id, questionId: bankQuestionId, content: fromDbRow(bq) };
+  return { sheetQuestionId: link.id, questionId: bankQuestionId, content: fromDbRow(bq), position: nextPosition };
 }

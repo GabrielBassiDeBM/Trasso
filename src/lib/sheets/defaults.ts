@@ -1,6 +1,21 @@
-/** All measurements are in millimeters, against an A4 page (210 x 297mm). */
+export type PaperSize = "A4" | "A3" | "A5";
+
+export interface PaperSizeSpec {
+  label: string;
+  widthMm: number;
+  heightMm: number;
+}
+
+/** Width/height in millimeters. CSS `@page { size: ... }` recognizes these names directly. */
+export const PAPER_SIZES: Record<PaperSize, PaperSizeSpec> = {
+  A4: { label: "A4 (210 × 297 mm)", widthMm: 210, heightMm: 297 },
+  A3: { label: "A3 (297 × 420 mm)", widthMm: 297, heightMm: 420 },
+  A5: { label: "A5 (148 × 210 mm)", widthMm: 148, heightMm: 210 },
+};
+
+/** All measurements are in millimeters, against the selected paper size. */
 export interface PageSettings {
-  size: "A4";
+  size: PaperSize;
   margins: { top: number; right: number; bottom: number; left: number };
   columns: 1 | 2;
   numbering: "numeric" | "none";

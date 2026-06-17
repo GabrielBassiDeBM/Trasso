@@ -42,3 +42,21 @@ export async function removeGroupAction(groupId: string): Promise<void> {
   const supabase = await createClient();
   await supabase.from("question_groups").delete().eq("id", groupId);
 }
+
+export type SheetEntityRef = { id: string; kind: "item" | "group" };
+
+/** Questions and passage blocks share one position axis so they can be freely reordered together. */
+export async function reorderSheetEntitiesAction(
+  sheetId: string,
+  entries: SheetEntityRef[],
+): Promise<void> {
+  const supabase = await createClient();
+  await Promise.all(
+    entries.map((entry, index) =>
+      entry.kind === "item"
+        ? supabase.from("sheet_questions").update({ position: index }).eq("id", entry.id)
+        : supabase.from("question_groups").update({ position: index }).eq("id", entry.id)
+    ),
+  );
+  revalidatePath(`/sheets/${sheetId}`);
+}

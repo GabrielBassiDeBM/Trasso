@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import type { SheetRow } from "@/lib/data/sheets";
+import type { SheetRow, SubjectRow, TopicRow } from "@/lib/data/sheets";
 import type { CoverLayout, PageSettings } from "@/lib/sheets/defaults";
 import type { ExamType } from "@/lib/types/database";
 import { renameSheetAction, updateCoverLayoutAction } from "@/lib/actions/sheets";
@@ -18,7 +18,7 @@ import { ScanModal } from "@/components/ai/ScanModal";
 import { GenerateModal } from "@/components/ai/GenerateModal";
 import { PrintConfigModal } from "./PrintConfigModal";
 import { addQuestionAction } from "@/lib/actions/questions";
-import { Wand2, Camera, Printer } from "lucide-react";
+import { Printer } from "lucide-react";
 
 const EXAM_TYPE_LABELS: Record<ExamType, string> = {
   prova: "Test",
@@ -33,6 +33,8 @@ interface SheetEditorProps {
   initialGroups: GroupItem[];
   initialPageSettings: PageSettings;
   coverLayout: CoverLayout;
+  subjects: SubjectRow[];
+  allTopics: TopicRow[];
 }
 
 export function SheetEditor({
@@ -41,6 +43,8 @@ export function SheetEditor({
   initialGroups,
   initialPageSettings,
   coverLayout: initialCoverLayout,
+  subjects,
+  allTopics,
 }: SheetEditorProps) {
   const searchParams = useSearchParams();
   const aiParam = searchParams.get("ai");
@@ -104,6 +108,7 @@ export function SheetEditor({
           questionId: result.questionId,
           points: 1,
           content: result.content,
+          position: result.position,
         },
       ]);
     }
@@ -111,6 +116,9 @@ export function SheetEditor({
 
   const examLabel = sheet.exam_type ? EXAM_TYPE_LABELS[sheet.exam_type] : null;
   const hasAccessibility = !!(accessibility?.enabled);
+  const defaultSubjectIds = sheet.subject_ids?.length ? sheet.subject_ids : sheet.subject_id ? [sheet.subject_id] : [];
+  const defaultTopicIds = sheet.topic_ids ?? [];
+  const defaultDifficulties = sheet.difficulty ? [sheet.difficulty] : [];
 
   return (
     <div className="space-y-6 px-8 py-7">
@@ -154,41 +162,6 @@ export function SheetEditor({
             )}
           </div>
         </div>
-
-        <div className="flex shrink-0 flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => setGenerateOpen(true)}
-            className={buttonStyles("outline", "sm")}
-          >
-            <Wand2 size={14} />
-            Generate with AI
-          </button>
-          <button
-            type="button"
-            onClick={() => setScanOpen(true)}
-            className={buttonStyles("outline", "sm")}
-          >
-            <Camera size={14} />
-            Scan photo
-          </button>
-          <button
-            type="button"
-            onClick={() => setPrintConfigOpen(true)}
-            className={buttonStyles("primary", "sm")}
-          >
-            <Printer size={14} />
-            Print
-          </button>
-          <a
-            href={`/sheets/${sheet.id}/print/gabarito`}
-            target="_blank"
-            rel="noreferrer"
-            className={buttonStyles("outline", "sm")}
-          >
-            Answer Key
-          </a>
-        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_440px]">
@@ -216,13 +189,38 @@ export function SheetEditor({
             pointsPerQuestion={pageSettings.pointsPerQuestion}
             onItemsChange={setItems}
             onGroupsChange={setGroups}
+            subjects={subjects}
+            allTopics={allTopics}
+            defaultSubjectIds={defaultSubjectIds}
+            defaultTopicIds={defaultTopicIds}
+            defaultDifficulties={defaultDifficulties}
           />
         </div>
 
         <div className="lg:sticky lg:top-8 lg:self-start">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-soft">
-            Preview
-          </p>
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft">
+              Preview
+            </p>
+            <div className="flex shrink-0 flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setPrintConfigOpen(true)}
+                className={buttonStyles("primary", "sm")}
+              >
+                <Printer size={14} />
+                Print
+              </button>
+              <a
+                href={`/sheets/${sheet.id}/print/gabarito`}
+                target="_blank"
+                rel="noreferrer"
+                className={buttonStyles("outline", "sm")}
+              >
+                Answer Key
+              </a>
+            </div>
+          </div>
           <div className="overflow-hidden rounded-2xl border border-line bg-canvas p-4">
             <div style={{ zoom: 0.5 }}>
               <SheetDocument
@@ -230,6 +228,7 @@ export function SheetEditor({
                 pageSettings={pageSettings}
                 coverLayout={coverLayout}
                 items={items}
+                groups={groups}
                 mode="preview"
               />
             </div>

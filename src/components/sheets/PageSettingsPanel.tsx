@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Accessibility } from "lucide-react";
-import type { PageSettings } from "@/lib/sheets/defaults";
+import { Accessibility, Check, ChevronDown } from "lucide-react";
+import { PAPER_SIZES, type PageSettings, type PaperSize } from "@/lib/sheets/defaults";
 import { updatePageSettingsAction, updateAccessibilityAction } from "@/lib/actions/sheets";
 import { Card } from "@/components/ui/Card";
 import { Input, Label } from "@/components/ui/Input";
@@ -89,7 +89,10 @@ export function PageSettingsPanel({ sheetId, settings, accessibility, onChange, 
 
       <div>
         <span className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Size</span>
-        <p className="mt-1 text-sm text-ink-soft">A4 (210 × 297 mm)</p>
+        <PaperSizeDropdown
+          value={settings.size}
+          onChange={(size) => onChange({ ...settings, size })}
+        />
       </div>
 
       <div>
@@ -234,6 +237,62 @@ export function PageSettingsPanel({ sheetId, settings, accessibility, onChange, 
         )}
       </div>
     </Card>
+  );
+}
+
+function PaperSizeDropdown({ value, onChange }: { value: PaperSize; onChange: (value: PaperSize) => void }) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const sizes = Object.keys(PAPER_SIZES) as PaperSize[];
+
+  useEffect(() => {
+    if (!open) return;
+    function handleClick(e: MouseEvent) {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open]);
+
+  return (
+    <div ref={rootRef} className="relative mt-1.5 max-w-xs">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className={cn(
+          "flex h-10 w-full items-center justify-between gap-2 rounded-xl border border-line bg-surface px-3.5 text-left text-sm shadow-xs transition-all duration-150 hover:border-brand/40",
+          open && "border-brand ring-2 ring-brand/25",
+        )}
+      >
+        <span className="truncate text-ink">{PAPER_SIZES[value].label}</span>
+        <ChevronDown size={15} className={cn("shrink-0 text-ink-faint transition-transform", open && "rotate-180")} />
+      </button>
+
+      {open && (
+        <div className="absolute left-0 right-0 top-[calc(100%+4px)] z-20 overflow-hidden rounded-xl border border-line bg-surface p-1.5 shadow-lg">
+          {sizes.map((size) => {
+            const active = size === value;
+            return (
+              <button
+                type="button"
+                key={size}
+                onClick={() => {
+                  onChange(size);
+                  setOpen(false);
+                }}
+                className={cn(
+                  "flex w-full items-center justify-between gap-2 rounded-lg px-2.5 py-2 text-left text-sm transition-colors",
+                  active ? "bg-brand-soft text-brand" : "text-ink hover:bg-muted",
+                )}
+              >
+                <span className="truncate">{PAPER_SIZES[size].label}</span>
+                {active && <Check size={14} strokeWidth={3} className="shrink-0" />}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 }
 

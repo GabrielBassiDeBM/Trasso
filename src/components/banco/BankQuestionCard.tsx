@@ -31,6 +31,7 @@ interface BankQuestionCardProps {
   inSelectionMode?: boolean;
   onToggleSelect?: (id: string) => void;
   onAddToSheet?: (questionId: string, sheetId: string) => Promise<void>;
+  onEdit?: (questionId: string) => void;
   sheets?: Array<{ id: string; title: string }>;
 }
 
@@ -129,6 +130,7 @@ export function BankQuestionCard({
   inSelectionMode = false,
   onToggleSelect,
   onAddToSheet,
+  onEdit,
   sheets = [],
 }: BankQuestionCardProps) {
   const t = useT();
@@ -330,6 +332,16 @@ export function BankQuestionCard({
                   />
                 )}
               </>
+            )}
+            {isPersonal && onEdit && (
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); onEdit(question.id); }}
+                aria-label={t("bank.question.edit")}
+                className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint opacity-0 transition-all group-hover:opacity-100 hover:bg-brand-soft hover:text-brand"
+              >
+                <Pencil size={13} aria-hidden="true" />
+              </button>
             )}
             {isPersonal && (
               <button

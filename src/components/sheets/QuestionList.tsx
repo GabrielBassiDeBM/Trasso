@@ -11,25 +11,27 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Wand2, Camera, BookText } from "lucide-react";
+import { Wand2, Camera, BookText, Library } from "lucide-react";
 import type { QuestionType } from "@/lib/types/database";
+import type { SubjectRow, TopicRow } from "@/lib/data/sheets";
 import { QUESTION_TYPES, QUESTION_TYPE_LABELS, type QuestionContent } from "@/lib/types/question";
-import { addQuestionAction, reorderQuestionsAction } from "@/lib/actions/questions";
-import { addGroupAction } from "@/lib/actions/groups";
+import { addQuestionAction } from "@/lib/actions/questions";
+import { addGroupAction, reorderSheetEntitiesAction, type SheetEntityRef } from "@/lib/actions/groups";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { QuestionEditorShell } from "./QuestionEditor/QuestionEditorShell";
 import { QuestionGroupEditor, type GroupItem } from "./QuestionGroupEditor";
 import { ScanModal } from "@/components/ai/ScanModal";
 import { GenerateModal } from "@/components/ai/GenerateModal";
+import { BankPickerModal } from "./BankPickerModal";
 
 export interface QuestionItem {
   sheetQuestionId: string;
   questionId: string;
   points: number | null;
   content: QuestionContent;
-  groupId?: string | null;
   inlineImages?: string[];
+  position?: number;
 }
 
 interface QuestionListProps {
@@ -39,26 +41,92 @@ interface QuestionListProps {
   pointsPerQuestion: boolean;
   onItemsChange: (items: QuestionItem[]) => void;
   onGroupsChange: (groups: GroupItem[]) => void;
+  subjects: SubjectRow[];
+  allTopics: TopicRow[];
+  defaultSubjectIds: string[];
+  defaultTopicIds: string[];
+  defaultDifficulties: string[];
 }
 
-export function QuestionList({ sheetId, items, groups, pointsPerQuestion, onItemsChange, onGroupsChange }: QuestionListProps) {
+// ─── Unified ordering ───────────────────────────────────────────────────────
+// Questions and passage blocks share one position axis (see reorderSheetEntitiesAction),
+// so they're merged into a single sortable list here.
+
+type Entry =
+  | { dndId: string; kind: "item"; position: number; item: QuestionItem }
+  | { dndId: string; kind: "group"; position: number; group: GroupItem };
+
+function groupDndId(groupId: string) {
+  return `group:${groupId}`;
+}
+
+function buildEntries(items: QuestionItem[], groups: GroupItem[]): Entry[] {
+  const entries: Entry[] = [
+    ...items.map((item, i) => ({ dndId: item.sheetQuestionId, kind: "item" as const, position: item.position ?? i, item })),
+    ...groups.map((group, i) => ({ dndId: groupDndId(group.id), kind: "group" as const, position: group.position ?? i, group })),
+  ];
+  return entries.sort((a, b) => a.position - b.position);
+}
+
+function withQuestionNumber(entries: Entry[]): { entry: Entry; questionIndex: number }[] {
+  let index = 0;
+  return entries.map((entry) => {
+    if (entry.kind !== "item") return { entry, questionIndex: -1 };
+    const questionIndex = index;
+    index += 1;
+    return { entry, questionIndex };
+  });
+}
+
+export function QuestionList({
+  sheetId,
+  items,
+  groups,
+  pointsPerQuestion,
+  onItemsChange,
+  onGroupsChange,
+  subjects,
+  allTopics,
+  defaultSubjectIds,
+  defaultTopicIds,
+  defaultDifficulties,
+}: QuestionListProps) {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }));
   const [adding, setAdding] = useState<QuestionType | null>(null);
   const [addingGroup, setAddingGroup] = useState(false);
   const [scanOpen, setScanOpen] = useState(false);
   const [generateOpen, setGenerateOpen] = useState(false);
+  const [bankOpen, setBankOpen] = useState(false);
+
+  const entries = buildEntries(items, groups);
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
-    const oldIndex = items.findIndex((item) => item.sheetQuestionId === active.id);
-    const newIndex = items.findIndex((item) => item.sheetQuestionId === over.id);
+    const oldIndex = entries.findIndex((entry) => entry.dndId === active.id);
+    const newIndex = entries.findIndex((entry) => entry.dndId === over.id);
     if (oldIndex === -1 || newIndex === -1) return;
 
-    const next = arrayMove(items, oldIndex, newIndex);
-    onItemsChange(next);
-    reorderQuestionsAction(sheetId, next.map((item) => item.sheetQuestionId));
+    const reordered = arrayMove(entries, oldIndex, newIndex);
+
+    const nextItems: QuestionItem[] = [];
+    const nextGroups: GroupItem[] = [];
+    const refs: SheetEntityRef[] = [];
+
+    reordered.forEach((entry, position) => {
+      if (entry.kind === "item") {
+        nextItems.push({ ...entry.item, position });
+        refs.push({ id: entry.item.sheetQuestionId, kind: "item" });
+      } else {
+        nextGroups.push({ ...entry.group, position });
+        refs.push({ id: entry.group.id, kind: "group" });
+      }
+    });
+
+    onItemsChange(nextItems);
+    onGroupsChange(nextGroups);
+    reorderSheetEntitiesAction(sheetId, refs);
   }
 
   async function handleAdd(type: QuestionType) {
@@ -78,13 +146,14 @@ export function QuestionList({ sheetId, items, groups, pointsPerQuestion, onItem
         questionId: result.questionId,
         points: 1,
         content: result.content,
+        position: result.position,
       },
     ]);
   }
 
   async function handleAddGroup() {
     setAddingGroup(true);
-    const result = await addGroupAction(sheetId, items.length);
+    const result = await addGroupAction(sheetId, items.length + groups.length);
     setAddingGroup(false);
 
     if ("error" in result) {
@@ -113,62 +182,49 @@ export function QuestionList({ sheetId, items, groups, pointsPerQuestion, onItem
         questionId: result.questionId,
         points: 1,
         content: result.content,
+        position: result.position,
       });
     }
     if (added.length > 0) onItemsChange([...items, ...added]);
   }
 
-  // Items not belonging to any group
-  const ungroupedItems = items.filter((item) => !item.groupId);
-  // Items belonging to each group
-  const itemsByGroup = (groupId: string) => items.filter((item) => item.groupId === groupId);
+  const indexedEntries = withQuestionNumber(entries);
 
   return (
     <div className="space-y-4">
-      {/* Passage groups */}
-      {groups.map((group) => (
-        <QuestionGroupEditor
-          key={group.id}
-          sheetId={sheetId}
-          group={group}
-          items={itemsByGroup(group.id)}
-          allItems={items}
-          onGroupChange={(updated) =>
-            onGroupsChange(groups.map((g) => (g.id === group.id ? updated : g)))
-          }
-          onGroupRemove={() => onGroupsChange(groups.filter((g) => g.id !== group.id))}
-          onItemsChange={onItemsChange}
-          onItemRemove={removeItem}
-          onAddQuestion={handleAdd}
-          adding={adding}
-          pointsPerQuestion={pointsPerQuestion}
-        />
-      ))}
-
-      {/* Ungrouped questions */}
-      {ungroupedItems.length === 0 && groups.length === 0 && (
+      {items.length === 0 && groups.length === 0 && (
         <Card className="p-6 text-center text-sm text-ink-soft">
           No questions yet. Add the first one using the buttons below.
         </Card>
       )}
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext
-          items={ungroupedItems.map((item) => item.sheetQuestionId)}
-          strategy={verticalListSortingStrategy}
-        >
+        <SortableContext items={entries.map((entry) => entry.dndId)} strategy={verticalListSortingStrategy}>
           <div className="space-y-4">
-            {ungroupedItems.map((item, index) => (
-              <SortableQuestionItem
-                key={item.sheetQuestionId}
-                item={item}
-                index={items.indexOf(item)}
-                sheetId={sheetId}
-                onContentChange={(content) => updateItemContent(item.sheetQuestionId, content)}
-                onRemoved={() => removeItem(item.sheetQuestionId)}
-                pointsPerQuestion={pointsPerQuestion}
-              />
-            ))}
+            {indexedEntries.map(({ entry, questionIndex }) =>
+              entry.kind === "item" ? (
+                <SortableQuestionItem
+                  key={entry.dndId}
+                  dndId={entry.dndId}
+                  item={entry.item}
+                  index={questionIndex}
+                  sheetId={sheetId}
+                  onContentChange={(content) => updateItemContent(entry.item.sheetQuestionId, content)}
+                  onRemoved={() => removeItem(entry.item.sheetQuestionId)}
+                  pointsPerQuestion={pointsPerQuestion}
+                />
+              ) : (
+                <SortableGroupBlock
+                  key={entry.dndId}
+                  dndId={entry.dndId}
+                  group={entry.group}
+                  onGroupChange={(updated) =>
+                    onGroupsChange(groups.map((g) => (g.id === updated.id ? updated : g)))
+                  }
+                  onGroupRemove={() => onGroupsChange(groups.filter((g) => g.id !== entry.group.id))}
+                />
+              ),
+            )}
           </div>
         </SortableContext>
       </DndContext>
@@ -222,6 +278,15 @@ export function QuestionList({ sheetId, items, groups, pointsPerQuestion, onItem
             <Camera size={14} className="text-accent-dark" />
             Scan photo
           </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setBankOpen(true)}
+          >
+            <Library size={14} className="text-accent-dark" />
+            Browse question bank
+          </Button>
         </div>
       </Card>
 
@@ -235,13 +300,43 @@ export function QuestionList({ sheetId, items, groups, pointsPerQuestion, onItem
         onClose={() => setGenerateOpen(false)}
         onAccept={handleAiAccept}
       />
+      <BankPickerModal
+        open={bankOpen}
+        onClose={() => setBankOpen(false)}
+        sheetId={sheetId}
+        items={items}
+        subjects={subjects}
+        allTopics={allTopics}
+        defaultSubjectIds={defaultSubjectIds}
+        defaultTopicIds={defaultTopicIds}
+        defaultDifficulties={defaultDifficulties}
+        onAddItem={(item) => onItemsChange([...items, item])}
+        onRemoveItem={removeItem}
+      />
     </div>
   );
 }
 
-// ─── Sortable wrapper ─────────────────────────────────────────────────────────
+// ─── Sortable wrappers ────────────────────────────────────────────────────────
+
+function DragHandle({ attributes, listeners, label }: { attributes: ReturnType<typeof useSortable>["attributes"]; listeners: ReturnType<typeof useSortable>["listeners"]; label: string }) {
+  return (
+    <button
+      type="button"
+      {...attributes}
+      {...listeners}
+      className="cursor-grab touch-none rounded-md p-1 text-ink-faint hover:bg-canvas hover:text-ink active:cursor-grabbing"
+      aria-label={label}
+    >
+      <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+        <path d="M7 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM15 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
+      </svg>
+    </button>
+  );
+}
 
 interface SortableQuestionItemProps {
+  dndId: string;
   item: QuestionItem;
   index: number;
   sheetId: string;
@@ -250,10 +345,8 @@ interface SortableQuestionItemProps {
   onRemoved: () => void;
 }
 
-function SortableQuestionItem({ item, index, sheetId, pointsPerQuestion, onContentChange, onRemoved }: SortableQuestionItemProps) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: item.sheetQuestionId,
-  });
+function SortableQuestionItem({ dndId, item, index, sheetId, pointsPerQuestion, onContentChange, onRemoved }: SortableQuestionItemProps) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: dndId });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -273,19 +366,35 @@ function SortableQuestionItem({ item, index, sheetId, pointsPerQuestion, onConte
         showPoints={pointsPerQuestion}
         onContentChange={onContentChange}
         onRemoved={onRemoved}
-        dragHandle={
-          <button
-            type="button"
-            {...attributes}
-            {...listeners}
-            className="cursor-grab touch-none rounded-md p-1 text-ink-faint hover:bg-canvas hover:text-ink active:cursor-grabbing"
-            aria-label="Reorder question"
-          >
-            <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
-              <path d="M7 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM15 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
-            </svg>
-          </button>
-        }
+        dragHandle={<DragHandle attributes={attributes} listeners={listeners} label="Reorder question" />}
+      />
+    </div>
+  );
+}
+
+interface SortableGroupBlockProps {
+  dndId: string;
+  group: GroupItem;
+  onGroupChange: (group: GroupItem) => void;
+  onGroupRemove: () => void;
+}
+
+function SortableGroupBlock({ dndId, group, onGroupChange, onGroupRemove }: SortableGroupBlockProps) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: dndId });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      <QuestionGroupEditor
+        group={group}
+        onGroupChange={onGroupChange}
+        onGroupRemove={onGroupRemove}
+        dragHandle={<DragHandle attributes={attributes} listeners={listeners} label="Reorder passage block" />}
       />
     </div>
   );

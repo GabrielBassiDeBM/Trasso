@@ -22,7 +22,7 @@ export function QuestionRenderer({ item, index, numbering, mcqStyle, pointsPerQu
   const number = numbering === "numeric" ? `${index + 1}. ` : "";
 
   return (
-    <div className="sheet-question mb-5 break-inside-avoid text-[11pt] leading-relaxed text-ink">
+    <div className="sheet-question mb-5 break-inside-avoid text-[11pt] leading-relaxed text-black">
       <p className="font-medium">
         {number}
         {content.type === "fill_blank" ? (
@@ -31,7 +31,7 @@ export function QuestionRenderer({ item, index, numbering, mcqStyle, pointsPerQu
           <Latex text={content.statement} />
         )}
         {pointsPerQuestion && points != null && (
-          <span className="ml-1 text-[10pt] text-ink-soft">(Valor: {formatPoints(points)})</span>
+          <span className="ml-1 text-[10pt] text-black/60">(Valor: {formatPoints(points)})</span>
         )}
       </p>
 
@@ -63,7 +63,7 @@ function AnswerLines({ count, sample }: { count: number; sample?: string }) {
   return (
     <div className="space-y-4 pt-1">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="h-px bg-ink/20" />
+        <div key={i} className="h-px bg-black/20" />
       ))}
     </div>
   );
@@ -162,7 +162,7 @@ function FillBlankStatement({ statement, blanks, showAnswers }: { statement: str
         }
 
         return (
-          <span key={index} className="inline-block min-w-16 border-b border-ink align-bottom">
+          <span key={index} className="inline-block min-w-16 border-b border-black align-bottom">
             &nbsp;
           </span>
         );

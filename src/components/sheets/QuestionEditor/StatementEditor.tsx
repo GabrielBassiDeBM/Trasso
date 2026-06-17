@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { ImagePlus, X } from "lucide-react";
+import { ImagePlus, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Input";
 import { Latex } from "@/components/math/Latex";
@@ -31,14 +31,29 @@ export function StatementEditor({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showMath, setShowMath] = useState(false);
-  const [mathValue, setMathValue] = useState("");
+  const [mathValues, setMathValues] = useState<string[]>([""]);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
+  function addEquationField() {
+    setMathValues((values) => [...values, ""]);
+  }
+
+  function updateEquationField(index: number, latex: string) {
+    setMathValues((values) => values.map((v, i) => (i === index ? latex : v)));
+  }
+
+  function removeEquationField(index: number) {
+    setMathValues((values) => (values.length > 1 ? values.filter((_, i) => i !== index) : [""]));
+  }
+
   function insertMath() {
-    const latex = mathValue.trim();
-    if (!latex) return;
-    const snippet = `$${latex}$`;
+    const snippet = mathValues
+      .map((v) => v.trim())
+      .filter(Boolean)
+      .map((latex) => `$${latex}$`)
+      .join(" ");
+    if (!snippet) return;
     const textarea = textareaRef.current;
 
     if (!textarea) {
@@ -54,7 +69,7 @@ export function StatementEditor({
       });
     }
 
-    setMathValue("");
+    setMathValues([""]);
     setShowMath(false);
   }
 
@@ -102,7 +117,17 @@ export function StatementEditor({
               {uploading ? "Uploading…" : "Image"}
             </Button>
           )}
-          <Button type="button" variant="ghost" size="sm" onClick={() => setShowMath((open) => !open)}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              if (showMath) {
+                setMathValues([""]);
+              }
+              setShowMath((open) => !open);
+            }}
+          >
             {showMath ? "Close equation" : "Insert equation"}
           </Button>
         </div>
@@ -155,15 +180,40 @@ export function StatementEditor({
       />
 
       {showMath && (
-        <div className="rounded-lg border border-line bg-canvas p-3">
-          <MathFieldInput value={mathValue} onChange={setMathValue} className="w-full" />
-          <div className="mt-2 flex justify-end gap-2">
-            <Button type="button" variant="ghost" size="sm" onClick={() => setShowMath(false)}>
-              Cancel
+        <div className="rounded-lg border border-line bg-canvas p-3 space-y-2">
+          {mathValues.map((latex, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <MathFieldInput value={latex} onChange={(v) => updateEquationField(index, v)} className="w-full" />
+              <button
+                type="button"
+                onClick={() => removeEquationField(index)}
+                className="shrink-0 rounded-md p-1 text-ink-faint hover:bg-muted hover:text-danger"
+                aria-label="Remove equation"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          ))}
+
+          <div className="flex items-center justify-between gap-2 pt-1">
+            <Button type="button" variant="ghost" size="sm" onClick={addEquationField} className="gap-1">
+              <Plus size={14} />
+              Add equation
             </Button>
-            <Button type="button" variant="primary" size="sm" onClick={insertMath} disabled={!mathValue.trim()}>
-              Inserir no enunciado
-            </Button>
+            <div className="flex gap-2">
+              <Button type="button" variant="ghost" size="sm" onClick={() => setShowMath(false)}>
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                onClick={insertMath}
+                disabled={!mathValues.some((v) => v.trim())}
+              >
+                Inserir no enunciado
+              </Button>
+            </div>
           </div>
         </div>
       )}

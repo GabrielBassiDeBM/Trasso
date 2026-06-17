@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { X, Check, Plus, Trash2, Search, BookOpen } from "lucide-react";
-import { createBankQuestionAction } from "@/lib/actions/questions";
+import { createBankQuestionAction, updateBankQuestionAction } from "@/lib/actions/questions";
 import { pullManyFromBankAction } from "@/lib/actions/questions";
 import { useT } from "@/lib/i18n/client";
 import { cn } from "@/lib/utils/cn";
@@ -12,12 +12,21 @@ import type { McqOption, MatchingItem, QuestionContent } from "@/lib/types/quest
 import type { QuestionType } from "@/lib/types/database";
 import type { SubjectRow, TopicRow } from "@/lib/data/sheets";
 
+interface EditingQuestion {
+  questionId: string;
+  content: QuestionContent;
+  subjectId: string | null;
+  topicId: string | null;
+  difficulty: string | null;
+}
+
 interface Props {
   open: boolean;
   onClose: () => void;
   subjects: SubjectRow[];
   allTopics: TopicRow[];
   sheets: Array<{ id: string; title: string }>;
+  editing?: EditingQuestion | null;
 }
 
 const DIFFICULTIES = ["easy", "medium", "hard"] as const;
@@ -288,7 +297,7 @@ function LinesInput({ value, onChange }: { value: number; onChange: (n: number) 
 
 // ─── Main modal ───────────────────────────────────────────────────────────────
 
-export function AddToBankModal({ open, onClose, subjects, allTopics, sheets }: Props) {
+export function AddToBankModal({ open, onClose, subjects, allTopics, sheets, editing = null }: Props) {
   const t = useT();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const sheetSearchRef = useRef<HTMLInputElement>(null);
@@ -357,35 +366,41 @@ export function AddToBankModal({ open, onClose, subjects, allTopics, sheets }: P
     });
   }, [statement, type]);
 
-  // Reset on open
+  // Reset (or seed from `editing`) on open
   useEffect(() => {
     if (!open) return;
-    setType("multiple_choice");
-    setStatement("");
-    setSubjectId("");
-    setTopicId("");
-    setDifficulty("");
-    setMcqOptions([
-      { key: "a", text: "", is_correct: false },
-      { key: "b", text: "", is_correct: false },
-      { key: "c", text: "", is_correct: false },
-      { key: "d", text: "", is_correct: false },
-    ]);
-    setTfAnswer(true);
-    setBlanks({});
-    setMatchLeft([{ key: "1", text: "" }, { key: "2", text: "" }]);
-    setMatchRight([{ key: "a", text: "" }, { key: "b", text: "" }]);
-    setSampleAnswer("");
-    setOpenLines(3);
-    setEssayLines(8);
+
+    const content = editing?.content;
+    setType(content?.type ?? "multiple_choice");
+    setStatement(content?.statement ?? "");
+    setSubjectId(editing?.subjectId ?? "");
+    setTopicId(editing?.topicId ?? "");
+    setDifficulty(editing?.difficulty ?? "");
+    setMcqOptions(
+      content?.type === "multiple_choice"
+        ? content.options
+        : [
+            { key: "a", text: "", is_correct: false },
+            { key: "b", text: "", is_correct: false },
+            { key: "c", text: "", is_correct: false },
+            { key: "d", text: "", is_correct: false },
+          ],
+    );
+    setTfAnswer(content?.type === "true_false" ? content.answer : true);
+    setBlanks(content?.type === "fill_blank" ? content.blanks : {});
+    setMatchLeft(content?.type === "matching" ? content.left : [{ key: "1", text: "" }, { key: "2", text: "" }]);
+    setMatchRight(content?.type === "matching" ? content.right : [{ key: "a", text: "" }, { key: "b", text: "" }]);
+    setSampleAnswer(content?.type === "open" ? content.sampleAnswer : "");
+    setOpenLines(content?.type === "open" ? content.answerLines : 3);
+    setEssayLines(content?.type === "essay" ? content.answerLines : 8);
     setAddToSheet(false);
     setSheetId("");
     setSheetSearch("");
     setError(null);
     setTimeout(() => textareaRef.current?.focus(), 80);
-  }, [open]);
+  }, [open, editing]);
 
-  useEffect(() => { setTopicId(""); }, [subjectId]);
+  useEffect(() => { if (!editing) setTopicId(""); }, [subjectId, editing]);
 
   useEffect(() => {
     if (!open) return;
@@ -428,6 +443,30 @@ export function AddToBankModal({ open, onClose, subjects, allTopics, sheets }: P
     }
     setSaving(true);
     setError(null);
+
+    if (editing) {
+      const result = await updateBankQuestionAction({
+        questionId: editing.questionId,
+        content: buildContent(),
+        subjectId: subjectId || null,
+        topicId: topicId || null,
+        difficulty: difficulty || null,
+      });
+
+      if (result.error) {
+        setError(result.error);
+        setSaving(false);
+        return;
+      }
+
+      if (addToSheet && sheetId) {
+        await pullManyFromBankAction(sheetId, [editing.questionId]);
+      }
+
+      setSaving(false);
+      onClose();
+      return;
+    }
 
     const result = await createBankQuestionAction({
       content: buildContent(),
@@ -481,7 +520,7 @@ export function AddToBankModal({ open, onClose, subjects, allTopics, sheets }: P
           {/* Header */}
           <div className="mb-6 flex items-center justify-between">
             <h2 id="add-q-title" className="text-xl font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
-              {t("bank.addModal.title")}
+              {editing ? t("bank.addModal.editTitle") : t("bank.addModal.title")}
             </h2>
             <button
               onClick={onClose}
@@ -766,7 +805,9 @@ export function AddToBankModal({ open, onClose, subjects, allTopics, sheets }: P
               ? t("bank.addModal.saving")
               : hasSheet && sheetId
                 ? t("bank.addModal.saveAndAdd")
-                : t("bank.addModal.save")}
+                : editing
+                  ? t("bank.addModal.saveChanges")
+                  : t("bank.addModal.save")}
           </button>
         </div>
       </div>

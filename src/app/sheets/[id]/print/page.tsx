@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getSheet, getSheetQuestions } from "@/lib/data/sheets";
+import { getSheet, getSheetQuestions, getSheetGroups } from "@/lib/data/sheets";
 import { fromDbRow } from "@/lib/types/question";
 import { DEFAULT_COVER_LAYOUT, DEFAULT_PAGE_SETTINGS, type CoverLayout, type PageSettings } from "@/lib/sheets/defaults";
 import { SheetDocument } from "@/components/sheets/SheetDocument";
@@ -22,7 +22,7 @@ export default async function SheetPrintPage({
   const sheet = await getSheet(id);
   if (!sheet) notFound();
 
-  const sheetQuestions = await getSheetQuestions(id);
+  const [sheetQuestions, groups] = await Promise.all([getSheetQuestions(id), getSheetGroups(id)]);
   const items: QuestionItem[] = sheetQuestions
     .filter((sheetQuestion) => sheetQuestion.question !== null)
     .map((sheetQuestion) => ({
@@ -30,6 +30,7 @@ export default async function SheetPrintPage({
       questionId: sheetQuestion.question!.id,
       points: sheetQuestion.points,
       content: fromDbRow(sheetQuestion.question!),
+      position: sheetQuestion.position,
     }));
 
   const pageSettings = (sheet.page_settings as unknown as PageSettings | null) ?? DEFAULT_PAGE_SETTINGS;
@@ -49,19 +50,20 @@ export default async function SheetPrintPage({
     : "";
 
   return (
-    <div className={cn("print-page min-h-screen overflow-x-auto bg-[#e7e2d4] py-8 print:bg-white print:py-0", a11yClasses)}>
+    <div className="print-page min-h-screen overflow-x-auto bg-[#e7e2d4] py-8 print:bg-white print:py-0">
       <PrintToolbar
         sheetId={sheet.id}
         title={isA11y ? `${sheet.title} — Accessible Version` : sheet.title}
         altHref={isA11y ? `/sheets/${sheet.id}/print` : `/sheets/${sheet.id}/print/gabarito`}
         altLabel={isA11y ? "Standard version" : "View answer key"}
       />
-      <div className="mx-auto w-fit space-y-6">
+      <div className={cn("mx-auto w-fit space-y-6", a11yClasses)}>
         <SheetDocument
           title={isA11y ? `${sheet.title} — Accessible Version` : sheet.title}
           pageSettings={pageSettings}
           coverLayout={coverLayout}
           items={items}
+          groups={groups}
           mode="print"
         />
         {mcqCount > 0 && (
