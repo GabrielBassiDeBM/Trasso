@@ -28,6 +28,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
 
 export interface SheetFilters {
   examType?: string;
+  subjectId?: string;
   search?: string;
 }
 
@@ -35,10 +36,28 @@ export async function getSheets(filters: SheetFilters = {}): Promise<SheetRow[]>
   const supabase = await createClient();
   let q = supabase.from("sheets").select("*").order("updated_at", { ascending: false });
   if (filters.examType) q = q.eq("exam_type", filters.examType as "prova" | "lista" | "simulado" | "recuperacao");
+  if (filters.subjectId) q = q.eq("subject_id", filters.subjectId);
   if (filters.search) q = q.ilike("title", `%${filters.search}%`);
   const { data, error } = await q;
   if (error) throw error;
   return data ?? [];
+}
+
+export interface SheetWithTaxonomy extends Omit<SheetRow, "difficulty"> {
+  subjectIds: string[];
+  topicIds: string[];
+  difficulty: Difficulty | "mixed" | null;
+}
+
+/** Subjects, topics, and difficulty are chosen once at sheet-creation time (see NewSheetModal) and stored on the row — not derived from the sheet's questions. */
+export async function getSheetsWithTaxonomy(filters: SheetFilters = {}): Promise<SheetWithTaxonomy[]> {
+  const sheets = await getSheets(filters);
+  return sheets.map((sheet) => ({
+    ...sheet,
+    subjectIds: sheet.subject_ids?.length ? sheet.subject_ids : sheet.subject_id ? [sheet.subject_id] : [],
+    topicIds: sheet.topic_ids ?? [],
+    difficulty: sheet.difficulty ?? "mixed",
+  }));
 }
 
 export async function getSheet(id: string): Promise<SheetRow | null> {
@@ -100,9 +119,13 @@ export async function getSheetGroups(sheetId: string): Promise<GroupItem[]> {
 
 export interface BankFilters {
   subjectId?: string;
+  subjectIds?: string[];
   topicId?: string;
+  topicIds?: string[];
   difficulty?: string;
+  difficulties?: string[];
   type?: string;
+  types?: string[];
   isAdapted?: boolean;
   search?: string;
 }
@@ -119,14 +142,32 @@ export async function getBankQuestions(filters: BankFilters = {}, scope: "public
   if (scope === "public") {
     q = q.eq("is_public", true);
   } else {
-    // Personal: only the user's own private questions (RLS + is_public=false)
     q = q.eq("is_public", false);
   }
 
-  if (filters.subjectId) q = q.eq("subject_id", filters.subjectId);
-  if (filters.topicId) q = q.eq("topic_id", filters.topicId);
-  if (filters.difficulty) q = q.eq("difficulty", filters.difficulty as Difficulty);
-  if (filters.type) q = q.eq("type", filters.type as QuestionType);
+  if (filters.subjectIds && filters.subjectIds.length > 0) {
+    q = q.in("subject_id", filters.subjectIds);
+  } else if (filters.subjectId) {
+    q = q.eq("subject_id", filters.subjectId);
+  }
+  if (filters.topicIds && filters.topicIds.length > 0) {
+    q = q.in("topic_id", filters.topicIds);
+  } else if (filters.topicId) {
+    q = q.eq("topic_id", filters.topicId);
+  }
+
+  if (filters.difficulties && filters.difficulties.length > 0) {
+    q = q.in("difficulty", filters.difficulties as Difficulty[]);
+  } else if (filters.difficulty) {
+    q = q.eq("difficulty", filters.difficulty as Difficulty);
+  }
+
+  if (filters.types && filters.types.length > 0) {
+    q = q.in("type", filters.types as QuestionType[]);
+  } else if (filters.type) {
+    q = q.eq("type", filters.type as QuestionType);
+  }
+
   if (filters.isAdapted !== undefined) q = q.eq("is_adapted", filters.isAdapted);
   if (filters.search) {
     q = q.textSearch("search", filters.search, { type: "websearch", config: "portuguese" });

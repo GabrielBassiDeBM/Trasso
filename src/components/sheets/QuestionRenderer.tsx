@@ -9,6 +9,7 @@ interface QuestionRendererProps {
   index: number;
   numbering: PageSettings["numbering"];
   mcqStyle: PageSettings["mcqStyle"];
+  pointsPerQuestion: PageSettings["pointsPerQuestion"];
   showAnswers: boolean;
 }
 
@@ -16,7 +17,7 @@ function formatPoints(points: number) {
   return points.toLocaleString("pt-BR", { minimumFractionDigits: points % 1 === 0 ? 0 : 1 });
 }
 
-export function QuestionRenderer({ item, index, numbering, mcqStyle, showAnswers }: QuestionRendererProps) {
+export function QuestionRenderer({ item, index, numbering, mcqStyle, pointsPerQuestion, showAnswers }: QuestionRendererProps) {
   const { content, points } = item;
   const number = numbering === "numeric" ? `${index + 1}. ` : "";
 
@@ -29,7 +30,9 @@ export function QuestionRenderer({ item, index, numbering, mcqStyle, showAnswers
         ) : (
           <Latex text={content.statement} />
         )}
-        {points != null && <span className="ml-1 text-[10pt] text-ink-soft">(Valor: {formatPoints(points)})</span>}
+        {pointsPerQuestion && points != null && (
+          <span className="ml-1 text-[10pt] text-ink-soft">(Valor: {formatPoints(points)})</span>
+        )}
       </p>
 
       <div className="mt-2">

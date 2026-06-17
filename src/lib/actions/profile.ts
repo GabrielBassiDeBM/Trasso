@@ -1,7 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+import type { Locale } from "@/lib/i18n/server";
 
 export interface ProfileActionState {
   error: string | null;
@@ -50,6 +52,19 @@ export async function updateEmailAction(
   if (error) return { error: error.message };
 
   return { error: null, success: true };
+}
+
+export async function updateLocaleAction(locale: Locale): Promise<void> {
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
+  await supabase.from("profiles").update({ locale }).eq("id", userData.user.id);
+
+  const cookieStore = await cookies();
+  cookieStore.set("trasso_locale", locale, { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
+
+  revalidatePath("/", "layout");
 }
 
 export async function updatePasswordAction(

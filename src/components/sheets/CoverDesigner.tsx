@@ -3,6 +3,7 @@
 import { useRef, useState, useTransition } from "react";
 import { Rnd } from "react-rnd";
 import type { CoverBlock, CoverBlockType, CoverLayout } from "@/lib/sheets/defaults";
+import { computeSnap, GRID_SIZE_MM, type SnapRect } from "@/lib/sheets/snapping";
 import { uploadLogoAction } from "@/lib/actions/sheets";
 import { CoverBlockContent } from "./SheetDocument";
 import { Button } from "@/components/ui/Button";
@@ -14,6 +15,7 @@ const PAGE_WIDTH_MM = 210;
 const CANVAS_WIDTH_PX = 700;
 const PX_PER_MM = CANVAS_WIDTH_PX / PAGE_WIDTH_MM;
 const MIN_CANVAS_HEIGHT_MM = 110;
+const GUIDE_COLOR = "#ff3b6e";
 
 interface BlockPreset {
   type: CoverBlockType;
@@ -62,6 +64,7 @@ interface CoverDesignerProps {
 
 export function CoverDesigner({ title, layout, onChange }: CoverDesignerProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [guides, setGuides] = useState<{ x: number[]; y: number[] }>({ x: [], y: [] });
   const selected = layout.blocks.find((block) => block.id === selectedId) ?? null;
 
   const canvasHeightMm = Math.max(
@@ -103,6 +106,15 @@ export function CoverDesigner({ title, layout, onChange }: CoverDesignerProps) {
     setSelectedId(id);
   }
 
+  function blockToRect(id: string, x: number, y: number, w: number, h: number): SnapRect {
+    return { id, x: pxToMm(x), y: pxToMm(y), w: pxToMm(w), h: pxToMm(h) };
+  }
+
+  function previewGuides(rect: SnapRect) {
+    const { guidesX, guidesY } = computeSnap(rect, layout.blocks, PAGE_WIDTH_MM);
+    setGuides({ x: guidesX, y: guidesY });
+  }
+
   return (
     <div className="space-y-4">
       <div>
@@ -118,11 +130,32 @@ export function CoverDesigner({ title, layout, onChange }: CoverDesignerProps) {
 
       <div
         className="relative mx-auto overflow-hidden rounded-md border border-ink/15 bg-white shadow-sm"
-        style={{ width: CANVAS_WIDTH_PX, height: mmToPx(canvasHeightMm) }}
+        style={{
+          width: CANVAS_WIDTH_PX,
+          height: mmToPx(canvasHeightMm),
+          backgroundImage:
+            "linear-gradient(to right, rgba(27,20,48,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(27,20,48,0.06) 1px, transparent 1px)",
+          backgroundSize: `${mmToPx(GRID_SIZE_MM)}px ${mmToPx(GRID_SIZE_MM)}px`,
+        }}
         onClick={(event) => {
           if (event.target === event.currentTarget) setSelectedId(null);
         }}
       >
+        {guides.x.map((x) => (
+          <div
+            key={`gx-${x}`}
+            className="pointer-events-none absolute top-0 bottom-0 z-20"
+            style={{ left: mmToPx(x), width: 1, background: GUIDE_COLOR }}
+          />
+        ))}
+        {guides.y.map((y) => (
+          <div
+            key={`gy-${y}`}
+            className="pointer-events-none absolute left-0 right-0 z-20"
+            style={{ top: mmToPx(y), height: 1, background: GUIDE_COLOR }}
+          />
+        ))}
+
         {layout.blocks.map((block) => {
           const isSelected = block.id === selectedId;
           return (
@@ -132,15 +165,22 @@ export function CoverDesigner({ title, layout, onChange }: CoverDesignerProps) {
               size={{ width: mmToPx(block.w), height: mmToPx(block.h) }}
               position={{ x: mmToPx(block.x), y: mmToPx(block.y) }}
               onMouseDown={() => setSelectedId(block.id)}
-              onDragStop={(_event, data) => patchBlock(block.id, { x: pxToMm(data.x), y: pxToMm(data.y) })}
-              onResizeStop={(_event, _direction, ref, _delta, position) =>
-                patchBlock(block.id, {
-                  w: pxToMm(ref.offsetWidth),
-                  h: pxToMm(ref.offsetHeight),
-                  x: pxToMm(position.x),
-                  y: pxToMm(position.y),
-                })
+              onDrag={(_event, data) => previewGuides(blockToRect(block.id, data.x, data.y, mmToPx(block.w), mmToPx(block.h)))}
+              onDragStop={(_event, data) => {
+                const rect = blockToRect(block.id, data.x, data.y, mmToPx(block.w), mmToPx(block.h));
+                const snapped = computeSnap(rect, layout.blocks, PAGE_WIDTH_MM);
+                patchBlock(block.id, { x: snapped.x, y: snapped.y });
+                setGuides({ x: [], y: [] });
+              }}
+              onResize={(_event, _direction, ref, _delta, position) =>
+                previewGuides(blockToRect(block.id, position.x, position.y, ref.offsetWidth, ref.offsetHeight))
               }
+              onResizeStop={(_event, _direction, ref, _delta, position) => {
+                const rect = blockToRect(block.id, position.x, position.y, ref.offsetWidth, ref.offsetHeight);
+                const snapped = computeSnap(rect, layout.blocks, PAGE_WIDTH_MM);
+                patchBlock(block.id, { x: snapped.x, y: snapped.y, w: rect.w, h: rect.h });
+                setGuides({ x: [], y: [] });
+              }}
               enableResizing={isSelected}
               resizeHandleStyles={RESIZE_HANDLE_STYLES}
               className={isSelected ? "z-10" : "z-0"}
@@ -170,7 +210,8 @@ export function CoverDesigner({ title, layout, onChange }: CoverDesignerProps) {
         />
       ) : (
         <p className="text-sm text-ink-soft">
-          Click a block to edit its content, drag to reposition, and use the corner handle to resize.
+          Click a block to edit its content, drag to reposition, and use the corner handle to resize. Blocks snap to
+          the grid and to nearby objects automatically.
         </p>
       )}
     </div>
@@ -195,6 +236,8 @@ function BlockInspector({ block, onChangeProps, onChangeGeometry, onRemove }: Bl
       </div>
 
       <BlockFields block={block} onChangeProps={onChangeProps} />
+
+      <ColorFields block={block} onChangeProps={onChangeProps} />
 
       <div>
         <span className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Position and size (mm)</span>
@@ -222,6 +265,68 @@ function blockTypeLabel(type: CoverBlockType): string {
     case "logo":
       return "Logo";
   }
+}
+
+const COLOR_FIELDS: Record<CoverBlockType, { key: string; label: string }[]> = {
+  title: [
+    { key: "kickerColor", label: "Kicker text color" },
+    { key: "titleColor", label: "Sheet name color" },
+  ],
+  student_field: [
+    { key: "color", label: "Label color" },
+    { key: "fill", label: "Underline color" },
+  ],
+  score_box: [
+    { key: "color", label: "Label color" },
+    { key: "fill", label: "Box border color" },
+  ],
+  instructions: [
+    { key: "color", label: "Text color" },
+    { key: "fill", label: "Background color" },
+  ],
+  logo: [{ key: "fill", label: "Placeholder color" }],
+};
+
+function ColorFields({ block, onChangeProps }: { block: CoverBlock; onChangeProps: (props: Record<string, string>) => void }) {
+  const fields = COLOR_FIELDS[block.type];
+  if (fields.length === 0) return null;
+
+  return (
+    <div>
+      <span className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Colors</span>
+      <div className="mt-2 flex flex-wrap gap-4">
+        {fields.map((field) => (
+          <ColorInput
+            key={field.key}
+            label={field.label}
+            value={block.props[field.key]}
+            onChange={(value) => onChangeProps({ [field.key]: value })}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ColorInput({ label, value, onChange }: { label: string; value?: string; onChange: (value: string) => void }) {
+  return (
+    <div>
+      <Label>{label}</Label>
+      <div className="flex items-center gap-2">
+        <input
+          type="color"
+          value={value || "#1b1430"}
+          onChange={(event) => onChange(event.target.value)}
+          className="h-9 w-12 cursor-pointer rounded-md border border-line bg-surface p-1"
+        />
+        {value && (
+          <Button type="button" variant="ghost" size="sm" onClick={() => onChange("")}>
+            Reset
+          </Button>
+        )}
+      </div>
+    </div>
+  );
 }
 
 function GeometryInput({ label, value, onChange }: { label: string; value: number; onChange: (value: number) => void }) {

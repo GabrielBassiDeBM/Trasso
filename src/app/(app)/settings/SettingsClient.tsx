@@ -1,39 +1,62 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import { User, Lock, Palette } from "lucide-react";
-import { updateProfileAction, updateEmailAction, updatePasswordAction, type ProfileActionState } from "@/lib/actions/profile";
+import { useActionState, useOptimistic, useState, useTransition } from "react";
+import { User, Lock, Palette, Check } from "lucide-react";
+import { updateProfileAction, updateEmailAction, updatePasswordAction, updateLocaleAction, type ProfileActionState } from "@/lib/actions/profile";
 import { Input, Label } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
+import { useT, useLocale } from "@/lib/i18n/client";
+import type { Locale } from "@/lib/i18n/translations";
 
 const initial: ProfileActionState = { error: null };
 
 type Tab = "profile" | "account" | "appearance";
 
-const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
-  { id: "profile", label: "Profile", icon: User },
-  { id: "account", label: "Account", icon: Lock },
-  { id: "appearance", label: "Appearance", icon: Palette },
-];
-
 interface Props {
   initialDisplayName: string;
   initialInstitution: string;
   currentEmail: string;
+  initialLocale: Locale;
 }
 
-export function SettingsClient({ initialDisplayName, initialInstitution, currentEmail }: Props) {
+export function SettingsClient({ initialDisplayName, initialInstitution, currentEmail, initialLocale }: Props) {
+  const t = useT();
+  const contextLocale = useLocale();
   const [tab, setTab] = useState<Tab>("profile");
   const [profileState, profileAction, profilePending] = useActionState(updateProfileAction, initial);
   const [emailState, emailAction, emailPending] = useActionState(updateEmailAction, initial);
   const [pwState, pwAction, pwPending] = useActionState(updatePasswordAction, initial);
+  const [isPending, startTransition] = useTransition();
+
+  const [optimisticLocale, setOptimisticLocale] = useOptimistic(
+    initialLocale ?? contextLocale,
+    (_: Locale, next: Locale) => next,
+  );
+
+  const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
+    { id: "profile", label: t("settings.tabs.profile"), icon: User },
+    { id: "account", label: t("settings.tabs.account"), icon: Lock },
+    { id: "appearance", label: t("settings.tabs.appearance"), icon: Palette },
+  ];
+
+  function handleLocaleChange(next: Locale) {
+    startTransition(async () => {
+      setOptimisticLocale(next);
+      await updateLocaleAction(next);
+    });
+  }
+
+  const LANGUAGES: { value: Locale; label: string; flag: string }[] = [
+    { value: "en", label: t("settings.appearance.english"), flag: "🇺🇸" },
+    { value: "pt", label: t("settings.appearance.portuguese"), flag: "🇧🇷" },
+  ];
 
   return (
     <div className="flex min-h-full flex-col">
       <header className="sticky top-0 z-10 flex items-center gap-4 border-b border-line bg-surface/95 px-8 py-4 backdrop-blur-[8px]">
         <h1 className="text-[20px] font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
-          Settings
+          {t("settings.title")}
         </h1>
       </header>
 
@@ -61,35 +84,37 @@ export function SettingsClient({ initialDisplayName, initialInstitution, current
         {/* Profile */}
         {tab === "profile" && (
           <section className="rounded-2xl border border-line bg-surface p-6 space-y-5">
-            <h2 className="text-base font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>Profile information</h2>
+            <h2 className="text-base font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
+              {t("settings.profile.heading")}
+            </h2>
             <form action={profileAction} className="space-y-4">
               <div>
-                <Label htmlFor="display_name">Display name</Label>
+                <Label htmlFor="display_name">{t("settings.profile.displayName")}</Label>
                 <Input
                   id="display_name"
                   name="display_name"
                   defaultValue={initialDisplayName}
-                  placeholder="e.g. Dr. Smith"
+                  placeholder={t("settings.profile.displayNamePlaceholder")}
                 />
               </div>
               <div>
-                <Label htmlFor="institution">School / Institution</Label>
+                <Label htmlFor="institution">{t("settings.profile.institution")}</Label>
                 <Input
                   id="institution"
                   name="institution"
                   defaultValue={initialInstitution}
-                  placeholder="e.g. Westview High School"
+                  placeholder={t("settings.profile.institutionPlaceholder")}
                 />
               </div>
               {profileState.error && (
                 <p role="alert" className="text-sm text-danger">{profileState.error}</p>
               )}
               {profileState.success && (
-                <p className="text-sm text-success">Profile updated successfully.</p>
+                <p className="text-sm text-success">{t("settings.profile.saved")}</p>
               )}
               <div className="flex justify-end">
                 <Button type="submit" variant="primary" size="sm" disabled={profilePending}>
-                  {profilePending ? "Saving…" : "Save profile"}
+                  {profilePending ? t("settings.profile.saving") : t("settings.profile.save")}
                 </Button>
               </div>
             </form>
@@ -100,47 +125,53 @@ export function SettingsClient({ initialDisplayName, initialInstitution, current
         {tab === "account" && (
           <div className="space-y-5">
             <section className="rounded-2xl border border-line bg-surface p-6 space-y-4">
-              <h2 className="text-base font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>Change email</h2>
-              <p className="text-sm text-ink-soft">Current email: <strong>{currentEmail}</strong></p>
+              <h2 className="text-base font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
+                {t("settings.account.changeEmail")}
+              </h2>
+              <p className="text-sm text-ink-soft">
+                {t("settings.account.currentEmail")} <strong>{currentEmail}</strong>
+              </p>
               <form action={emailAction} className="space-y-4">
                 <div>
-                  <Label htmlFor="email">New email</Label>
+                  <Label htmlFor="email">{t("settings.account.newEmail")}</Label>
                   <Input id="email" name="email" type="email" placeholder="new@example.com" />
                 </div>
                 {emailState.error && (
                   <p role="alert" className="text-sm text-danger">{emailState.error}</p>
                 )}
                 {emailState.success && (
-                  <p className="text-sm text-success">Check your email to confirm the change.</p>
+                  <p className="text-sm text-success">{t("settings.account.emailSent")}</p>
                 )}
                 <div className="flex justify-end">
                   <Button type="submit" variant="primary" size="sm" disabled={emailPending}>
-                    {emailPending ? "Sending…" : "Change email"}
+                    {emailPending ? t("settings.account.sending") : t("settings.account.changeEmailBtn")}
                   </Button>
                 </div>
               </form>
             </section>
 
             <section className="rounded-2xl border border-line bg-surface p-6 space-y-4">
-              <h2 className="text-base font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>Change password</h2>
+              <h2 className="text-base font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
+                {t("settings.account.changePassword")}
+              </h2>
               <form action={pwAction} className="space-y-4">
                 <div>
-                  <Label htmlFor="password">New password</Label>
-                  <Input id="password" name="password" type="password" placeholder="At least 6 characters" />
+                  <Label htmlFor="password">{t("settings.account.newPassword")}</Label>
+                  <Input id="password" name="password" type="password" placeholder={t("settings.account.newPasswordPlaceholder")} />
                 </div>
                 <div>
-                  <Label htmlFor="confirm_password">Confirm password</Label>
-                  <Input id="confirm_password" name="confirm_password" type="password" placeholder="Repeat the new password" />
+                  <Label htmlFor="confirm_password">{t("settings.account.confirmPassword")}</Label>
+                  <Input id="confirm_password" name="confirm_password" type="password" placeholder={t("settings.account.confirmPasswordPlaceholder")} />
                 </div>
                 {pwState.error && (
                   <p role="alert" className="text-sm text-danger">{pwState.error}</p>
                 )}
                 {pwState.success && (
-                  <p className="text-sm text-success">Password changed successfully.</p>
+                  <p className="text-sm text-success">{t("settings.account.passwordSaved")}</p>
                 )}
                 <div className="flex justify-end">
                   <Button type="submit" variant="primary" size="sm" disabled={pwPending}>
-                    {pwPending ? "Saving…" : "Change password"}
+                    {pwPending ? t("settings.account.savingPassword") : t("settings.account.changePasswordBtn")}
                   </Button>
                 </div>
               </form>
@@ -151,21 +182,48 @@ export function SettingsClient({ initialDisplayName, initialInstitution, current
         {/* Appearance */}
         {tab === "appearance" && (
           <section className="rounded-2xl border border-line bg-surface p-6 space-y-5">
-            <h2 className="text-base font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>Appearance</h2>
-            <div className="space-y-3">
+            <h2 className="text-base font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
+              {t("settings.appearance.heading")}
+            </h2>
+            <div className="space-y-4">
+              {/* Theme — coming soon */}
               <div className="flex items-center justify-between rounded-xl border border-line bg-canvas px-4 py-3">
                 <div>
-                  <p className="text-sm font-semibold text-ink">Theme</p>
-                  <p className="text-xs text-ink-faint">Light / Dark</p>
+                  <p className="text-sm font-semibold text-ink">{t("settings.appearance.theme")}</p>
+                  <p className="text-xs text-ink-faint">{t("settings.appearance.themeDesc")}</p>
                 </div>
-                <span className="rounded-full bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">Coming soon</span>
+                <span className="rounded-full bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">
+                  {t("settings.appearance.comingSoon")}
+                </span>
               </div>
-              <div className="flex items-center justify-between rounded-xl border border-line bg-canvas px-4 py-3">
+
+              {/* Language picker */}
+              <div className="rounded-xl border border-line bg-canvas px-4 py-3 space-y-3">
                 <div>
-                  <p className="text-sm font-semibold text-ink">Language</p>
-                  <p className="text-xs text-ink-faint">English</p>
+                  <p className="text-sm font-semibold text-ink">{t("settings.appearance.language")}</p>
+                  <p className="text-xs text-ink-faint">{t("settings.appearance.languageDesc")}</p>
                 </div>
-                <span className="rounded-full bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">Coming soon</span>
+                <div className="flex gap-2">
+                  {LANGUAGES.map(({ value, label, flag }) => (
+                    <button
+                      key={value}
+                      type="button"
+                      disabled={isPending}
+                      onClick={() => handleLocaleChange(value)}
+                      className={cn(
+                        "flex flex-1 items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors",
+                        optimisticLocale === value
+                          ? "border-brand bg-brand-soft text-brand"
+                          : "border-line bg-surface text-ink-soft hover:border-brand/40 hover:text-ink",
+                        isPending && "opacity-60 cursor-not-allowed"
+                      )}
+                    >
+                      <span aria-hidden="true">{flag}</span>
+                      {label}
+                      {optimisticLocale === value && <Check size={13} aria-hidden="true" />}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </section>

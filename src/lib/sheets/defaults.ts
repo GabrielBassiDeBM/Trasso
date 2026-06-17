@@ -6,6 +6,7 @@ export interface PageSettings {
   numbering: "numeric" | "none";
   answerLines: number;
   mcqStyle: "lettered" | "bubble";
+  pointsPerQuestion: boolean;
 }
 
 export type CoverBlockType =
@@ -36,6 +37,7 @@ export const DEFAULT_PAGE_SETTINGS: PageSettings = {
   numbering: "numeric",
   answerLines: 3,
   mcqStyle: "lettered",
+  pointsPerQuestion: false,
 };
 
 export const DEFAULT_COVER_LAYOUT: CoverLayout = {

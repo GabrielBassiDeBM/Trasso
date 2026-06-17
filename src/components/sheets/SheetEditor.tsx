@@ -213,6 +213,7 @@ export function SheetEditor({
             sheetId={sheet.id}
             items={items}
             groups={groups}
+            pointsPerQuestion={pageSettings.pointsPerQuestion}
             onItemsChange={setItems}
             onGroupsChange={setGroups}
           />

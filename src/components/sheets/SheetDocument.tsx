@@ -23,31 +23,42 @@ export function SheetDocument({
   showAnswers = false,
   className,
 }: SheetDocumentProps) {
-  const { margins, columns, numbering, mcqStyle } = pageSettings;
+  const { margins, columns, numbering, mcqStyle, pointsPerQuestion } = pageSettings;
   const coverHeight = coverLayout.blocks.reduce((max, block) => Math.max(max, block.y + block.h), 0) + 6;
 
   return (
     <div
-      className={cn("sheet-page bg-white text-ink", mode === "preview" && "shadow-lg shadow-ink/10", className)}
+      className={cn("sheet-page relative bg-white text-ink", mode === "preview" && "shadow-lg shadow-ink/10", className)}
       style={{
         width: "210mm",
         minHeight: mode === "print" ? "297mm" : undefined,
         padding: `${margins.top}mm ${margins.right}mm ${margins.bottom}mm ${margins.left}mm`,
       }}
     >
-      <CoverSection blocks={coverLayout.blocks} title={title} height={coverHeight} margins={margins} />
+      <div
+        className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden"
+        aria-hidden="true"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/trasso-logo.svg" alt="" className="opacity-[0.05]" style={{ width: "65%", maxWidth: "150mm" }} />
+      </div>
 
-      <div className={cn("mt-6", columns === 2 && "columns-2 gap-8")}>
-        {items.map((item, index) => (
-          <QuestionRenderer
-            key={item.sheetQuestionId}
-            item={item}
-            index={index}
-            numbering={numbering}
-            mcqStyle={mcqStyle}
-            showAnswers={showAnswers}
-          />
-        ))}
+      <div className="relative z-10">
+        <CoverSection blocks={coverLayout.blocks} title={title} height={coverHeight} margins={margins} />
+
+        <div className={cn("mt-6", columns === 2 && "columns-2 gap-8")}>
+          {items.map((item, index) => (
+            <QuestionRenderer
+              key={item.sheetQuestionId}
+              item={item}
+              index={index}
+              numbering={numbering}
+              mcqStyle={mcqStyle}
+              pointsPerQuestion={pointsPerQuestion}
+              showAnswers={showAnswers}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -88,34 +99,54 @@ function CoverSection({ blocks, title, height, margins }: CoverSectionProps) {
 }
 
 export function CoverBlockContent({ block, title }: { block: CoverBlock; title: string }) {
+  const color = block.props.color || undefined;
+  const fill = block.props.fill || undefined;
   switch (block.type) {
-    case "title":
+    case "title": {
+      const kickerColor = block.props.kickerColor || undefined;
+      const titleColor = block.props.titleColor || undefined;
       return (
         <div className="flex h-full flex-col justify-center">
           {block.props.text && (
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">{block.props.text}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent" style={{ color: kickerColor }}>
+              {block.props.text}
+            </p>
           )}
-          <h1 className="font-display text-2xl font-semibold leading-tight text-ink">{title}</h1>
-          {block.props.subtitle && <p className="mt-1 text-sm text-ink-soft">{block.props.subtitle}</p>}
+          <h1 className="font-display text-2xl font-semibold leading-tight text-ink" style={{ color: titleColor }}>
+            {title}
+          </h1>
+          {block.props.subtitle && (
+            <p className="mt-1 text-sm text-ink-soft" style={{ color: titleColor }}>
+              {block.props.subtitle}
+            </p>
+          )}
         </div>
       );
+    }
     case "student_field":
       return (
         <div className="flex h-full items-end gap-2 pb-1">
-          <span className="whitespace-nowrap text-sm text-ink-soft">{block.props.label}:</span>
-          <span className="flex-1 border-b border-ink/40" />
+          <span className="whitespace-nowrap text-sm text-ink-soft" style={{ color }}>
+            {block.props.label}:
+          </span>
+          <span className="flex-1 border-b border-ink/40" style={{ borderColor: fill }} />
         </div>
       );
     case "score_box":
       return (
         <div className="flex h-full items-center gap-2">
-          <span className="whitespace-nowrap text-sm text-ink-soft">{block.props.label}:</span>
-          <span className="h-6 flex-1 rounded-md border border-ink/30" />
+          <span className="whitespace-nowrap text-sm text-ink-soft" style={{ color }}>
+            {block.props.label}:
+          </span>
+          <span className="h-6 flex-1 rounded-md border border-ink/30" style={{ borderColor: fill }} />
         </div>
       );
     case "instructions":
       return (
-        <div className="h-full rounded-md border border-ink/15 bg-canvas/60 p-3 text-xs leading-relaxed text-ink-soft">
+        <div
+          className="h-full rounded-md border border-ink/15 bg-canvas/60 p-3 text-xs leading-relaxed text-ink-soft"
+          style={{ color, backgroundColor: fill }}
+        >
           <Latex text={block.props.text ?? ""} />
         </div>
       );

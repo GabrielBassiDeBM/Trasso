@@ -1,8 +1,8 @@
 "use client";
 
-import { useActionState, useEffect, useState, useMemo } from "react";
-import { X, ArrowRight, Wand2, Camera, FileText } from "lucide-react";
-import { createSheetAction, type SheetActionState } from "@/lib/actions/sheets";
+import { useEffect, useMemo, useState, useTransition } from "react";
+import { X } from "lucide-react";
+import { updateSheetTaxonomyAction } from "@/lib/actions/sheets";
 import { Input, Label } from "@/components/ui/Input";
 import { SearchableMultiSelect } from "@/components/ui/SearchableMultiSelect";
 import { SearchableSelect } from "@/components/ui/SearchableSelect";
@@ -10,29 +10,41 @@ import { buttonStyles } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
 import { useT, useLocale } from "@/lib/i18n/client";
 import { translateTopicName } from "@/lib/i18n/translations";
-import type { SubjectRow, TopicRow } from "@/lib/data/sheets";
+import { DEFAULT_PAGE_SETTINGS, type PageSettings } from "@/lib/sheets/defaults";
+import type { SheetWithTaxonomy, SubjectRow, TopicRow } from "@/lib/data/sheets";
 
 interface Props {
   open: boolean;
   onClose: () => void;
+  sheet: SheetWithTaxonomy;
   subjects: SubjectRow[];
   allTopics: TopicRow[];
 }
 
-type CreationMode = "blank" | "ai_generate" | "scan";
-
-const initial: SheetActionState = { error: null };
-
-export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
+export function EditSheetModal({ open, onClose, sheet, subjects, allTopics }: Props) {
   const t = useT();
   const locale = useLocale();
-  const [state, formAction, pending] = useActionState(createSheetAction, initial);
-  const [mode, setMode] = useState<CreationMode>("blank");
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
-  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-  const [difficulty, setDifficulty] = useState<string>("");
-  const [examType, setExamType] = useState<string>("");
-  const [pointsPerQuestion, setPointsPerQuestion] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+
+  const [title, setTitle] = useState(sheet.title);
+  const [examType, setExamType] = useState(sheet.exam_type ?? "");
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>(sheet.subjectIds);
+  const [selectedTopics, setSelectedTopics] = useState<string[]>(sheet.topicIds);
+  const [difficulty, setDifficulty] = useState<string>(sheet.difficulty === "mixed" ? "" : sheet.difficulty ?? "");
+  const currentPageSettings = (sheet.page_settings as unknown as PageSettings | null) ?? DEFAULT_PAGE_SETTINGS;
+  const [pointsPerQuestion, setPointsPerQuestion] = useState(currentPageSettings.pointsPerQuestion);
+
+  useEffect(() => {
+    if (!open) return;
+    setTitle(sheet.title);
+    setExamType(sheet.exam_type ?? "");
+    setSelectedSubjects(sheet.subjectIds);
+    setSelectedTopics(sheet.topicIds);
+    setDifficulty(sheet.difficulty === "mixed" ? "" : sheet.difficulty ?? "");
+    setPointsPerQuestion(((sheet.page_settings as unknown as PageSettings | null) ?? DEFAULT_PAGE_SETTINGS).pointsPerQuestion);
+    setError(null);
+  }, [open, sheet]);
 
   const availableTopics = useMemo(
     () => selectedSubjects.length > 0
@@ -41,22 +53,9 @@ export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
     [allTopics, selectedSubjects],
   );
 
-  // Drop topics that no longer belong to any selected subject
   useEffect(() => {
-    if (selectedTopics.length === 0) return;
-    const validIds = new Set(availableTopics.map((tp) => tp.id));
-    setSelectedTopics((prev) => prev.filter((id) => validIds.has(id)));
-  }, [availableTopics]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (!open) return;
-    setMode("blank");
-    setSelectedSubjects([]);
-    setSelectedTopics([]);
-    setDifficulty("");
-    setExamType("");
-    setPointsPerQuestion(false);
-  }, [open]);
+    setSelectedTopics((prev) => prev.filter((id) => availableTopics.some((tp) => tp.id === id)));
+  }, [availableTopics]);
 
   useEffect(() => {
     if (!open) return;
@@ -65,20 +64,14 @@ export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
     return () => window.removeEventListener("keydown", handler);
   }, [open, onClose]);
 
-  function handleExamTypeChange(value: string) {
-    setExamType(value);
-    setPointsPerQuestion(value === "prova");
-  }
-
   if (!open) return null;
 
   const EXAM_TYPES = [
-    { value: "", label: t("examType.select") },
     { value: "prova", label: t("examType.test") },
     { value: "lista", label: t("examType.problemSet") },
     { value: "simulado", label: t("examType.practiceTest") },
     { value: "recuperacao", label: t("examType.review") },
-  ] as const;
+  ];
 
   const DIFFICULTY_OPTIONS = [
     { value: "", label: t("difficulty.mixed") },
@@ -87,11 +80,21 @@ export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
     { value: "hard", label: t("difficulty.hard") },
   ];
 
-  const MODES = [
-    { id: "blank" as CreationMode, label: t("newSheet.mode.blank"), icon: FileText, description: t("newSheet.mode.blankDesc") },
-    { id: "ai_generate" as CreationMode, label: t("newSheet.mode.ai"), icon: Wand2, description: t("newSheet.mode.aiDesc") },
-    { id: "scan" as CreationMode, label: t("newSheet.mode.scan"), icon: Camera, description: t("newSheet.mode.scanDesc") },
-  ];
+  function handleSave() {
+    setError(null);
+    startTransition(async () => {
+      const result = await updateSheetTaxonomyAction(sheet.id, {
+        title,
+        examType: examType || null,
+        subjectIds: selectedSubjects,
+        topicIds: selectedTopics,
+        difficulty: difficulty || null,
+        pageSettings: { ...currentPageSettings, pointsPerQuestion },
+      });
+      if (result.error) { setError(result.error); return; }
+      onClose();
+    });
+  }
 
   return (
     <div
@@ -104,77 +107,48 @@ export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="modal-title"
+        aria-labelledby="edit-modal-title"
       >
         <div className="h-2 btn-gradient" />
 
         <div className="flex max-h-[calc(100vh-80px)] flex-col overflow-y-auto p-7">
           <div className="mb-5 flex items-center justify-between">
-            <h2 id="modal-title" className="text-xl font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
-              {t("newSheet.title")}
+            <h2 id="edit-modal-title" className="text-xl font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
+              {t("editSheet.title")}
             </h2>
             <button
               onClick={onClose}
-              aria-label={t("newSheet.close")}
+              aria-label={t("editSheet.close")}
               className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f1f0f5] text-ink-soft transition-colors hover:bg-[#e3e1ea] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
             >
               <X size={16} />
             </button>
           </div>
 
-          {/* Mode selector */}
-          <div className="mb-5 grid grid-cols-3 gap-2">
-            {MODES.map((m) => (
-              <button
-                key={m.id}
-                type="button"
-                onClick={() => setMode(m.id)}
-                className={cn(
-                  "flex flex-col items-center gap-1.5 rounded-xl border p-3 text-center transition-colors",
-                  mode === m.id
-                    ? "border-brand bg-brand-soft text-brand"
-                    : "border-line bg-canvas text-ink-soft hover:border-brand/40 hover:bg-brand-soft/50",
-                )}
-              >
-                <m.icon size={18} />
-                <span className="text-xs font-semibold">{m.label}</span>
-                <span className="text-[10px] text-ink-faint">{m.description}</span>
-              </button>
-            ))}
-          </div>
-
-          <form action={formAction} className="flex flex-col gap-4">
-            <input type="hidden" name="mode" value={mode} />
-            <input type="hidden" name="subject_ids" value={selectedSubjects.join(",")} />
-            <input type="hidden" name="topic_ids" value={selectedTopics.join(",")} />
-            <input type="hidden" name="difficulty" value={difficulty} />
-            <input type="hidden" name="exam_type" value={examType} />
-            <input type="hidden" name="points_per_question" value={pointsPerQuestion ? "1" : ""} />
-
+          <div className="flex flex-col gap-4">
             <div>
-              <Label htmlFor="modal-title-input">{t("newSheet.field.title")}</Label>
+              <Label htmlFor="edit-title-input">{t("newSheet.field.title")}</Label>
               <Input
-                id="modal-title-input"
-                name="title"
+                id="edit-title-input"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 placeholder={t("newSheet.field.titlePlaceholder")}
                 autoFocus
-                required
               />
             </div>
 
             <div>
-              <Label htmlFor="modal-exam-type">{t("newSheet.field.type")}</Label>
+              <Label htmlFor="edit-exam-type">{t("newSheet.field.type")}</Label>
               <SearchableSelect
-                options={EXAM_TYPES.filter((et) => et.value !== "")}
+                options={EXAM_TYPES}
                 value={examType}
-                onChange={handleExamTypeChange}
+                onChange={setExamType}
                 placeholder={t("examType.select")}
                 searchPlaceholder={t("newSheet.field.searchType")}
                 noResultsLabel={t("newSheet.field.noResults")}
               />
             </div>
 
-            {/* Subjects multi-select */}
             {subjects.length > 0 && (
               <div>
                 <Label>{t("newSheet.field.subjects")}</Label>
@@ -190,7 +164,6 @@ export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
               </div>
             )}
 
-            {/* Topics — shown only when at least one subject is selected */}
             <div>
               <Label>{t("newSheet.field.topics")}</Label>
               <SearchableMultiSelect
@@ -206,7 +179,6 @@ export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
               />
             </div>
 
-            {/* Difficulty */}
             <div>
               <Label>{t("newSheet.field.difficulty")}</Label>
               <div className="mt-1.5 flex gap-2">
@@ -228,7 +200,6 @@ export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
               </div>
             </div>
 
-            {/* Points per question — optional, off by default */}
             <label className="flex cursor-pointer items-center gap-3">
               <input
                 type="checkbox"
@@ -239,44 +210,17 @@ export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
               <span className="text-sm text-ink">{t("newSheet.field.pointsPerQuestion")}</span>
             </label>
 
-            {/* AI mode extra fields */}
-            {mode === "ai_generate" && (
-              <div className="space-y-3 rounded-xl border border-brand/30 bg-brand-soft/60 p-3">
-                <div className="flex items-center gap-2 text-xs font-semibold text-brand">
-                  <Wand2 size={13} />
-                  {t("newSheet.ai.config")}
-                </div>
-                <div>
-                  <Label htmlFor="modal-ai-count">{t("newSheet.ai.count")}</Label>
-                  <Input id="modal-ai-count" name="ai_count" type="number" min={1} max={20} defaultValue={5} />
-                </div>
-              </div>
-            )}
-
-            {mode === "scan" && (
-              <div className="space-y-2 rounded-xl border border-accent/30 bg-accent-soft/60 p-3">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#1187f0]">
-                  <Camera size={13} />
-                  {t("newSheet.scan.title")}
-                </div>
-                <p className="text-xs text-ink-soft">{t("newSheet.scan.desc")}</p>
-              </div>
-            )}
-
-            {state.error && (
-              <p role="alert" className="text-sm text-danger">{state.error}</p>
-            )}
+            {error && <p role="alert" className="text-sm text-danger">{error}</p>}
 
             <div className="mt-1 flex justify-end gap-3">
               <button type="button" onClick={onClose} className={buttonStyles("ghost", "sm")}>
                 {t("newSheet.btn.cancel")}
               </button>
-              <button type="submit" disabled={pending} className={buttonStyles("primary", "sm")}>
-                {pending ? t("newSheet.btn.creating") : mode === "ai_generate" ? t("newSheet.btn.createAI") : t("newSheet.btn.create")}
-                {!pending && <ArrowRight size={15} />}
+              <button type="button" disabled={pending} onClick={handleSave} className={buttonStyles("primary", "sm")}>
+                {pending ? t("editSheet.btn.saving") : t("editSheet.btn.save")}
               </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>

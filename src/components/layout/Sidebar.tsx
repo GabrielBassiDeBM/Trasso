@@ -13,14 +13,7 @@ import {
   Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
-
-const NAV = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/banco", label: "Question Bank", icon: Library },
-  { href: "/classes", label: "Classes", icon: Users },
-  { href: "/gabarito", label: "Grading", icon: ClipboardCheck },
-  { href: "/orgs", label: "Organizations", icon: Building2 },
-];
+import { useT } from "@/lib/i18n/client";
 
 interface SidebarProps {
   onNew: () => void;
@@ -32,6 +25,15 @@ interface SidebarProps {
 
 export function Sidebar({ onNew, userName, userEmail, isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const t = useT();
+
+  const NAV = [
+    { href: "/dashboard", label: t("nav.dashboard"), icon: LayoutDashboard },
+    { href: "/banco", label: t("nav.questionBank"), icon: Library },
+    { href: "/classes", label: t("nav.classes"), icon: Users },
+    { href: "/gabarito", label: t("nav.grading"), icon: ClipboardCheck },
+    { href: "/orgs", label: t("nav.organizations"), icon: Building2 },
+  ];
 
   return (
     <aside
@@ -60,7 +62,7 @@ export function Sidebar({ onNew, userName, userEmail, isOpen = false, onClose }:
         className="mb-5 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold text-white btn-gradient focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
       >
         <Plus size={16} />
-        New Sheet
+        {t("nav.newSheet")}
       </button>
 
       {/* Nav */}
@@ -74,7 +76,7 @@ export function Sidebar({ onNew, userName, userEmail, isOpen = false, onClose }:
 
           return (
             <Link
-              key={label}
+              key={href}
               href={href}
               onClick={onClose}
               className={cn(
@@ -105,7 +107,7 @@ export function Sidebar({ onNew, userName, userEmail, isOpen = false, onClose }:
           {(userName ?? userEmail ?? "?")[0].toUpperCase()}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-[13px] font-semibold text-ink">{userName ?? "My profile"}</p>
+          <p className="truncate text-[13px] font-semibold text-ink">{userName ?? t("nav.myProfile")}</p>
           {userEmail && (
             <p className="truncate text-[11px] text-ink-faint">{userEmail}</p>
           )}
@@ -113,7 +115,7 @@ export function Sidebar({ onNew, userName, userEmail, isOpen = false, onClose }:
         <Link
           href="/settings"
           onClick={onClose}
-          aria-label="Settings"
+          aria-label={t("nav.settings")}
           className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-ink-faint transition-colors hover:bg-[#e3e1ea] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
         >
           <Settings size={14} />

@@ -36,11 +36,12 @@ interface QuestionListProps {
   sheetId: string;
   items: QuestionItem[];
   groups: GroupItem[];
+  pointsPerQuestion: boolean;
   onItemsChange: (items: QuestionItem[]) => void;
   onGroupsChange: (groups: GroupItem[]) => void;
 }
 
-export function QuestionList({ sheetId, items, groups, onItemsChange, onGroupsChange }: QuestionListProps) {
+export function QuestionList({ sheetId, items, groups, pointsPerQuestion, onItemsChange, onGroupsChange }: QuestionListProps) {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }));
   const [adding, setAdding] = useState<QuestionType | null>(null);
   const [addingGroup, setAddingGroup] = useState(false);
@@ -140,6 +141,7 @@ export function QuestionList({ sheetId, items, groups, onItemsChange, onGroupsCh
           onItemRemove={removeItem}
           onAddQuestion={handleAdd}
           adding={adding}
+          pointsPerQuestion={pointsPerQuestion}
         />
       ))}
 
@@ -164,6 +166,7 @@ export function QuestionList({ sheetId, items, groups, onItemsChange, onGroupsCh
                 sheetId={sheetId}
                 onContentChange={(content) => updateItemContent(item.sheetQuestionId, content)}
                 onRemoved={() => removeItem(item.sheetQuestionId)}
+                pointsPerQuestion={pointsPerQuestion}
               />
             ))}
           </div>
@@ -242,11 +245,12 @@ interface SortableQuestionItemProps {
   item: QuestionItem;
   index: number;
   sheetId: string;
+  pointsPerQuestion: boolean;
   onContentChange: (content: QuestionContent) => void;
   onRemoved: () => void;
 }
 
-function SortableQuestionItem({ item, index, sheetId, onContentChange, onRemoved }: SortableQuestionItemProps) {
+function SortableQuestionItem({ item, index, sheetId, pointsPerQuestion, onContentChange, onRemoved }: SortableQuestionItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: item.sheetQuestionId,
   });
@@ -266,6 +270,7 @@ function SortableQuestionItem({ item, index, sheetId, onContentChange, onRemoved
         index={index}
         content={item.content}
         points={item.points}
+        showPoints={pointsPerQuestion}
         onContentChange={onContentChange}
         onRemoved={onRemoved}
         dragHandle={

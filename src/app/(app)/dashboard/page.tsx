@@ -1,120 +1,176 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FileText, Library } from "lucide-react";
-import { getSheets, getDashboardStats } from "@/lib/data/sheets";
-import { SheetCard } from "@/components/dashboard/SheetCard";
+import { getSheetsWithTaxonomy, getDashboardStats, getSubjects, getTopics } from "@/lib/data/sheets";
+import { SheetsGrid } from "@/components/dashboard/SheetsGrid";
 import { DashboardTopbar } from "@/components/dashboard/DashboardTopbar";
 import { createClient } from "@/lib/supabase/server";
+import { getLocale } from "@/lib/i18n/server";
+import { translate } from "@/lib/i18n/translations";
 import { cn } from "@/lib/utils/cn";
 
 export const metadata: Metadata = {
   title: "Dashboard — trasso",
 };
 
-function getGreeting() {
-  const h = new Date().getHours();
-  if (h < 12) return "Good morning";
-  if (h < 18) return "Good afternoon";
-  return "Good evening";
-}
-
-const EXAM_FILTERS = [
-  { value: "", label: "All" },
-  { value: "prova", label: "Tests" },
-  { value: "lista", label: "Problem Sets" },
-  { value: "simulado", label: "Practice Tests" },
-  { value: "recuperacao", label: "Reviews" },
-] as const;
-
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ exam_type?: string; search?: string }>;
+  searchParams: Promise<{ exam_type?: string; subject_id?: string; search?: string }>;
 }) {
   const sp = await searchParams;
   const supabase = await createClient();
 
-  const [{ data: { user } }, sheets, stats] = await Promise.all([
+  const [{ data: { user } }, sheets, stats, subjects, allTopics, locale] = await Promise.all([
     supabase.auth.getUser(),
-    getSheets({ examType: sp.exam_type, search: sp.search }),
+    getSheetsWithTaxonomy({ examType: sp.exam_type, subjectId: sp.subject_id, search: sp.search }),
     getDashboardStats(),
+    getSubjects(),
+    getTopics(),
+    getLocale(),
   ]);
+
+  const t = (key: Parameters<typeof translate>[1], vars?: Parameters<typeof translate>[2]) =>
+    translate(locale, key, vars);
 
   const displayName =
     user?.user_metadata?.display_name ?? user?.email?.split("@")[0] ?? "teacher";
 
+  function getGreeting() {
+    const h = new Date().getHours();
+    if (h < 12) return t("dashboard.greeting.morning");
+    if (h < 18) return t("dashboard.greeting.afternoon");
+    return t("dashboard.greeting.evening");
+  }
+
+  const EXAM_FILTERS = [
+    { value: "", label: t("dashboard.filter.all") },
+    { value: "prova", label: t("dashboard.filter.tests") },
+    { value: "lista", label: t("dashboard.filter.problemSets") },
+    { value: "simulado", label: t("dashboard.filter.practicetests") },
+    { value: "recuperacao", label: t("dashboard.filter.reviews") },
+  ] as const;
+
   const activeFilter = sp.exam_type ?? "";
+  const activeSubject = sp.subject_id ?? "";
+
+  const sheetsFoundLabel = sheets.length === 1
+    ? t("dashboard.sheetsFound_one", { n: sheets.length })
+    : t("dashboard.sheetsFound_many", { n: sheets.length });
 
   return (
     <div className="flex min-h-full flex-col">
       <DashboardTopbar />
 
-      <div className="flex-1 px-8 py-7">
-        {/* Greeting */}
-        <div className="mb-7">
-          <h2 className="text-[26px] font-extrabold text-ink" style={{ letterSpacing: "-0.02em" }}>
-            {getGreeting()}, {displayName} 👋
-          </h2>
-          <p className="mt-1 text-[15px] text-ink-soft">
-            {sheets.length === 0
-              ? "Create your first sheet to get started."
-              : `${sheets.length} sheet${sheets.length !== 1 ? "s" : ""} found.`}
-          </p>
-        </div>
-
-        {/* Stat cards */}
-        <div className="mb-8 grid grid-cols-2 gap-4">
-          <StatCard
-            icon={FileText}
-            label="Sheets created"
-            value={String(stats.sheetsCount)}
-            tintBg="bg-brand-soft"
-            tintText="text-brand"
-          />
-          <StatCard
-            icon={Library}
-            label="Questions in bank"
-            value={String(stats.questionsCount)}
-            tintBg="bg-accent-soft"
-            tintText="text-[#1187f0]"
-          />
-        </div>
-
-        {/* Filter chips */}
-        <div className="mb-5 flex flex-wrap items-center gap-2">
-          <h2 className="text-[18px] font-bold text-ink mr-1" style={{ letterSpacing: "-0.01em" }}>
-            Sheets
-          </h2>
-          {EXAM_FILTERS.map((f) => {
-            const params = new URLSearchParams();
-            if (f.value) params.set("exam_type", f.value);
-            if (sp.search) params.set("search", sp.search);
-            return (
-              <Link
-                key={f.value}
-                href={`/dashboard?${params.toString()}`}
-                className={cn(
-                  "rounded-full border px-4 py-1 text-xs font-semibold transition-colors",
-                  activeFilter === f.value
-                    ? "border-brand bg-brand-soft text-brand"
-                    : "border-line bg-surface text-ink-soft hover:border-brand/40 hover:text-ink"
-                )}
-              >
-                {f.label}
-              </Link>
-            );
-          })}
-        </div>
-
-        {sheets.length === 0 ? (
-          <EmptyState hasFilter={!!activeFilter || !!sp.search} />
-        ) : (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {sheets.map((sheet, i) => (
-              <SheetCard key={sheet.id} sheet={sheet} index={i} />
-            ))}
+      <div className="flex flex-1">
+        {/* Main content */}
+        <div className="min-w-0 flex-1 px-8 py-7">
+          {/* Greeting */}
+          <div className="mb-7">
+            <h2 className="text-[26px] font-extrabold text-ink" style={{ letterSpacing: "-0.02em" }}>
+              {getGreeting()}, {displayName} 👋
+            </h2>
+            <p className="mt-1 text-[15px] text-ink-soft">
+              {sheets.length === 0 ? t("dashboard.createFirst") : sheetsFoundLabel}
+            </p>
           </div>
-        )}
+
+          {/* Stat cards */}
+          <div className="mb-8 grid grid-cols-2 gap-4">
+            <StatCard
+              icon={FileText}
+              label={t("dashboard.sheetsCreated")}
+              value={String(stats.sheetsCount)}
+              tintBg="bg-brand-soft"
+              tintText="text-brand"
+            />
+            <StatCard
+              icon={Library}
+              label={t("dashboard.questionsInBank")}
+              value={String(stats.questionsCount)}
+              tintBg="bg-accent-soft"
+              tintText="text-[#1187f0]"
+            />
+          </div>
+
+          {/* Exam type filter chips */}
+          <div className="mb-5 flex flex-wrap items-center gap-2">
+            {EXAM_FILTERS.map((f) => {
+              const params = new URLSearchParams();
+              if (f.value) params.set("exam_type", f.value);
+              if (activeSubject) params.set("subject_id", activeSubject);
+              if (sp.search) params.set("search", sp.search);
+              return (
+                <Link
+                  key={f.value}
+                  href={`/dashboard?${params.toString()}`}
+                  className={cn(
+                    "rounded-full border px-4 py-1 text-xs font-semibold transition-colors",
+                    activeFilter === f.value
+                      ? "border-brand bg-brand-soft text-brand"
+                      : "border-line bg-surface text-ink-soft hover:border-brand/40 hover:text-ink"
+                  )}
+                >
+                  {f.label}
+                </Link>
+              );
+            })}
+          </div>
+
+          {sheets.length === 0 ? (
+            <EmptyState hasFilter={!!activeFilter || !!activeSubject || !!sp.search} t={t} />
+          ) : (
+            <SheetsGrid sheets={sheets} subjects={subjects} allTopics={allTopics} />
+          )}
+        </div>
+
+        {/* Right panel — subject filter */}
+        <aside className="hidden w-56 flex-shrink-0 border-l border-line px-5 py-7 lg:block">
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-ink-faint">
+            {t("dashboard.subject")}
+          </p>
+          <div className="flex flex-col gap-1">
+            {(() => {
+              const params = new URLSearchParams();
+              if (activeFilter) params.set("exam_type", activeFilter);
+              if (sp.search) params.set("search", sp.search);
+              return (
+                <Link
+                  href={`/dashboard?${params.toString()}`}
+                  className={cn(
+                    "rounded-lg px-3 py-2 text-[13px] font-medium transition-colors",
+                    activeSubject === ""
+                      ? "bg-brand-soft text-brand"
+                      : "text-ink-soft hover:bg-[#f1f0f5] hover:text-ink"
+                  )}
+                >
+                  {t("dashboard.allSubjects")}
+                </Link>
+              );
+            })()}
+
+            {subjects.map((subject) => {
+              const params = new URLSearchParams();
+              if (activeFilter) params.set("exam_type", activeFilter);
+              params.set("subject_id", subject.id);
+              if (sp.search) params.set("search", sp.search);
+              return (
+                <Link
+                  key={subject.id}
+                  href={`/dashboard?${params.toString()}`}
+                  className={cn(
+                    "rounded-lg px-3 py-2 text-[13px] font-medium transition-colors",
+                    activeSubject === subject.id
+                      ? "bg-brand-soft text-brand"
+                      : "text-ink-soft hover:bg-[#f1f0f5] hover:text-ink"
+                  )}
+                >
+                  {subject.name}
+                </Link>
+              );
+            })}
+          </div>
+        </aside>
       </div>
     </div>
   );
@@ -148,19 +204,17 @@ function StatCard({
   );
 }
 
-function EmptyState({ hasFilter }: { hasFilter: boolean }) {
+function EmptyState({ hasFilter, t }: { hasFilter: boolean; t: (k: Parameters<typeof translate>[1]) => string }) {
   return (
     <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-line py-20 text-center">
       <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-soft" aria-hidden="true">
         <FileText size={24} className="text-brand" />
       </div>
       <p className="font-semibold text-ink">
-        {hasFilter ? "No sheets found" : "No sheets yet"}
+        {hasFilter ? t("dashboard.emptyFiltered.title") : t("dashboard.empty.title")}
       </p>
       <p className="mt-1 max-w-xs text-sm text-ink-soft">
-        {hasFilter
-          ? "Try removing filters or creating a new sheet."
-          : 'Click "New Sheet" in the sidebar to create your first test or problem set.'}
+        {hasFilter ? t("dashboard.emptyFiltered.hint") : t("dashboard.empty.hint")}
       </p>
     </div>
   );

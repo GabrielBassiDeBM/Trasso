@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getSheet } from "@/lib/data/sheets";
 import { defaultContentForType, toDbColumns, type QuestionContent } from "@/lib/types/question";
-import type { QuestionType } from "@/lib/types/database";
+import type { Difficulty, QuestionType } from "@/lib/types/database";
 
 export interface AddQuestionResult {
   sheetQuestionId: string;
@@ -121,6 +121,119 @@ export async function removeQuestionAction(
 }
 
 // ─── Question bank actions ────────────────────────────────────────────────────
+
+export async function deleteQuestionFromBankAction(questionId: string): Promise<{ error: string | null }> {
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return { error: "Session expired." };
+
+  const { data: question } = await supabase
+    .from("questions")
+    .select("owner_id")
+    .eq("id", questionId)
+    .maybeSingle();
+
+  if (!question || question.owner_id !== userData.user.id) {
+    return { error: "Question not found or access denied." };
+  }
+
+  await supabase.from("sheet_questions").delete().eq("question_id", questionId);
+  const { error } = await supabase.from("questions").delete().eq("id", questionId);
+  if (error) return { error: error.message };
+
+  revalidatePath("/banco");
+  return { error: null };
+}
+
+export async function createBankQuestionAction({
+  content,
+  subjectId,
+  topicId,
+  difficulty,
+}: {
+  content: QuestionContent;
+  subjectId?: string | null;
+  topicId?: string | null;
+  difficulty?: string | null;
+}): Promise<{ error: string | null; questionId?: string }> {
+  if (!content.statement.trim()) return { error: "Statement is required." };
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return { error: "Session expired." };
+
+  const columns = toDbColumns(content);
+
+  const { data: question, error } = await supabase
+    .from("questions")
+    .insert({
+      owner_id: userData.user.id,
+      ...columns,
+      subject_id: subjectId ?? null,
+      topic_id: topicId ?? null,
+      difficulty: (difficulty as Difficulty | null) ?? null,
+    })
+    .select("id")
+    .single();
+
+  if (error || !question) return { error: error?.message ?? "Could not create question." };
+  revalidatePath("/banco");
+  return { error: null, questionId: question.id };
+}
+
+export async function deleteManyFromBankAction(questionIds: string[]): Promise<{ error: string | null }> {
+  if (questionIds.length === 0) return { error: null };
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return { error: "Session expired." };
+
+  const { data: owned } = await supabase
+    .from("questions")
+    .select("id")
+    .in("id", questionIds)
+    .eq("owner_id", userData.user.id);
+
+  if (!owned || owned.length === 0) return { error: "No owned questions found." };
+  const ownedIds = owned.map((q) => q.id);
+
+  await supabase.from("sheet_questions").delete().in("question_id", ownedIds);
+  const { error } = await supabase.from("questions").delete().in("id", ownedIds);
+  if (error) return { error: error.message };
+
+  revalidatePath("/banco");
+  return { error: null };
+}
+
+export async function pullManyFromBankAction(
+  sheetId: string,
+  bankQuestionIds: string[],
+): Promise<{ error: string | null }> {
+  if (bankQuestionIds.length === 0) return { error: null };
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return { error: "Session expired." };
+
+  const { data: last } = await supabase
+    .from("sheet_questions")
+    .select("position")
+    .eq("sheet_id", sheetId)
+    .order("position", { ascending: false })
+    .limit(1);
+
+  const startPosition = last && last.length > 0 ? last[0].position + 1 : 0;
+
+  const { error } = await supabase.from("sheet_questions").insert(
+    bankQuestionIds.map((qId, i) => ({
+      sheet_id: sheetId,
+      question_id: qId,
+      position: startPosition + i,
+      points: 1,
+    })),
+  );
+
+  if (error) return { error: error.message };
+  revalidatePath(`/sheets/${sheetId}`);
+  return { error: null };
+}
 
 export async function saveQuestionToBankAction(questionId: string): Promise<{ error: string | null }> {
   // Questions created in the editor are already owned by the user — they're already in the bank.

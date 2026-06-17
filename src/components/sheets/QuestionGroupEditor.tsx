@@ -31,6 +31,7 @@ interface QuestionGroupEditorProps {
   onItemRemove: (id: string) => void;
   onAddQuestion: (type: QuestionType) => void;
   adding: QuestionType | null;
+  pointsPerQuestion: boolean;
 }
 
 export function QuestionGroupEditor({
@@ -42,6 +43,7 @@ export function QuestionGroupEditor({
   onGroupRemove,
   onItemsChange,
   adding,
+  pointsPerQuestion,
 }: QuestionGroupEditorProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [localPassage, setLocalPassage] = useState(group.passage ?? "");
@@ -181,6 +183,7 @@ export function QuestionGroupEditor({
                   index={idx}
                   content={item.content}
                   points={item.points}
+                  showPoints={pointsPerQuestion}
                   onContentChange={(c) => updateItemInGroup(item.sheetQuestionId, c)}
                   onRemoved={() => removeItemFromGroup(item.sheetQuestionId)}
                 />

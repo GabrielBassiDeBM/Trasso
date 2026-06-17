@@ -5,14 +5,17 @@ import Image from "next/image";
 import { Menu } from "lucide-react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { NewSheetModal } from "@/components/dashboard/NewSheetModal";
+import type { SubjectRow, TopicRow } from "@/lib/data/sheets";
 
 interface AppShellProps {
   children: ReactNode;
   userName?: string | null;
   userEmail?: string | null;
+  subjects?: SubjectRow[];
+  allTopics?: TopicRow[];
 }
 
-export function AppShell({ children, userName, userEmail }: AppShellProps) {
+export function AppShell({ children, userName, userEmail, subjects = [], allTopics = [] }: AppShellProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -54,7 +57,7 @@ export function AppShell({ children, userName, userEmail }: AppShellProps) {
         <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
 
-      <NewSheetModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <NewSheetModal open={modalOpen} onClose={() => setModalOpen(false)} subjects={subjects} allTopics={allTopics} />
     </div>
   );
 }

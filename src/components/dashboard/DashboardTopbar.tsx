@@ -2,11 +2,13 @@
 
 import { useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Bell, Search, X } from "lucide-react";
+import { Bell, X } from "lucide-react";
+import { useT } from "@/lib/i18n/client";
 
 export function DashboardTopbar() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useT();
   const [notifOpen, setNotifOpen] = useState(false);
   const notifRef = useRef<HTMLDivElement>(null);
   const currentSearch = searchParams.get("search") ?? "";
@@ -25,16 +27,16 @@ export function DashboardTopbar() {
   return (
     <header className="sticky top-0 z-10 flex items-center gap-4 border-b border-line bg-surface/95 px-8 py-4 backdrop-blur-[8px]">
       <h1 className="text-[20px] font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
-        Dashboard
+        {t("dashboard.title")}
       </h1>
 
       <div className="relative ml-auto w-72">
-        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint" aria-hidden="true" />
+        <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         <input
           key={currentSearch}
           defaultValue={currentSearch}
-          placeholder="Search sheets…"
-          aria-label="Search sheets"
+          placeholder={t("dashboard.searchPlaceholder")}
+          aria-label={t("dashboard.searchPlaceholder")}
           className="h-10 w-full rounded-xl border border-line bg-canvas pl-9 pr-3 text-sm text-ink placeholder:text-ink-faint transition-all focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20 hover:border-brand/40"
           onKeyDown={(e) => { if (e.key === "Enter") handleSearch(e); }}
           onBlur={handleSearch}
@@ -44,7 +46,7 @@ export function DashboardTopbar() {
       {/* Notifications */}
       <div className="relative" ref={notifRef}>
         <button
-          aria-label="Notifications"
+          aria-label={t("notifications.title")}
           aria-expanded={notifOpen}
           onClick={() => setNotifOpen((v) => !v)}
           className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-surface transition-colors hover:bg-[#f1f0f5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
@@ -57,10 +59,10 @@ export function DashboardTopbar() {
             <div className="fixed inset-0 z-40" onClick={() => setNotifOpen(false)} aria-hidden="true" />
             <div className="absolute right-0 top-12 z-50 w-80 overflow-hidden rounded-2xl border border-line bg-surface shadow-lg">
               <div className="flex items-center justify-between border-b border-line px-5 py-3">
-                <p className="text-sm font-semibold text-ink">Notifications</p>
+                <p className="text-sm font-semibold text-ink">{t("notifications.title")}</p>
                 <button
                   onClick={() => setNotifOpen(false)}
-                  aria-label="Close notifications"
+                  aria-label={t("notifications.close")}
                   className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint hover:bg-[#f1f0f5] hover:text-ink"
                 >
                   <X size={14} />
@@ -68,8 +70,8 @@ export function DashboardTopbar() {
               </div>
               <div className="flex flex-col items-center justify-center py-10 px-5 text-center">
                 <Bell size={28} className="mb-3 text-ink-faint" aria-hidden="true" />
-                <p className="text-sm font-medium text-ink">No notifications</p>
-                <p className="mt-1 text-xs text-ink-faint">Invite alerts and activity will appear here.</p>
+                <p className="text-sm font-medium text-ink">{t("notifications.empty")}</p>
+                <p className="mt-1 text-xs text-ink-faint">{t("notifications.emptyDesc")}</p>
               </div>
             </div>
           </>

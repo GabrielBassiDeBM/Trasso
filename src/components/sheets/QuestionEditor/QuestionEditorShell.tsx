@@ -19,6 +19,7 @@ interface QuestionEditorShellProps {
   index: number;
   content: QuestionContent;
   points: number | null;
+  showPoints: boolean;
   onContentChange: (content: QuestionContent) => void;
   onRemoved: () => void;
   dragHandle?: ReactNode;
@@ -41,6 +42,7 @@ export function QuestionEditorShell({
   index,
   content,
   points,
+  showPoints,
   onContentChange,
   onRemoved,
   dragHandle,
@@ -161,17 +163,19 @@ export function QuestionEditorShell({
             )}
           </div>
 
-          <label className="flex items-center gap-1.5 text-xs text-ink-soft">
-            Points
-            <Input
-              type="number"
-              min={0}
-              step="0.5"
-              value={localPoints}
-              onChange={(event) => handlePointsChange(Number(event.target.value))}
-              className="w-16 px-2 py-1 text-center"
-            />
-          </label>
+          {showPoints && (
+            <label className="flex items-center gap-1.5 text-xs text-ink-soft">
+              Points
+              <Input
+                type="number"
+                min={0}
+                step="0.5"
+                value={localPoints}
+                onChange={(event) => handlePointsChange(Number(event.target.value))}
+                className="w-16 px-2 py-1 text-center"
+              />
+            </label>
+          )}
           <Button type="button" variant="ghost" size="sm" onClick={handleRemove}>
             Remove
           </Button>

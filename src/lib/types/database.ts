@@ -135,6 +135,9 @@ export interface Database {
           title: string;
           status: SheetStatus;
           subject_id: string | null;
+          subject_ids: string[];
+          topic_ids: string[];
+          difficulty: Difficulty | null;
           grade_level: string | null;
           turma: string | null;
           exam_type: ExamType | null;
@@ -153,6 +156,9 @@ export interface Database {
           title: string;
           status?: SheetStatus;
           subject_id?: string | null;
+          subject_ids?: string[];
+          topic_ids?: string[];
+          difficulty?: Difficulty | null;
           grade_level?: string | null;
           turma?: string | null;
           exam_type?: ExamType | null;
@@ -167,6 +173,9 @@ export interface Database {
           org_id?: string | null;
           folder_id?: string | null;
           subject_id?: string | null;
+          subject_ids?: string[];
+          topic_ids?: string[];
+          difficulty?: Difficulty | null;
           grade_level?: string | null;
           turma?: string | null;
           exam_type?: ExamType | null;

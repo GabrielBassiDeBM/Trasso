@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { DEFAULT_PAGE_SETTINGS, DEFAULT_COVER_LAYOUT, type CoverLayout, type PageSettings } from "@/lib/sheets/defaults";
 import type { Json } from "@/lib/types/database";
-import type { ExamType } from "@/lib/types/database";
+import type { ExamType, Difficulty } from "@/lib/types/database";
 
 export interface SheetActionState {
   error: string | null;
@@ -14,9 +14,11 @@ export interface SheetActionState {
 export async function createSheetAction(_prev: SheetActionState, formData: FormData): Promise<SheetActionState> {
   const title = String(formData.get("title") ?? "").trim() || "Untitled sheet";
   const examType = String(formData.get("exam_type") ?? "").trim() || null;
-  const gradeLevel = String(formData.get("grade_level") ?? "").trim() || null;
-  const turma = String(formData.get("turma") ?? "").trim() || null;
   const mode = String(formData.get("mode") ?? "blank");
+  const subjectIds = String(formData.get("subject_ids") ?? "").split(",").filter(Boolean);
+  const topicIds = String(formData.get("topic_ids") ?? "").split(",").filter(Boolean);
+  const difficulty = String(formData.get("difficulty") ?? "").trim() || null;
+  const pointsPerQuestion = formData.get("points_per_question") === "1";
 
   const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
@@ -28,9 +30,11 @@ export async function createSheetAction(_prev: SheetActionState, formData: FormD
       owner_id: userData.user.id,
       title,
       exam_type: (examType as ExamType | null) ?? null,
-      grade_level: gradeLevel,
-      turma,
-      page_settings: DEFAULT_PAGE_SETTINGS as unknown as Json,
+      subject_id: subjectIds[0] ?? null,
+      subject_ids: subjectIds,
+      topic_ids: topicIds,
+      difficulty: difficulty as Difficulty | null,
+      page_settings: { ...DEFAULT_PAGE_SETTINGS, pointsPerQuestion } as unknown as Json,
       cover_layout: DEFAULT_COVER_LAYOUT as unknown as Json,
     })
     .select("id")
@@ -43,7 +47,11 @@ export async function createSheetAction(_prev: SheetActionState, formData: FormD
   revalidatePath("/dashboard");
 
   if (mode === "ai_generate") {
-    redirect(`/sheets/${data.id}?ai=generate`);
+    const params = new URLSearchParams({ ai: "generate" });
+    if (subjectIds.length) params.set("subjects", subjectIds.join(","));
+    if (topicIds.length) params.set("topics", topicIds.join(","));
+    if (difficulty) params.set("difficulty", difficulty);
+    redirect(`/sheets/${data.id}?${params.toString()}`);
   } else if (mode === "scan") {
     redirect(`/sheets/${data.id}?ai=scan`);
   } else {
@@ -63,6 +71,41 @@ export async function renameSheetAction(formData: FormData): Promise<void> {
   revalidatePath(`/sheets/${id}`);
 }
 
+export interface SheetMetaInput {
+  title: string;
+  examType: string | null;
+  subjectIds: string[];
+  topicIds: string[];
+  difficulty: string | null;
+  pageSettings: PageSettings;
+}
+
+export async function updateSheetTaxonomyAction(sheetId: string, input: SheetMetaInput): Promise<{ error: string | null }> {
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return { error: "Session expired." };
+
+  const { error } = await supabase
+    .from("sheets")
+    .update({
+      title: input.title.trim() || "Untitled sheet",
+      exam_type: (input.examType as ExamType | null) ?? null,
+      subject_id: input.subjectIds[0] ?? null,
+      subject_ids: input.subjectIds,
+      topic_ids: input.topicIds,
+      difficulty: input.difficulty as Difficulty | null,
+      page_settings: input.pageSettings as unknown as Json,
+    })
+    .eq("id", sheetId)
+    .eq("owner_id", userData.user.id);
+
+  if (error) return { error: error.message };
+
+  revalidatePath("/dashboard");
+  revalidatePath(`/sheets/${sheetId}`);
+  return { error: null };
+}
+
 export async function deleteSheetAction(formData: FormData): Promise<void> {
   const id = String(formData.get("id") ?? "");
   if (!id) return;
@@ -71,6 +114,19 @@ export async function deleteSheetAction(formData: FormData): Promise<void> {
   await supabase.from("sheets").delete().eq("id", id);
 
   revalidatePath("/dashboard");
+}
+
+export async function deleteManySheetsAction(sheetIds: string[]): Promise<{ error: string | null }> {
+  if (sheetIds.length === 0) return { error: null };
+
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return { error: "Session expired." };
+
+  await supabase.from("sheets").delete().in("id", sheetIds).eq("owner_id", userData.user.id);
+
+  revalidatePath("/dashboard");
+  return { error: null };
 }
 
 export async function updatePageSettingsAction(sheetId: string, settings: PageSettings): Promise<void> {
