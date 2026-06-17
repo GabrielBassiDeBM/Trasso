@@ -219,7 +219,7 @@ export function QuestionList({ sheetId, items, groups, pointsPerQuestion, onItem
             size="sm"
             onClick={() => setScanOpen(true)}
           >
-            <Camera size={14} className="text-[#1187f0]" />
+            <Camera size={14} className="text-accent-dark" />
             Scan photo
           </Button>
         </div>

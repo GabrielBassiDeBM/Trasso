@@ -48,7 +48,7 @@ export default async function OrgsPage() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-soft">
                     <Building2 size={18} className="text-brand" aria-hidden="true" />
                   </div>
-                  <span className="rounded-full bg-[#f1f0f5] px-2.5 py-0.5 text-[11px] font-semibold capitalize text-ink-soft">
+                  <span className="rounded-full bg-muted px-2.5 py-0.5 text-[11px] font-semibold capitalize text-ink-soft">
                     {role === "dono" ? "Owner" : role === "admin" ? "Admin" : "Member"}
                   </span>
                 </div>

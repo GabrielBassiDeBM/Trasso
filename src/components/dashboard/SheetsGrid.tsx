@@ -118,7 +118,7 @@ export function SheetsGrid({ sheets, subjects, allTopics }: Props) {
               type="button"
               onClick={handleBulkDelete}
               disabled={working}
-              className="flex items-center gap-1.5 rounded-xl border border-danger/20 bg-[#fdecee] px-3 py-1.5 text-xs font-semibold text-danger transition-all hover:bg-danger hover:text-white disabled:opacity-60"
+              className="flex items-center gap-1.5 rounded-xl border border-danger/20 bg-danger-soft px-3 py-1.5 text-xs font-semibold text-danger transition-all hover:bg-danger hover:text-white disabled:opacity-60"
             >
               <Trash2 size={12} aria-hidden="true" />
               {t("dashboard.selection.deleteSelected")}

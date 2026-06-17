@@ -33,6 +33,7 @@ export interface Database {
           display_name: string | null;
           institution: string | null;
           locale: string;
+          theme: string;
           created_at: string;
         };
         Insert: {
@@ -40,11 +41,13 @@ export interface Database {
           display_name?: string | null;
           institution?: string | null;
           locale?: string;
+          theme?: string;
         };
         Update: {
           display_name?: string | null;
           institution?: string | null;
           locale?: string;
+          theme?: string;
         };
         Relationships: [];
       };

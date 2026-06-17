@@ -107,7 +107,7 @@ function InlineSheetPicker({ sheets, onSelect, onClose, working }: InlineSheetPi
                 type="button"
                 disabled={working}
                 onClick={() => onSelect(sheet.id)}
-                className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs text-ink transition-colors hover:bg-[#f1f0f5] disabled:opacity-60"
+                className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs text-ink transition-colors hover:bg-muted disabled:opacity-60"
               >
                 <BookOpen size={11} className="shrink-0 text-ink-faint" aria-hidden="true" />
                 <span className="truncate">{sheet.title}</span>
@@ -260,13 +260,13 @@ export function BankQuestionCard({
           {question.topic && (() => {
             const TopicIcon = getTopicIcon(question.topic.name);
             return (
-              <span className="flex items-center gap-1 rounded-lg bg-[#f4f3ff] px-2 py-0.5 text-[11px] font-medium text-ink-soft">
+              <span className="flex items-center gap-1 rounded-lg bg-topic-soft px-2 py-0.5 text-[11px] font-medium text-ink-soft">
                 {TopicIcon && <TopicIcon size={9} aria-hidden="true" />}
                 {translateTopicName(question.topic.name, locale)}
               </span>
             );
           })()}
-          <span className="ml-auto rounded-lg bg-[#f1f0f5] px-2 py-0.5 text-[11px] font-semibold text-ink-soft">
+          <span className="ml-auto rounded-lg bg-muted px-2 py-0.5 text-[11px] font-semibold text-ink-soft">
             {TYPE_LABELS[question.type] ?? question.type}
           </span>
         </div>
@@ -336,7 +336,7 @@ export function BankQuestionCard({
                 type="button"
                 onClick={handleDelete}
                 aria-label={t("bank.question.delete")}
-                className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint opacity-0 transition-all group-hover:opacity-100 hover:bg-[#fdecee] hover:text-danger"
+                className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint opacity-0 transition-all group-hover:opacity-100 hover:bg-danger-soft hover:text-danger"
               >
                 <Trash2 size={13} aria-hidden="true" />
               </button>

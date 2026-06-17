@@ -89,7 +89,7 @@ export default async function DashboardPage({
               label={t("dashboard.questionsInBank")}
               value={String(stats.questionsCount)}
               tintBg="bg-accent-soft"
-              tintText="text-[#1187f0]"
+              tintText="text-accent-dark"
             />
           </div>
 
@@ -141,7 +141,7 @@ export default async function DashboardPage({
                     "rounded-lg px-3 py-2 text-[13px] font-medium transition-colors",
                     activeSubject === ""
                       ? "bg-brand-soft text-brand"
-                      : "text-ink-soft hover:bg-[#f1f0f5] hover:text-ink"
+                      : "text-ink-soft hover:bg-muted hover:text-ink"
                   )}
                 >
                   {t("dashboard.allSubjects")}
@@ -162,7 +162,7 @@ export default async function DashboardPage({
                     "rounded-lg px-3 py-2 text-[13px] font-medium transition-colors",
                     activeSubject === subject.id
                       ? "bg-brand-soft text-brand"
-                      : "text-ink-soft hover:bg-[#f1f0f5] hover:text-ink"
+                      : "text-ink-soft hover:bg-muted hover:text-ink"
                   )}
                 >
                   {subject.name}

@@ -115,7 +115,7 @@ export function SearchableMultiSelect({
               type="button"
               onClick={clear}
               aria-label={clearLabel}
-              className="rounded-full p-0.5 hover:bg-[#f1f0f5] hover:text-ink"
+              className="rounded-full p-0.5 hover:bg-muted hover:text-ink"
             >
               <X size={13} />
             </button>
@@ -149,7 +149,7 @@ export function SearchableMultiSelect({
                     onClick={() => toggle(o.id)}
                     className={cn(
                       "flex w-full items-center justify-between gap-2 rounded-lg px-2.5 py-2 text-left text-sm transition-colors",
-                      active ? "bg-brand-soft text-brand" : "text-ink hover:bg-[#f6f5fa]",
+                      active ? "bg-brand-soft text-brand" : "text-ink hover:bg-muted",
                     )}
                   >
                     <span className="truncate">{o.label}</span>

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import type { Locale } from "@/lib/i18n/server";
+import type { Theme } from "@/lib/theme/server";
 
 export interface ProfileActionState {
   error: string | null;
@@ -63,6 +64,19 @@ export async function updateLocaleAction(locale: Locale): Promise<void> {
 
   const cookieStore = await cookies();
   cookieStore.set("trasso_locale", locale, { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
+
+  revalidatePath("/", "layout");
+}
+
+export async function updateThemeAction(theme: Theme): Promise<void> {
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
+  await supabase.from("profiles").update({ theme }).eq("id", userData.user.id);
+
+  const cookieStore = await cookies();
+  cookieStore.set("trasso_theme", theme, { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
 
   revalidatePath("/", "layout");
 }

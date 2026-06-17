@@ -30,8 +30,8 @@ export function ResultsTable({ results, sheet }: ResultsTableProps) {
       {/* Stats row */}
       <div className="grid grid-cols-3 gap-4">
         <StatCard label="Average" value={avg.toFixed(1)} />
-        <StatCard label="High score" value={String(max)} tintBg="bg-[#f0fdf4]" tintText="text-success" />
-        <StatCard label="Low score" value={String(min)} tintBg="bg-[#fef2f2]" tintText="text-danger" />
+        <StatCard label="High score" value={String(max)} tintBg="bg-subject-green-soft" tintText="text-success" />
+        <StatCard label="Low score" value={String(min)} tintBg="bg-danger-soft" tintText="text-danger" />
       </div>
 
       {/* Table */}

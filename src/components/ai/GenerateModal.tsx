@@ -114,7 +114,7 @@ export function GenerateModal({ open, onClose, onAccept }: GenerateModalProps) {
             <button
               onClick={handleClose}
               aria-label="Close"
-              className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f1f0f5] text-ink-soft hover:bg-[#e3e1ea]"
+              className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-ink-soft hover:bg-muted-strong"
             >
               <X size={16} />
             </button>

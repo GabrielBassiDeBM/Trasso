@@ -54,7 +54,7 @@ export function OrgSettings({ org, members, invitations, myRole }: OrgSettingsPr
           {org.name}
         </h1>
         {org.slug && (
-          <span className="rounded-full bg-[#f1f0f5] px-3 py-1 text-xs font-medium text-ink-soft">
+          <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-ink-soft">
             @{org.slug}
           </span>
         )}
@@ -168,7 +168,7 @@ export function OrgSettings({ org, members, invitations, myRole }: OrgSettingsPr
                     <p className="text-sm font-medium text-ink">{inv.email}</p>
                     <p className="text-xs text-ink-faint">{ROLE_LABELS[inv.role] ?? inv.role} · expires {inv.expires_at ? new Date(inv.expires_at).toLocaleDateString("en-US") : "—"}</p>
                   </div>
-                  <span className="rounded-full bg-[#fef9c3] px-2.5 py-0.5 text-xs font-medium text-yellow-700">
+                  <span className="rounded-full bg-warning-soft px-2.5 py-0.5 text-xs font-medium text-warning">
                     Pending
                   </span>
                 </div>

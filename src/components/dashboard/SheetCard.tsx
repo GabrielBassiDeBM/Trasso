@@ -29,14 +29,14 @@ const EXAM_TYPE_ICONS: Record<string, React.ElementType> = {
 };
 
 const STATUS_STYLES: Record<SheetWithTaxonomy["status"], string> = {
-  draft: "bg-[#fdf3e3] text-[#e0890b]",
-  ready: "bg-[#e9f8ef] text-[#16a34a]",
+  draft: "bg-status-draft text-status-draft-fg",
+  ready: "bg-status-ready text-success",
 };
 
 function OverflowTooltip({ count, children }: { count: number; children: React.ReactNode }) {
   return (
     <span className="group/of relative inline-flex">
-      <span className="cursor-default rounded-lg bg-[#f1f0f5] px-2 py-0.5 text-[11px] font-semibold text-ink-soft transition-colors hover:bg-[#e3e1ea]">
+      <span className="cursor-default rounded-lg bg-muted px-2 py-0.5 text-[11px] font-semibold text-ink-soft transition-colors hover:bg-muted-strong">
         +{count}
       </span>
       <div
@@ -241,7 +241,7 @@ export function SheetCard({
             {visibleTopics.map((topic) => {
               const TopicIcon = getTopicIcon(topic.name);
               return (
-                <span key={topic.id} className="flex items-center gap-1 rounded-lg bg-[#f4f3ff] px-2 py-0.5 text-[11px] font-medium text-ink-soft">
+                <span key={topic.id} className="flex items-center gap-1 rounded-lg bg-topic-soft px-2 py-0.5 text-[11px] font-medium text-ink-soft">
                   {TopicIcon && <TopicIcon size={9} aria-hidden="true" />}
                   {translateTopicName(topic.name, locale)}
                 </span>
@@ -252,7 +252,7 @@ export function SheetCard({
                 {overflowTopics.map((topic) => {
                   const TopicIcon = getTopicIcon(topic.name);
                   return (
-                    <span key={topic.id} className="flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-[#f4f3ff] px-2 py-1 text-[11px] font-medium text-ink-soft">
+                    <span key={topic.id} className="flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-topic-soft px-2 py-1 text-[11px] font-medium text-ink-soft">
                       {TopicIcon && <TopicIcon size={10} aria-hidden="true" />}
                       {translateTopicName(topic.name, locale)}
                     </span>
@@ -270,14 +270,14 @@ export function SheetCard({
             <button
               onClick={() => setEditOpen(true)}
               aria-label={t("sheet.rename")}
-              className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint transition-colors hover:bg-[#f1f0f5] hover:text-ink"
+              className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint transition-colors hover:bg-muted hover:text-ink"
             >
               <Pencil size={13} />
             </button>
             <button
               onClick={handleDelete}
               aria-label={t("sheet.delete")}
-              className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint transition-colors hover:bg-[#fdecee] hover:text-danger"
+              className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint transition-colors hover:bg-danger-soft hover:text-danger"
             >
               <Trash2 size={13} />
             </button>

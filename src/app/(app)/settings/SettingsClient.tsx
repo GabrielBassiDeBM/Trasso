@@ -1,13 +1,15 @@
 "use client";
 
 import { useActionState, useOptimistic, useState, useTransition } from "react";
-import { User, Lock, Palette, Check } from "lucide-react";
+import { User, Lock, Palette, Check, Sun, Moon, Monitor } from "lucide-react";
 import { updateProfileAction, updateEmailAction, updatePasswordAction, updateLocaleAction, type ProfileActionState } from "@/lib/actions/profile";
 import { Input, Label } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
 import { useT, useLocale } from "@/lib/i18n/client";
+import { useTheme } from "@/lib/theme/client";
 import type { Locale } from "@/lib/i18n/translations";
+import type { Theme } from "@/lib/theme/server";
 
 const initial: ProfileActionState = { error: null };
 
@@ -23,6 +25,7 @@ interface Props {
 export function SettingsClient({ initialDisplayName, initialInstitution, currentEmail, initialLocale }: Props) {
   const t = useT();
   const contextLocale = useLocale();
+  const { theme, setTheme } = useTheme();
   const [tab, setTab] = useState<Tab>("profile");
   const [profileState, profileAction, profilePending] = useActionState(updateProfileAction, initial);
   const [emailState, emailAction, emailPending] = useActionState(updateEmailAction, initial);
@@ -46,6 +49,12 @@ export function SettingsClient({ initialDisplayName, initialInstitution, current
       await updateLocaleAction(next);
     });
   }
+
+  const THEMES: { value: Theme; label: string; icon: React.ElementType }[] = [
+    { value: "light", label: t("settings.appearance.themeLight"), icon: Sun },
+    { value: "dark", label: t("settings.appearance.themeDark"), icon: Moon },
+    { value: "system", label: t("settings.appearance.themeSystem"), icon: Monitor },
+  ];
 
   const LANGUAGES: { value: Locale; label: string; flag: string }[] = [
     { value: "en", label: t("settings.appearance.english"), flag: "🇺🇸" },
@@ -186,15 +195,31 @@ export function SettingsClient({ initialDisplayName, initialInstitution, current
               {t("settings.appearance.heading")}
             </h2>
             <div className="space-y-4">
-              {/* Theme — coming soon */}
-              <div className="flex items-center justify-between rounded-xl border border-line bg-canvas px-4 py-3">
+              {/* Theme */}
+              <div className="rounded-xl border border-line bg-canvas px-4 py-3 space-y-3">
                 <div>
                   <p className="text-sm font-semibold text-ink">{t("settings.appearance.theme")}</p>
                   <p className="text-xs text-ink-faint">{t("settings.appearance.themeDesc")}</p>
                 </div>
-                <span className="rounded-full bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">
-                  {t("settings.appearance.comingSoon")}
-                </span>
+                <div className="flex gap-2">
+                  {THEMES.map(({ value, label, icon: Icon }) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setTheme(value)}
+                      className={cn(
+                        "flex flex-1 items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors",
+                        theme === value
+                          ? "border-brand bg-brand-soft text-brand"
+                          : "border-line bg-surface text-ink-soft hover:border-brand/40 hover:text-ink"
+                      )}
+                    >
+                      <Icon size={15} aria-hidden="true" />
+                      {label}
+                      {theme === value && <Check size={13} aria-hidden="true" />}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Language picker */}

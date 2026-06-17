@@ -143,12 +143,12 @@ export function SheetEditor({
               </span>
             )}
             {sheet.grade_level && (
-              <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-[#1187f0]">
+              <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-accent-dark">
                 {sheet.grade_level}
               </span>
             )}
             {sheet.turma && (
-              <span className="rounded-full bg-[#f1f0f5] px-2.5 py-0.5 text-xs font-semibold text-ink-soft">
+              <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-ink-soft">
                 {sheet.turma}
               </span>
             )}

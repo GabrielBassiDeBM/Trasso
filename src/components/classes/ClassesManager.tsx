@@ -53,8 +53,8 @@ function coverForId(id: string): string {
 const AVATAR_ACCENTS = [
   { bg: "bg-brand-soft", fg: "text-brand" },
   { bg: "bg-accent-soft", fg: "text-accent" },
-  { bg: "bg-[#fdf3e3]", fg: "text-[#e0890b]" },
-  { bg: "bg-[#e9f8ef]", fg: "text-success" },
+  { bg: "bg-status-draft", fg: "text-status-draft-fg" },
+  { bg: "bg-status-ready", fg: "text-success" },
 ];
 
 const ALL_NEEDS: AccessibilityNeed[] = [
@@ -223,7 +223,7 @@ export function ClassesManager({ initialRosters }: Props) {
             <div className="h-4 w-px bg-line" aria-hidden="true" />
             <button
               onClick={handleBulkDelete}
-              className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-[13px] font-semibold text-danger transition-colors hover:bg-[#fdecee] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger/40"
+              className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-[13px] font-semibold text-danger transition-colors hover:bg-danger-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger/40"
             >
               <Trash2 size={13} aria-hidden="true" />
               {t("classes.deleteSelected", { n: selectedIds.size })}
@@ -639,7 +639,7 @@ function ClassPanel({
                           <button
                             onClick={() => handleRemoveStudent(i)}
                             aria-label={t("classes.student.remove", { name: s.name })}
-                            className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint transition-colors hover:bg-[#fdecee] hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
+                            className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint transition-colors hover:bg-danger-soft hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
                           >
                             <X size={13} />
                           </button>
@@ -895,7 +895,7 @@ function NewClassModal({
             <button
               onClick={onClose}
               aria-label="Close"
-              className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f1f0f5] text-ink-soft transition-colors hover:bg-[#e3e1ea] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
+              className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-ink-soft transition-colors hover:bg-muted-strong hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
             >
               <X size={16} />
             </button>

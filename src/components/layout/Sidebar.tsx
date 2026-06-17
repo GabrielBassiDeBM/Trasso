@@ -48,7 +48,7 @@ export function Sidebar({ onNew, userName, userEmail, isOpen = false, onClose }:
       <Link
         href="/dashboard"
         onClick={onClose}
-        className="mb-5 flex items-center gap-2.5 rounded-xl px-2 py-1 transition-colors hover:bg-[#f1f0f5]"
+        className="mb-5 flex items-center gap-2.5 rounded-xl px-2 py-1 transition-colors hover:bg-muted"
       >
         <Image src="/trasso-logo.svg" alt="trasso" width={32} height={32} className="h-8 w-8" />
         <span className="text-xl font-bold text-ink" style={{ letterSpacing: "-0.025em" }}>
@@ -83,7 +83,7 @@ export function Sidebar({ onNew, userName, userEmail, isOpen = false, onClose }:
                 "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40",
                 active
                   ? "bg-brand-soft text-brand-dark"
-                  : "text-ink-soft hover:bg-[#f1f0f5] hover:text-ink",
+                  : "text-ink-soft hover:bg-muted hover:text-ink",
               )}
               aria-current={active ? "page" : undefined}
             >
@@ -99,7 +99,7 @@ export function Sidebar({ onNew, userName, userEmail, isOpen = false, onClose }:
       </nav>
 
       {/* User footer */}
-      <div className="mt-auto flex items-center gap-2.5 rounded-xl p-2 transition-colors hover:bg-[#f1f0f5]">
+      <div className="mt-auto flex items-center gap-2.5 rounded-xl p-2 transition-colors hover:bg-muted">
         <div
           className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-soft text-xs font-bold leading-none text-brand"
           aria-hidden="true"
@@ -116,7 +116,7 @@ export function Sidebar({ onNew, userName, userEmail, isOpen = false, onClose }:
           href="/settings"
           onClick={onClose}
           aria-label={t("nav.settings")}
-          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-ink-faint transition-colors hover:bg-[#e3e1ea] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-ink-faint transition-colors hover:bg-muted-strong hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
         >
           <Settings size={14} />
         </Link>

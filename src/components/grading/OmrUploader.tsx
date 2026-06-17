@@ -192,7 +192,7 @@ export function OmrUploader({ open, sheetId, onClose, onResult }: OmrUploaderPro
             <button
               onClick={() => { reset(); onClose(); }}
               aria-label="Close"
-              className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f1f0f5] text-ink-soft hover:bg-[#e3e1ea]"
+              className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-ink-soft hover:bg-muted-strong"
             >
               <X size={16} />
             </button>

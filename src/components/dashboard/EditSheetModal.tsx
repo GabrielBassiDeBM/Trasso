@@ -119,7 +119,7 @@ export function EditSheetModal({ open, onClose, sheet, subjects, allTopics }: Pr
             <button
               onClick={onClose}
               aria-label={t("editSheet.close")}
-              className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f1f0f5] text-ink-soft transition-colors hover:bg-[#e3e1ea] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
+              className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-ink-soft transition-colors hover:bg-muted-strong hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
             >
               <X size={16} />
             </button>

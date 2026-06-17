@@ -49,7 +49,7 @@ export function DashboardTopbar() {
           aria-label={t("notifications.title")}
           aria-expanded={notifOpen}
           onClick={() => setNotifOpen((v) => !v)}
-          className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-surface transition-colors hover:bg-[#f1f0f5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
+          className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-surface transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
         >
           <Bell size={17} className="text-ink-soft" />
         </button>
@@ -63,7 +63,7 @@ export function DashboardTopbar() {
                 <button
                   onClick={() => setNotifOpen(false)}
                   aria-label={t("notifications.close")}
-                  className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint hover:bg-[#f1f0f5] hover:text-ink"
+                  className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint hover:bg-muted hover:text-ink"
                 >
                   <X size={14} />
                 </button>

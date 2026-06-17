@@ -116,7 +116,7 @@ export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
             <button
               onClick={onClose}
               aria-label={t("newSheet.close")}
-              className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f1f0f5] text-ink-soft transition-colors hover:bg-[#e3e1ea] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
+              className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-ink-soft transition-colors hover:bg-muted-strong hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
             >
               <X size={16} />
             </button>
@@ -255,7 +255,7 @@ export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
 
             {mode === "scan" && (
               <div className="space-y-2 rounded-xl border border-accent/30 bg-accent-soft/60 p-3">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#1187f0]">
+                <div className="flex items-center gap-2 text-xs font-semibold text-accent-dark">
                   <Camera size={13} />
                   {t("newSheet.scan.title")}
                 </div>

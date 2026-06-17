@@ -64,7 +64,7 @@ export function AiReviewPanel({
           <button
             onClick={onClose}
             aria-label="Close panel"
-            className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f1f0f5] text-ink-soft hover:bg-[#e3e1ea] hover:text-ink"
+            className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-ink-soft hover:bg-muted-strong hover:text-ink"
           >
             <X size={16} />
           </button>

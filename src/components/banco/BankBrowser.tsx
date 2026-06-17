@@ -87,16 +87,16 @@ export function getSubjectIcon(name: string): React.ElementType {
 
 export function getSubjectColor(name: string): string {
   const n = name.toLowerCase();
-  if (n.includes("reading") || n.includes("writing")) return "text-[#0ea5e9] bg-[#e0f2fe]";
-  if (n.includes("statistics")) return "text-[#8b5cf6] bg-[#ede9fe]";
+  if (n.includes("reading") || n.includes("writing")) return "text-subject-sky bg-subject-sky-soft";
+  if (n.includes("statistics")) return "text-subject-violet bg-subject-violet-soft";
   if (n.includes("calculus") || n.includes("precalculus")) return "text-brand bg-brand-soft";
   if (n.includes("math")) return "text-brand bg-brand-soft";
-  if (n.includes("physics")) return "text-[#f59e0b] bg-[#fef3c7]";
-  if (n.includes("chemistry")) return "text-[#10b981] bg-[#d1fae5]";
-  if (n.includes("biology")) return "text-[#22c55e] bg-[#f0fdf4]";
-  if (n.includes("computer")) return "text-[#6366f1] bg-[#eef2ff]";
-  if (n.includes("environmental")) return "text-[#16a34a] bg-[#dcfce7]";
-  return "text-[#1187f0] bg-accent-soft";
+  if (n.includes("physics")) return "text-subject-amber bg-subject-amber-soft";
+  if (n.includes("chemistry")) return "text-subject-emerald bg-subject-emerald-soft";
+  if (n.includes("biology")) return "text-subject-green bg-subject-green-soft";
+  if (n.includes("computer")) return "text-subject-indigo bg-subject-indigo-soft";
+  if (n.includes("environmental")) return "text-success bg-subject-green2-soft";
+  return "text-accent-dark bg-accent-soft";
 }
 
 export function getSubjectGradient(name: string): string {
@@ -214,7 +214,7 @@ export function getTopicIcon(name: string): React.ElementType | null {
 }
 
 const DIFFICULTY_LEVELS = [
-  { value: "easy", bars: 1, activeColor: "bg-[#16a34a]" },
+  { value: "easy", bars: 1, activeColor: "bg-success" },
   { value: "medium", bars: 2, activeColor: "bg-brand" },
   { value: "hard", bars: 3, activeColor: "bg-danger" },
 ] as const;
@@ -271,7 +271,7 @@ function SheetPicker({ sheets, onSelect, onClose, working }: SheetPickerProps) {
                 type="button"
                 disabled={working}
                 onClick={() => onSelect(sheet.id)}
-                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-ink transition-colors hover:bg-[#f1f0f5] disabled:opacity-60"
+                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-ink transition-colors hover:bg-muted disabled:opacity-60"
               >
                 <BookOpen size={13} className="shrink-0 text-ink-faint" aria-hidden="true" />
                 <span className="truncate">{sheet.title}</span>
@@ -585,7 +585,7 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
             "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-colors",
             activeTab === "public"
               ? "bg-brand-soft text-brand"
-              : "text-ink-soft hover:bg-[#f1f0f5] hover:text-ink",
+              : "text-ink-soft hover:bg-muted hover:text-ink",
           )}
         >
           <Globe size={14} aria-hidden="true" />
@@ -598,7 +598,7 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
             "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-colors",
             activeTab === "personal"
               ? "bg-brand-soft text-brand"
-              : "text-ink-soft hover:bg-[#f1f0f5] hover:text-ink",
+              : "text-ink-soft hover:bg-muted hover:text-ink",
           )}
         >
           <BookOpen size={14} aria-hidden="true" />
@@ -615,7 +615,7 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
           transition: "max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.18s ease-out",
         }}
       >
-        <div className="border-b border-line bg-[#fafaf9] px-8 py-5">
+        <div className="border-b border-line bg-panel px-8 py-5">
           <div className="space-y-4">
 
             {/* Subjects — multi-select chips */}
@@ -735,7 +735,7 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
                         className={cn(
                           "flex items-end gap-[3px] rounded-lg border px-2.5 py-1.5 transition-all duration-150 active:scale-95",
                           active
-                            ? "border-transparent bg-[#f1f0f5]"
+                            ? "border-transparent bg-muted"
                             : "border-line hover:border-brand/40",
                         )}
                       >
@@ -806,7 +806,7 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
           </div>
         ) : activeTab === "personal" && questions.length === 0 && activeFilterCount === 0 && !filters.q ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f1f0f5]">
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
               <BookOpen size={24} className="text-ink-soft" aria-hidden="true" />
             </div>
             <p className="font-semibold text-ink">{t("bank.questions.empty")}</p>
@@ -987,7 +987,7 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
                   type="button"
                   onClick={handleBulkDelete}
                   disabled={bulkWorking}
-                  className="flex items-center gap-1.5 rounded-xl border border-danger/20 bg-[#fdecee] px-3 py-1.5 text-xs font-semibold text-danger transition-all hover:bg-danger hover:text-white disabled:opacity-60"
+                  className="flex items-center gap-1.5 rounded-xl border border-danger/20 bg-danger-soft px-3 py-1.5 text-xs font-semibold text-danger transition-all hover:bg-danger hover:text-white disabled:opacity-60"
                 >
                   <Trash2 size={12} aria-hidden="true" />
                   {t("bank.selection.deleteSelected")}

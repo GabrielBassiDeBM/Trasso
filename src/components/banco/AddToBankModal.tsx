@@ -23,9 +23,9 @@ interface Props {
 const DIFFICULTIES = ["easy", "medium", "hard"] as const;
 const LETTERS = ["A", "B", "C", "D", "E", "F"];
 const DIFF_COLOR: Record<string, string> = {
-  easy: "text-[#16a34a] bg-[#f0fdf4] border-[#bbf7d0]",
+  easy: "text-success bg-subject-green-soft border-success/30",
   medium: "text-brand bg-brand-soft border-brand/30",
-  hard: "text-danger bg-[#fdecee] border-danger/30",
+  hard: "text-danger bg-danger-soft border-danger/30",
 };
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -78,7 +78,7 @@ function McqEditor({
               "flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold transition-all",
               opt.is_correct
                 ? "bg-brand text-white"
-                : "border border-line bg-[#f1f0f5] text-ink-soft hover:border-brand/40 hover:text-brand",
+                : "border border-line bg-muted text-ink-soft hover:border-brand/40 hover:text-brand",
             )}
           >
             {LETTERS[idx] ?? idx + 1}
@@ -95,7 +95,7 @@ function McqEditor({
               type="button"
               onClick={() => removeOption(idx)}
               aria-label="Remove option"
-              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-ink-faint transition-colors hover:bg-[#fdecee] hover:text-danger"
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-ink-faint transition-colors hover:bg-danger-soft hover:text-danger"
             >
               <Trash2 size={12} aria-hidden="true" />
             </button>
@@ -136,8 +136,8 @@ function TrueFalseEditor({
             "flex flex-1 items-center justify-center gap-2 rounded-xl border py-3 text-sm font-semibold transition-all",
             answer === v
               ? v
-                ? "border-[#16a34a] bg-[#f0fdf4] text-[#16a34a]"
-                : "border-danger/30 bg-[#fdecee] text-danger"
+                ? "border-success/30 bg-subject-green-soft text-success"
+                : "border-danger/30 bg-danger-soft text-danger"
               : "border-line text-ink-soft hover:border-brand/30 hover:text-ink",
           )}
         >
@@ -176,7 +176,7 @@ function FillBlankEditor({
     <div className="space-y-2">
       {keys.map((key) => (
         <div key={key} className="flex items-center gap-2">
-          <span className="shrink-0 rounded-lg border border-line bg-[#f1f0f5] px-2 py-1 text-xs font-bold text-ink-soft font-mono">
+          <span className="shrink-0 rounded-lg border border-line bg-muted px-2 py-1 text-xs font-bold text-ink-soft font-mono">
             {`{{${key}}}`}
           </span>
           <input
@@ -254,7 +254,7 @@ function MatchingEditor({
               onClick={() => removePair(idx)}
               disabled={left.length <= 1}
               aria-label="Remove pair"
-              className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint transition-colors hover:bg-[#fdecee] hover:text-danger disabled:pointer-events-none disabled:opacity-30"
+              className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint transition-colors hover:bg-danger-soft hover:text-danger disabled:pointer-events-none disabled:opacity-30"
             >
               <Trash2 size={12} aria-hidden="true" />
             </button>
@@ -486,7 +486,7 @@ export function AddToBankModal({ open, onClose, subjects, allTopics, sheets }: P
             <button
               onClick={onClose}
               aria-label={t("bank.addModal.cancel")}
-              className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f1f0f5] text-ink-soft transition-colors hover:bg-[#e3e1ea] hover:text-ink"
+              className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-ink-soft transition-colors hover:bg-muted-strong hover:text-ink"
             >
               <X size={16} />
             </button>
@@ -645,7 +645,7 @@ export function AddToBankModal({ open, onClose, subjects, allTopics, sheets }: P
                     className={cn(
                       "rounded-lg border px-3 py-1 text-xs font-semibold transition-all",
                       difficulty === ""
-                        ? "border-ink/20 bg-[#f1f0f5] text-ink"
+                        ? "border-ink/20 bg-muted text-ink"
                         : "border-line text-ink-soft hover:text-ink",
                     )}
                   >
@@ -729,7 +729,7 @@ export function AddToBankModal({ open, onClose, subjects, allTopics, sheets }: P
                             "flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors",
                             sheetId === s.id
                               ? "bg-brand-soft text-brand"
-                              : "text-ink hover:bg-[#f1f0f5]",
+                              : "text-ink hover:bg-muted",
                           )}
                         >
                           <BookOpen size={13} className="shrink-0" aria-hidden="true" />

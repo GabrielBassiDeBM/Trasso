@@ -59,6 +59,95 @@
   /* Semantic status */
   --color-success: #16a34a;
   --color-danger: #e0394b;
+
+  /* Muted neutrals — hover/pressed surfaces */
+  --color-muted: #f1f0f5;
+  --color-muted-strong: #e3e1ea;
+  --color-danger-soft: #fdecee;
+  --color-accent-dark: #1187f0;
+  --color-topic-soft: #f4f3ff;
+
+  /* Sheet status pills */
+  --color-status-draft: #fdf3e3;
+  --color-status-draft-fg: #e0890b;
+  --color-status-ready: #e9f8ef;
+
+  /* Subject category palette */
+  --color-subject-sky: #0ea5e9;
+  --color-subject-sky-soft: #e0f2fe;
+  --color-subject-violet: #8b5cf6;
+  --color-subject-violet-soft: #ede9fe;
+  --color-subject-amber: #f59e0b;
+  --color-subject-amber-soft: #fef3c7;
+  --color-subject-emerald: #10b981;
+  --color-subject-emerald-soft: #d1fae5;
+  --color-subject-green: #22c55e;
+  --color-subject-green-soft: #f0fdf4;
+  --color-subject-indigo: #6366f1;
+  --color-subject-indigo-soft: #eef2ff;
+  --color-subject-green2-soft: #dcfce7;
+
+  --color-warning: #a16207;
+  --color-warning-soft: #fef9c3;
+  --color-panel: #fafaf9;
+
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  /* Violet (primary brand) — brightened slightly for contrast on dark surfaces */
+  --color-brand: #b94bff;
+  --color-brand-dark: #a71efb;
+  --color-brand-soft: #2c1a47;
+
+  /* Blue (secondary / accent) */
+  --color-accent: #5cb6ff;
+  --color-accent-soft: #16273d;
+
+  /* Ink — cool violet-tinted dark neutrals */
+  --color-canvas: #15101f;
+  --color-surface: #1d1730;
+  --color-ink: #f1eef9;
+  --color-ink-soft: #b6acd1;
+  --color-ink-faint: #8a80a8;
+  --color-line: #322a4a;
+
+  /* Semantic status */
+  --color-success: #34d058;
+  --color-danger: #ff6b78;
+
+  /* Muted neutrals — hover/pressed surfaces */
+  --color-muted: #261f3c;
+  --color-muted-strong: #322a4a;
+  --color-danger-soft: #3a1820;
+  --color-accent-dark: #5cb6ff;
+  --color-topic-soft: #241f3d;
+
+  /* Sheet status pills */
+  --color-status-draft: #3a2c10;
+  --color-status-draft-fg: #f5a524;
+  --color-status-ready: #133a22;
+
+  /* Subject category palette */
+  --color-subject-sky: #38bdf8;
+  --color-subject-sky-soft: #0c2a3d;
+  --color-subject-violet: #a78bfa;
+  --color-subject-violet-soft: #2a2150;
+  --color-subject-amber: #fbbf24;
+  --color-subject-amber-soft: #3a2c10;
+  --color-subject-emerald: #34d399;
+  --color-subject-emerald-soft: #0f2e22;
+  --color-subject-green: #4ade80;
+  --color-subject-green-soft: #122a18;
+  --color-subject-indigo: #818cf8;
+  --color-subject-indigo-soft: #211f45;
+  --color-subject-green2-soft: #11301c;
+
+  --color-warning: #fbbf24;
+  --color-warning-soft: #3a330f;
+  --color-panel: #1a1428;
+
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -75,6 +164,34 @@
   --color-line: var(--color-line);
   --color-success: var(--color-success);
   --color-danger: var(--color-danger);
+
+  --color-muted: var(--color-muted);
+  --color-muted-strong: var(--color-muted-strong);
+  --color-danger-soft: var(--color-danger-soft);
+  --color-accent-dark: var(--color-accent-dark);
+  --color-topic-soft: var(--color-topic-soft);
+
+  --color-status-draft: var(--color-status-draft);
+  --color-status-draft-fg: var(--color-status-draft-fg);
+  --color-status-ready: var(--color-status-ready);
+
+  --color-subject-sky: var(--color-subject-sky);
+  --color-subject-sky-soft: var(--color-subject-sky-soft);
+  --color-subject-violet: var(--color-subject-violet);
+  --color-subject-violet-soft: var(--color-subject-violet-soft);
+  --color-subject-amber: var(--color-subject-amber);
+  --color-subject-amber-soft: var(--color-subject-amber-soft);
+  --color-subject-emerald: var(--color-subject-emerald);
+  --color-subject-emerald-soft: var(--color-subject-emerald-soft);
+  --color-subject-green: var(--color-subject-green);
+  --color-subject-green-soft: var(--color-subject-green-soft);
+  --color-subject-indigo: var(--color-subject-indigo);
+  --color-subject-indigo-soft: var(--color-subject-indigo-soft);
+  --color-subject-green2-soft: var(--color-subject-green2-soft);
+
+  --color-warning: var(--color-warning);
+  --color-warning-soft: var(--color-warning-soft);
+  --color-panel: var(--color-panel);
 
   --font-display: var(--font-jakarta);
   --font-sans: var(--font-jakarta);

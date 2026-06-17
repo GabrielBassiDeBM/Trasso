@@ -54,7 +54,7 @@ export function VariantsModal({ sheetId, open, onClose, onCreated }: VariantsMod
             <h2 id="variants-title" className="text-xl font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
               Generate versions
             </h2>
-            <button onClick={onClose} aria-label="Close" className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f1f0f5] text-ink-soft hover:bg-[#e3e1ea]">
+            <button onClick={onClose} aria-label="Close" className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-ink-soft hover:bg-muted-strong">
               <X size={16} />
             </button>
           </div>

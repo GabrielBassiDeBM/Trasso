@@ -44,7 +44,7 @@ export function AppShell({ children, userName, userEmail, subjects = [], allTopi
           <button
             onClick={() => setSidebarOpen(true)}
             aria-label="Abrir menu"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-ink-soft transition-colors hover:bg-[#f1f0f5] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-ink-soft transition-colors hover:bg-muted hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
           >
             <Menu size={20} />
           </button>
