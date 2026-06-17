@@ -1,7 +1,6 @@
 "use client";
 
 import { BarChart2 } from "lucide-react";
-import type { SheetRow } from "@/lib/data/sheets";
 import { cn } from "@/lib/utils/cn";
 
 interface ExamResult {
@@ -16,10 +15,9 @@ interface ExamResult {
 
 interface ResultsTableProps {
   results: ExamResult[];
-  sheet: SheetRow;
 }
 
-export function ResultsTable({ results, sheet }: ResultsTableProps) {
+export function ResultsTable({ results }: ResultsTableProps) {
   const scores = results.map((r) => r.score ?? 0);
   const avg = scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
   const max = Math.max(...scores);

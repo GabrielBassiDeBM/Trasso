@@ -327,13 +327,6 @@ export async function pullManyFromBankAction(
   return { error: null };
 }
 
-export async function saveQuestionToBankAction(questionId: string): Promise<{ error: string | null }> {
-  // Questions created in the editor are already owned by the user — they're already in the bank.
-  // This marks them for bank browsing by ensuring they have no sheet_questions entry pointing to a sheet.
-  // For now, the bank just shows all owned questions.
-  return { error: null };
-}
-
 export async function pullFromBankAction(
   sheetId: string,
   bankQuestionId: string,

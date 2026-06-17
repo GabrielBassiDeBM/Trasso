@@ -107,7 +107,7 @@ export function GradingDashboard({ sheets }: GradingDashboardProps) {
             </div>
 
             {results.length > 0 ? (
-              <ResultsTable results={results} sheet={selectedSheet} />
+              <ResultsTable results={results} />
             ) : (
               <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-line py-16 text-center">
                 <Camera size={28} className="mb-3 text-ink-faint" />

@@ -6,7 +6,7 @@
  * Detects fiducial corners, locates the bubble grid, and reads filled circles.
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Camera, X, Upload } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input, Label } from "@/components/ui/Input";

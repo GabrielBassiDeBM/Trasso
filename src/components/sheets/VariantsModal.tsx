@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, Shuffle, Check } from "lucide-react";
+import { X, Shuffle } from "lucide-react";
 import { createVariantsAction } from "@/lib/actions/variants";
 import { Button } from "@/components/ui/Button";
 import { buttonStyles } from "@/components/ui/Button";

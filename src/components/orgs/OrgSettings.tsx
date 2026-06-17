@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { UserPlus, Shield, Trash2 } from "lucide-react";
+import { UserPlus, Trash2 } from "lucide-react";
 import type { OrgRole } from "@/lib/types/database";
 import { inviteMemberAction, updateMemberRoleAction, removeMemberAction } from "@/lib/actions/orgs";
 import { Button } from "@/components/ui/Button";
 import { Input, Label } from "@/components/ui/Input";
-import { cn } from "@/lib/utils/cn";
 
 interface OrgSettingsProps {
   org: { id: string; name: string; slug: string | null };
