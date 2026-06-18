@@ -111,7 +111,10 @@ export async function getSheetGroups(sheetId: string): Promise<GroupItem[]> {
     instructions: g.instructions,
     passage: g.passage,
     passage_format: g.passage_format,
+    block_type: g.block_type as GroupItem["block_type"],
+    title: g.title,
     position: g.position,
+    level: g.level,
   }));
 }
 

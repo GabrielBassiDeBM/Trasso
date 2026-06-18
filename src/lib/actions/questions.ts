@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getSheet, getBankQuestions, type BankFilters } from "@/lib/data/sheets";
 import { defaultContentForType, fromDbRow, toDbColumns, type QuestionContent } from "@/lib/types/question";
+import { getNextSheetPosition } from "@/lib/actions/position";
 import type { Difficulty, QuestionType } from "@/lib/types/database";
 
 export interface AddQuestionResult {
@@ -11,6 +12,9 @@ export interface AddQuestionResult {
   questionId: string;
   content: QuestionContent;
   position: number;
+  subjectId: string | null;
+  topicId: string | null;
+  difficulty: Difficulty | null;
 }
 
 export type ActionResult<T> = T | { error: string };
@@ -44,16 +48,7 @@ export async function addQuestionAction(
     return { error: questionError?.message ?? "Could not create question." };
   }
 
-  const { data: last, error: positionError } = await supabase
-    .from("sheet_questions")
-    .select("position")
-    .eq("sheet_id", sheetId)
-    .order("position", { ascending: false })
-    .limit(1);
-
-  if (positionError) return { error: positionError.message };
-
-  const nextPosition = last && last.length > 0 ? last[0].position + 1 : 0;
+  const nextPosition = await getNextSheetPosition(supabase, sheetId);
 
   const { data: link, error: linkError } = await supabase
     .from("sheet_questions")
@@ -71,7 +66,15 @@ export async function addQuestionAction(
   }
 
   revalidatePath(`/sheets/${sheetId}`);
-  return { sheetQuestionId: link.id, questionId: question.id, content, position: nextPosition };
+  return {
+    sheetQuestionId: link.id,
+    questionId: question.id,
+    content,
+    position: nextPosition,
+    subjectId: null,
+    topicId: null,
+    difficulty: null,
+  };
 }
 
 export async function updateQuestionAction(
@@ -304,14 +307,7 @@ export async function pullManyFromBankAction(
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return { error: "Session expired." };
 
-  const { data: last } = await supabase
-    .from("sheet_questions")
-    .select("position")
-    .eq("sheet_id", sheetId)
-    .order("position", { ascending: false })
-    .limit(1);
-
-  const startPosition = last && last.length > 0 ? last[0].position + 1 : 0;
+  const startPosition = await getNextSheetPosition(supabase, sheetId);
 
   const { error } = await supabase.from("sheet_questions").insert(
     bankQuestionIds.map((qId, i) => ({
@@ -344,15 +340,7 @@ export async function pullFromBankAction(
 
   if (bqError || !bq) return { error: "Question not found." };
 
-  // Get next position
-  const { data: last } = await supabase
-    .from("sheet_questions")
-    .select("position")
-    .eq("sheet_id", sheetId)
-    .order("position", { ascending: false })
-    .limit(1);
-
-  const nextPosition = last && last.length > 0 ? last[0].position + 1 : 0;
+  const nextPosition = await getNextSheetPosition(supabase, sheetId);
 
   const { data: link, error: linkError } = await supabase
     .from("sheet_questions")
@@ -369,5 +357,13 @@ export async function pullFromBankAction(
 
   const { fromDbRow } = await import("@/lib/types/question");
   revalidatePath(`/sheets/${sheetId}`);
-  return { sheetQuestionId: link.id, questionId: bankQuestionId, content: fromDbRow(bq), position: nextPosition };
+  return {
+    sheetQuestionId: link.id,
+    questionId: bankQuestionId,
+    content: fromDbRow(bq),
+    position: nextPosition,
+    subjectId: bq.subject_id,
+    topicId: bq.topic_id,
+    difficulty: bq.difficulty,
+  };
 }

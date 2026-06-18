@@ -111,10 +111,32 @@ export function SheetDocument({
               );
             }
 
+            if (block.group.block_type === "section_header") {
+              return <SectionHeaderBlock key={block.group.id} group={block.group} />;
+            }
+
             return <PassageBlock key={block.group.id} group={block.group} />;
           })}
         </div>
       </div>
+    </div>
+  );
+}
+
+function SectionHeaderBlock({ group }: { group: GroupItem }) {
+  if (!group.title) return null;
+
+  if (group.level === 2) {
+    return (
+      <div className="mb-3 break-inside-avoid border-b border-black/30 pb-1">
+        <h3 className="text-[11pt] font-semibold text-black">{group.title}</h3>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mb-5 break-inside-avoid border-b-2 border-black/70 pb-1.5">
+      <h2 className="text-[13pt] font-semibold uppercase tracking-wide text-black">{group.title}</h2>
     </div>
   );
 }

@@ -40,6 +40,11 @@ yarn-error.log*
 # question import source files (not part of the app)
 /question-imports/source/*
 !/question-imports/source/.gitkeep
+/question-imports/*.zip
+/question-imports/pdfs/*
+!/question-imports/pdfs/.gitkeep
+/question-imports/.import-progress.json
+/question-imports/import-log.ndjson
 
 # typescript
 *.tsbuildinfo

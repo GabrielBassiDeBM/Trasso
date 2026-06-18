@@ -2,19 +2,23 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import type { GroupItem } from "@/components/sheets/QuestionGroupEditor";
+import { getNextSheetPosition } from "@/lib/actions/position";
+import type { BlockType, GroupItem } from "@/components/sheets/QuestionGroupEditor";
 
 export async function addGroupAction(
   sheetId: string,
-  position: number
+  blockType: BlockType = "passage",
+  level: number = 1,
 ): Promise<GroupItem | { error: string }> {
   const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return { error: "Session expired." };
 
+  const position = await getNextSheetPosition(supabase, sheetId);
+
   const { data, error } = await supabase
     .from("question_groups")
-    .insert({ sheet_id: sheetId, position })
+    .insert({ sheet_id: sheetId, position, block_type: blockType, level })
     .select()
     .single();
 
@@ -26,13 +30,16 @@ export async function addGroupAction(
     instructions: data.instructions,
     passage: data.passage,
     passage_format: data.passage_format,
+    block_type: data.block_type as BlockType,
+    title: data.title,
     position: data.position,
+    level: data.level,
   };
 }
 
 export async function updateGroupAction(
   groupId: string,
-  updates: { passage?: string | null; instructions?: string | null }
+  updates: { passage?: string | null; instructions?: string | null; title?: string | null; level?: number }
 ): Promise<void> {
   const supabase = await createClient();
   await supabase.from("question_groups").update(updates).eq("id", groupId);

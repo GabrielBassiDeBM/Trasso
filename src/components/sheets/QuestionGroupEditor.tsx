@@ -1,16 +1,22 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { BookText, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { BookText, ChevronDown, ChevronUp, Heading, Trash2 } from "lucide-react";
 import { removeGroupAction, updateGroupAction } from "@/lib/actions/groups";
 import { Latex } from "@/components/math/Latex";
+import { cn } from "@/lib/utils/cn";
+
+export type BlockType = "passage" | "section_header";
 
 export interface GroupItem {
   id: string;
   instructions: string | null;
   passage: string | null;
   passage_format: string;
+  block_type: BlockType;
+  title: string | null;
   position: number;
+  level: number;
 }
 
 interface QuestionGroupEditorProps {
@@ -21,6 +27,17 @@ interface QuestionGroupEditorProps {
 }
 
 export function QuestionGroupEditor({ group, onGroupChange, onGroupRemove, dragHandle }: QuestionGroupEditorProps) {
+  if (group.block_type === "section_header") {
+    return (
+      <SectionHeaderEditor group={group} onGroupChange={onGroupChange} onGroupRemove={onGroupRemove} dragHandle={dragHandle} />
+    );
+  }
+  return (
+    <PassageEditor group={group} onGroupChange={onGroupChange} onGroupRemove={onGroupRemove} dragHandle={dragHandle} />
+  );
+}
+
+function PassageEditor({ group, onGroupChange, onGroupRemove, dragHandle }: QuestionGroupEditorProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [localPassage, setLocalPassage] = useState(group.passage ?? "");
   const [localInstructions, setLocalInstructions] = useState(group.instructions ?? "");
@@ -115,6 +132,62 @@ export function QuestionGroupEditor({ group, onGroupChange, onGroupRemove, dragH
           </p>
         </div>
       )}
+    </div>
+  );
+}
+
+function SectionHeaderEditor({ group, onGroupChange, onGroupRemove, dragHandle }: QuestionGroupEditorProps) {
+  const [localTitle, setLocalTitle] = useState(group.title ?? "");
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
+      updateGroupAction(group.id, { title: localTitle || null });
+    }, 600);
+    return () => { if (saveTimer.current) clearTimeout(saveTimer.current); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localTitle]);
+
+  async function handleRemoveGroup() {
+    if (!confirm("Remove this section header?")) return;
+    await removeGroupAction(group.id);
+    onGroupRemove();
+  }
+
+  const isSubLevel = group.level === 2;
+
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border-2 border-accent/20 bg-accent-soft/30",
+        isSubLevel && "ml-6 border-accent/10 bg-accent-soft/15",
+      )}
+    >
+      <div className="flex items-center gap-3 px-5 py-3">
+        {dragHandle}
+        <Heading size={isSubLevel ? 13 : 15} className="text-accent-dark shrink-0" />
+        <input
+          value={localTitle}
+          onChange={(e) => {
+            setLocalTitle(e.target.value);
+            onGroupChange({ ...group, title: e.target.value });
+          }}
+          placeholder={isSubLevel ? "Sub-section title, e.g. Topic: Fractions" : "Section title, e.g. Section 2: Free Response"}
+          className={cn(
+            "flex-1 rounded-md border border-transparent bg-transparent px-1 font-semibold text-accent-dark placeholder:text-accent-dark/50 focus:border-line focus:bg-canvas focus:outline-none",
+            isSubLevel ? "text-xs" : "text-sm",
+          )}
+        />
+        <button
+          type="button"
+          onClick={handleRemoveGroup}
+          className="rounded-lg p-1 text-ink-faint hover:text-danger"
+          aria-label="Remove section header"
+        >
+          <Trash2 size={15} />
+        </button>
+      </div>
     </div>
   );
 }

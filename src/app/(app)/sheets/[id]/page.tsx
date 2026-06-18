@@ -26,6 +26,9 @@ export default async function SheetEditorPage({ params }: { params: Promise<{ id
       points: sq.points,
       content: fromDbRow(sq.question!),
       position: sq.position,
+      subjectId: sq.question!.subject_id,
+      topicId: sq.question!.topic_id,
+      difficulty: sq.question!.difficulty,
     }));
 
   const pageSettings = (sheet.page_settings as unknown as PageSettings | null) ?? DEFAULT_PAGE_SETTINGS;

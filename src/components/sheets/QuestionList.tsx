@@ -11,12 +11,18 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Wand2, Camera, BookText, Library } from "lucide-react";
-import type { QuestionType } from "@/lib/types/database";
+import { Wand2, Camera, BookText, Heading, Library, ListOrdered } from "lucide-react";
+import type { Difficulty, QuestionType } from "@/lib/types/database";
 import type { SubjectRow, TopicRow } from "@/lib/data/sheets";
 import { QUESTION_TYPES, QUESTION_TYPE_LABELS, type QuestionContent } from "@/lib/types/question";
 import { addQuestionAction } from "@/lib/actions/questions";
-import { addGroupAction, reorderSheetEntitiesAction, type SheetEntityRef } from "@/lib/actions/groups";
+import {
+  addGroupAction,
+  removeGroupAction,
+  updateGroupAction,
+  reorderSheetEntitiesAction,
+  type SheetEntityRef,
+} from "@/lib/actions/groups";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { QuestionEditorShell } from "./QuestionEditor/QuestionEditorShell";
@@ -32,6 +38,9 @@ export interface QuestionItem {
   content: QuestionContent;
   inlineImages?: string[];
   position?: number;
+  subjectId?: string | null;
+  topicId?: string | null;
+  difficulty?: Difficulty | null;
 }
 
 interface QuestionListProps {
@@ -59,6 +68,9 @@ type Entry =
 function groupDndId(groupId: string) {
   return `group:${groupId}`;
 }
+
+const OTHER_KEY = "__other__";
+const DIFFICULTY_RANK: Record<string, number> = { easy: 0, medium: 1, hard: 2 };
 
 function buildEntries(items: QuestionItem[], groups: GroupItem[]): Entry[] {
   const entries: Entry[] = [
@@ -94,6 +106,8 @@ export function QuestionList({
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }));
   const [adding, setAdding] = useState<QuestionType | null>(null);
   const [addingGroup, setAddingGroup] = useState(false);
+  const [addingHeader, setAddingHeader] = useState(false);
+  const [organizing, setOrganizing] = useState(false);
   const [scanOpen, setScanOpen] = useState(false);
   const [generateOpen, setGenerateOpen] = useState(false);
   const [bankOpen, setBankOpen] = useState(false);
@@ -147,13 +161,16 @@ export function QuestionList({
         points: 1,
         content: result.content,
         position: result.position,
+        subjectId: result.subjectId,
+        topicId: result.topicId,
+        difficulty: result.difficulty,
       },
     ]);
   }
 
   async function handleAddGroup() {
     setAddingGroup(true);
-    const result = await addGroupAction(sheetId, items.length + groups.length);
+    const result = await addGroupAction(sheetId, "passage");
     setAddingGroup(false);
 
     if ("error" in result) {
@@ -162,6 +179,111 @@ export function QuestionList({
     }
 
     onGroupsChange([...groups, result]);
+  }
+
+  async function handleAddSectionHeader() {
+    setAddingHeader(true);
+    const result = await addGroupAction(sheetId, "section_header");
+    setAddingHeader(false);
+
+    if ("error" in result) {
+      alert(result.error);
+      return;
+    }
+
+    onGroupsChange([...groups, result]);
+  }
+
+  async function handleOrganize() {
+    if (items.length === 0) return;
+    setOrganizing(true);
+
+    const subjectName = (id: string | null | undefined) =>
+      (id && subjects.find((s) => s.id === id)?.name) || "Other";
+    const topicName = (id: string | null | undefined) =>
+      (id && allTopics.find((t) => t.id === id)?.name) || "";
+    const difficultyRank = (difficulty: Difficulty | null | undefined) => DIFFICULTY_RANK[difficulty ?? ""] ?? 99;
+
+    const bySubject = new Map<string, QuestionItem[]>();
+    for (const item of items) {
+      const key = item.subjectId ?? OTHER_KEY;
+      const bucket = bySubject.get(key);
+      if (bucket) bucket.push(item);
+      else bySubject.set(key, [item]);
+    }
+
+    const subjectKeys = Array.from(bySubject.keys()).sort((a, b) => {
+      if (a === OTHER_KEY) return 1;
+      if (b === OTHER_KEY) return -1;
+      return subjectName(a).localeCompare(subjectName(b));
+    });
+
+    const oldHeaders = groups.filter((g) => g.block_type === "section_header");
+    const passages = groups.filter((g) => g.block_type !== "section_header");
+    await Promise.all(oldHeaders.map((g) => removeGroupAction(g.id)));
+
+    const orderedItems: QuestionItem[] = [];
+    const newGroups: GroupItem[] = [];
+    const refs: SheetEntityRef[] = [];
+    let position = 0;
+
+    for (const subjectKey of subjectKeys) {
+      const subjectTitle = subjectKey === OTHER_KEY ? "Other" : subjectName(subjectKey);
+      const subjectHeader = await addGroupAction(sheetId, "section_header", 1);
+      if (!("error" in subjectHeader)) {
+        await updateGroupAction(subjectHeader.id, { title: subjectTitle, level: 1 });
+        newGroups.push({ ...subjectHeader, title: subjectTitle, level: 1, position });
+        refs.push({ id: subjectHeader.id, kind: "group" });
+        position += 1;
+      }
+
+      const byTopic = new Map<string, QuestionItem[]>();
+      for (const item of bySubject.get(subjectKey)!) {
+        const key = item.topicId ?? OTHER_KEY;
+        const bucket = byTopic.get(key);
+        if (bucket) bucket.push(item);
+        else byTopic.set(key, [item]);
+      }
+
+      const topicKeys = Array.from(byTopic.keys()).sort((a, b) => {
+        if (a === OTHER_KEY) return 1;
+        if (b === OTHER_KEY) return -1;
+        return topicName(a).localeCompare(topicName(b));
+      });
+
+      for (const topicKey of topicKeys) {
+        const topicTitle = topicKey === OTHER_KEY ? "Other" : topicName(topicKey);
+        const topicHeader = await addGroupAction(sheetId, "section_header", 2);
+        if (!("error" in topicHeader)) {
+          await updateGroupAction(topicHeader.id, { title: topicTitle, level: 2 });
+          newGroups.push({ ...topicHeader, title: topicTitle, level: 2, position });
+          refs.push({ id: topicHeader.id, kind: "group" });
+          position += 1;
+        }
+
+        const bucket = [...byTopic.get(topicKey)!].sort(
+          (a, b) => difficultyRank(a.difficulty) - difficultyRank(b.difficulty),
+        );
+
+        for (const item of bucket) {
+          orderedItems.push({ ...item, position });
+          refs.push({ id: item.sheetQuestionId, kind: "item" });
+          position += 1;
+        }
+      }
+    }
+
+    for (const passage of passages) {
+      newGroups.push({ ...passage, position });
+      refs.push({ id: passage.id, kind: "group" });
+      position += 1;
+    }
+
+    await reorderSheetEntitiesAction(sheetId, refs);
+
+    onItemsChange(orderedItems);
+    onGroupsChange(newGroups);
+    setOrganizing(false);
   }
 
   function updateItemContent(sheetQuestionId: string, content: QuestionContent) {
@@ -183,6 +305,9 @@ export function QuestionList({
         points: 1,
         content: result.content,
         position: result.position,
+        subjectId: result.subjectId,
+        topicId: result.topicId,
+        difficulty: result.difficulty,
       });
     }
     if (added.length > 0) onItemsChange([...items, ...added]);
@@ -259,6 +384,26 @@ export function QuestionList({
           >
             <BookText size={14} />
             {addingGroup ? "Adding…" : "Passage / reading block"}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleAddSectionHeader}
+            disabled={addingHeader}
+          >
+            <Heading size={14} />
+            {addingHeader ? "Adding…" : "Section header"}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleOrganize}
+            disabled={organizing || items.length === 0}
+          >
+            <ListOrdered size={14} />
+            {organizing ? "Organizing…" : "Organize list"}
           </Button>
           <Button
             type="button"
@@ -394,7 +539,7 @@ function SortableGroupBlock({ dndId, group, onGroupChange, onGroupRemove }: Sort
         group={group}
         onGroupChange={onGroupChange}
         onGroupRemove={onGroupRemove}
-        dragHandle={<DragHandle attributes={attributes} listeners={listeners} label="Reorder passage block" />}
+        dragHandle={<DragHandle attributes={attributes} listeners={listeners} label={group.block_type === "section_header" ? "Reorder section header" : "Reorder passage block"} />}
       />
     </div>
   );

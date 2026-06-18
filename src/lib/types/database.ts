@@ -196,7 +196,10 @@ export interface Database {
           instructions: string | null;
           passage: string | null;
           passage_format: string;
+          block_type: string;
+          title: string | null;
           position: number;
+          level: number;
           created_at: string;
         };
         Insert: {
@@ -205,13 +208,19 @@ export interface Database {
           instructions?: string | null;
           passage?: string | null;
           passage_format?: string;
+          block_type?: string;
+          title?: string | null;
           position: number;
+          level?: number;
         };
         Update: {
           instructions?: string | null;
           passage?: string | null;
           passage_format?: string;
+          block_type?: string;
+          title?: string | null;
           position?: number;
+          level?: number;
         };
         Relationships: [];
       };

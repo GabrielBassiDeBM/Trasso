@@ -109,6 +109,9 @@ export function SheetEditor({
           points: 1,
           content: result.content,
           position: result.position,
+          subjectId: result.subjectId,
+          topicId: result.topicId,
+          difficulty: result.difficulty,
         },
       ]);
     }
