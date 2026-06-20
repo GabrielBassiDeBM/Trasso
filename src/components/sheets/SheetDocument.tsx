@@ -48,7 +48,7 @@ export function SheetDocument({
   showAnswers = false,
   className,
 }: SheetDocumentProps) {
-  const { margins, columns, numbering, mcqStyle, pointsPerQuestion } = pageSettings;
+  const { margins, columns, numbering, mcqStyle, pointsPerQuestion, showAnswerLines } = pageSettings;
   const coverHeight = coverLayout.blocks.reduce((max, block) => Math.max(max, block.y + block.h), 0) + 6;
   const paper = PAPER_SIZES[pageSettings.size] ?? PAPER_SIZES.A4;
   const blocks = withQuestionIndex(buildDocumentBlocks(items, groups));
@@ -60,6 +60,11 @@ export function SheetDocument({
         width: `${paper.widthMm}mm`,
         minHeight: mode === "print" ? `${paper.heightMm}mm` : undefined,
         padding: `${margins.top}mm ${margins.right}mm ${margins.bottom}mm ${margins.left}mm`,
+        // `@page` keeps margin at 0 (see below) so Chrome never reserves space for its own
+        // print header/footer (date, URL, title) — we draw the margin ourselves via padding.
+        // `clone` re-applies that padding on every page fragment instead of only the first/last.
+        boxDecorationBreak: "clone",
+        WebkitBoxDecorationBreak: "clone",
       }}
     >
       {mode === "print" && (
@@ -106,6 +111,7 @@ export function SheetDocument({
                   numbering={numbering}
                   mcqStyle={mcqStyle}
                   pointsPerQuestion={pointsPerQuestion}
+                  showAnswerLines={showAnswerLines}
                   showAnswers={showAnswers}
                 />
               );

@@ -140,7 +140,7 @@ export async function getBankQuestions(filters: BankFilters = {}, scope: "public
     .from("questions")
     .select("*, subject:subjects(id,name), topic:topics(id,name)")
     .order("created_at", { ascending: false })
-    .limit(60);
+    .limit(1000);
 
   if (scope === "public") {
     q = q.eq("is_public", true);

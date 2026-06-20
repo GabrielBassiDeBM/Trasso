@@ -21,7 +21,7 @@ import { BankQuestionCard } from "./BankQuestionCard";
 import { cn } from "@/lib/utils/cn";
 import { useT, useLocale } from "@/lib/i18n/client";
 import { translateTopicName } from "@/lib/i18n/translations";
-import { deleteManyFromBankAction, pullManyFromBankAction, getBankQuestionForEditAction, type BankQuestionForEdit } from "@/lib/actions/questions";
+import { deleteManyFromBankAction, pullManyFromBankAction, addManyToPersonalBankAction, getBankQuestionForEditAction, type BankQuestionForEdit } from "@/lib/actions/questions";
 import { AddToBankModal } from "./AddToBankModal";
 
 type QuestionWithTaxonomy = {
@@ -371,6 +371,15 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
     clearSelection();
   }
 
+  async function handleAddToPersonalBank() {
+    setBulkWorking(true);
+    startTransition(async () => {
+      await addManyToPersonalBankAction([...selectedIds]);
+      setBulkWorking(false);
+      clearSelection();
+    });
+  }
+
   async function handleSingleAdd(questionId: string, sheetId: string) {
     await pullManyFromBankAction(sheetId, [questionId]);
   }
@@ -465,7 +474,6 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
     (local.adapted ? 1 : 0);
 
   const groupedList = useMemo(() => {
-    if (activeTab !== "personal") return null;
     const map = new Map<string, { key: string; name: string; qs: QuestionWithTaxonomy[] }>();
     for (const q of questions) {
       const key = q.subject?.id ?? "__none";
@@ -473,8 +481,8 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
       if (!map.has(key)) map.set(key, { key, name, qs: [] });
       map.get(key)!.qs.push(q);
     }
-    return Array.from(map.values());
-  }, [questions, activeTab]);
+    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }, [questions]);
 
   const allSelected = questions.length > 0 && questions.every((q) => selectedIds.has(q.id));
   const someSelected = selectedIds.size > 0;
@@ -853,7 +861,7 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
               </p>
             </div>
 
-            {activeTab === "personal" && groupedList ? (
+            {groupedList && (
               <div className="space-y-8">
                 {groupedList.map(({ key, name, qs }) => {
                   const Icon = getSubjectIcon(name);
@@ -896,32 +904,19 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
                           <BankQuestionCard
                             key={q.id}
                             question={q}
-                            isPersonal
+                            isPersonal={activeTab === "personal"}
                             selected={selectedIds.has(q.id)}
                             inSelectionMode={inSelectionMode}
                             onToggleSelect={toggleSelect}
                             onEdit={handleEdit}
+                            onAddToSheet={activeTab === "public" ? handleSingleAdd : undefined}
+                            sheets={activeTab === "public" ? sheets : undefined}
                           />
                         ))}
                       </div>
                     </section>
                   );
                 })}
-              </div>
-            ) : (
-              <div className={cols === 3 ? "grid grid-cols-3 gap-3" : cols === 2 ? "grid grid-cols-2 gap-3" : "space-y-2.5"}>
-                {questions.map((q) => (
-                  <BankQuestionCard
-                    key={q.id}
-                    question={q}
-                    isPersonal={false}
-                    selected={selectedIds.has(q.id)}
-                    inSelectionMode={inSelectionMode}
-                    onToggleSelect={toggleSelect}
-                    onAddToSheet={handleSingleAdd}
-                    sheets={sheets}
-                  />
-                ))}
               </div>
             )}
           </>
@@ -996,6 +991,19 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
                 />
               )}
             </div>
+
+            {/* Add to personal bank — public tab only */}
+            {activeTab === "public" && (
+              <button
+                type="button"
+                onClick={handleAddToPersonalBank}
+                disabled={bulkWorking}
+                className="flex items-center gap-1.5 rounded-xl border border-brand/30 bg-brand-soft px-3 py-1.5 text-xs font-semibold text-brand transition-colors hover:bg-brand hover:text-white disabled:opacity-60"
+              >
+                <BookOpen size={12} aria-hidden="true" />
+                {bulkWorking ? t("bank.selection.adding") : t("bank.selection.addToBank")}
+              </button>
+            )}
 
             {/* Delete — personal tab only */}
             {activeTab === "personal" && (

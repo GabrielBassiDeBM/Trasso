@@ -10,6 +10,7 @@ interface QuestionRendererProps {
   numbering: PageSettings["numbering"];
   mcqStyle: PageSettings["mcqStyle"];
   pointsPerQuestion: PageSettings["pointsPerQuestion"];
+  showAnswerLines: PageSettings["showAnswerLines"];
   showAnswers: boolean;
 }
 
@@ -17,7 +18,7 @@ function formatPoints(points: number) {
   return points.toLocaleString("pt-BR", { minimumFractionDigits: points % 1 === 0 ? 0 : 1 });
 }
 
-export function QuestionRenderer({ item, index, numbering, mcqStyle, pointsPerQuestion, showAnswers }: QuestionRendererProps) {
+export function QuestionRenderer({ item, index, numbering, mcqStyle, pointsPerQuestion, showAnswerLines, showAnswers }: QuestionRendererProps) {
   const { content, points } = item;
   const number = numbering === "numeric" ? `${index + 1}. ` : "";
 
@@ -36,7 +37,9 @@ export function QuestionRenderer({ item, index, numbering, mcqStyle, pointsPerQu
       </p>
 
       <div className="mt-2">
-        {content.type === "open" && <AnswerLines count={content.answerLines} sample={showAnswers ? content.sampleAnswer : undefined} />}
+        {content.type === "open" && (
+          <AnswerLines count={content.answerLines} hidden={!showAnswerLines} sample={showAnswers ? content.sampleAnswer : undefined} />
+        )}
         {content.type === "essay" && <AnswerLines count={content.answerLines} />}
         {content.type === "multiple_choice" && <McqOptions options={content.options} mcqStyle={mcqStyle} showAnswers={showAnswers} />}
         {content.type === "true_false" && <TrueFalseAnswer answer={content.answer} showAnswers={showAnswers} />}
@@ -48,7 +51,7 @@ export function QuestionRenderer({ item, index, numbering, mcqStyle, pointsPerQu
   );
 }
 
-function AnswerLines({ count, sample }: { count: number; sample?: string }) {
+function AnswerLines({ count, sample, hidden }: { count: number; sample?: string; hidden?: boolean }) {
   if (sample) {
     return (
       <p className="rounded-md border border-dashed border-brand/40 bg-brand-soft/40 px-3 py-2 text-[10pt] text-brand-dark">
@@ -63,7 +66,7 @@ function AnswerLines({ count, sample }: { count: number; sample?: string }) {
   return (
     <div className="space-y-4 pt-1">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="h-px bg-black/20" />
+        <div key={i} className={cn("h-px", hidden ? "bg-transparent" : "bg-black/20")} />
       ))}
     </div>
   );

@@ -1,0 +1,3775 @@
+{
+  "source": "manual-2026-06-19",
+  "folder": "ap-physics-batch-1",
+  "questions": [
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Kinematics",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Júlia throws a ball straight up from the edge of a cliff that stands $75\\,\\text{m}$ above the valley floor, releasing it with an initial speed of $10\\,\\text{m/s}$. Taking $g = 10\\,\\text{m/s}^2$ and ignoring air resistance, how long after release does the ball reach the valley floor?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$3\\,\\text{s}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$4\\,\\text{s}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$5\\,\\text{s}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$6\\,\\text{s}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Take upward as positive and the launch point as the origin, so the valley floor is at $y = -75\\,\\text{m}$. The displacement equation is $y = v_0 t - \\tfrac{1}{2}g t^2$, giving $-75 = 10t - 5t^2$. Rearranging, $5t^2 - 10t - 75 = 0$, or $t^2 - 2t - 15 = 0$. Factoring, $(t-5)(t+3)=0$, so the positive root is $t = 5\\,\\text{s}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Newton's Laws",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "On a frictionless horizontal floor, a worker pushes two crates that stay in contact and move together. Crate A (mass $3.0\\,\\text{kg}$) is pushed directly and presses against crate B (mass $5.0\\,\\text{kg}$). The applied horizontal force is $24\\,\\text{N}$. What is the magnitude of the contact force that crate A exerts on crate B?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$8.0\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$9.0\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$15\\,\\text{N}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$24\\,\\text{N}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Treat both crates as one system to find the shared acceleration: $a = \\dfrac{F}{m_A + m_B} = \\dfrac{24}{3.0+5.0} = 3.0\\,\\text{m/s}^2$. The only horizontal force on crate B is the contact force from A, so by Newton's second law $F_{AB} = m_B a = (5.0)(3.0) = 15\\,\\text{N}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Work and Energy",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A $2.0\\,\\text{kg}$ block is released from rest on a frictionless ramp and descends through a vertical height of $1.8\\,\\text{m}$. At the base it slides along a frictionless horizontal track and compresses a spring of force constant $k = 800\\,\\text{N/m}$. Taking $g = 10\\,\\text{m/s}^2$, find the maximum compression of the spring.",
+      "options": null,
+      "correctAnswer": "0.30 m",
+      "solution": "Mechanical energy is conserved, so the gravitational potential energy lost equals the elastic energy stored at maximum compression: $mgh = \\tfrac{1}{2}k x^2$. Substituting, $(2.0)(10)(1.8) = \\tfrac{1}{2}(800)x^2$, so $36 = 400x^2$. Then $x^2 = 0.09$ and $x = 0.30\\,\\text{m}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Momentum",
+      "difficulty": "easy",
+      "type": "multiple_choice",
+      "statement": "On a frictionless track, a $0.40\\,\\text{kg}$ cart moving east at $6.0\\,\\text{m/s}$ collides with a stationary $0.20\\,\\text{kg}$ cart, and the two stick together. What is their common speed immediately after the collision?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$2.0\\,\\text{m/s}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$3.0\\,\\text{m/s}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$4.0\\,\\text{m/s}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$6.0\\,\\text{m/s}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Momentum is conserved. Before the collision, $p = (0.40)(6.0) + (0.20)(0) = 2.4\\,\\text{kg}\\cdot\\text{m/s}$. Afterward the combined mass is $0.60\\,\\text{kg}$ moving at speed $v$, so $0.60\\,v = 2.4$, giving $v = 4.0\\,\\text{m/s}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Circular Motion",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A $0.30\\,\\text{kg}$ ball on a light string is swung in a vertical circle of radius $0.50\\,\\text{m}$. At the top of the loop it moves at the minimum speed for which the string stays taut. Using $g = 10\\,\\text{m/s}^2$, what is the tension in the string when the ball is at the bottom of the loop?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$6.0\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$15\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$18\\,\\text{N}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$21\\,\\text{N}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "At the top, minimum speed means the tension is zero and gravity alone supplies the centripetal force: $mg = \\dfrac{m v_{\\text{top}}^2}{R}$, so $v_{\\text{top}}^2 = gR = (10)(0.50) = 5.0\\,\\text{m}^2/\\text{s}^2$. Energy conservation over the drop of $2R$ gives $v_{\\text{bot}}^2 = v_{\\text{top}}^2 + 2g(2R) = 5.0 + 4(10)(0.50) = 25\\,\\text{m}^2/\\text{s}^2$. At the bottom, $T - mg = \\dfrac{m v_{\\text{bot}}^2}{R}$, so $T = m\\left(g + \\dfrac{v_{\\text{bot}}^2}{R}\\right) = 0.30\\left(10 + \\dfrac{25}{0.50}\\right) = 0.30(60) = 18\\,\\text{N}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Torque and Equilibrium",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A uniform horizontal beam of mass $8.0\\,\\text{kg}$ and length $4.0\\,\\text{m}$ is hinged at its left end and held up by a vertical cable attached at its right end. A $12\\,\\text{kg}$ box rests on the beam $1.0\\,\\text{m}$ from the hinged end. Using $g = 10\\,\\text{m/s}^2$, what is the tension in the cable?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$50\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$70\\,\\text{N}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$100\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$140\\,\\text{N}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Take torques about the hinge so its force drops out. The clockwise torques come from the beam's weight at its center ($2.0\\,\\text{m}$) and the box ($1.0\\,\\text{m}$); the counterclockwise torque comes from the cable at the far end ($4.0\\,\\text{m}$). Setting them equal: $T(4.0) = (8.0)(10)(2.0) + (12)(10)(1.0) = 160 + 120 = 280$. Thus $T = \\dfrac{280}{4.0} = 70\\,\\text{N}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Simple Harmonic Motion",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A block on a spring oscillates in simple harmonic motion with a period of $0.80\\,\\text{s}$. If the block is replaced by one with four times the mass while the same spring is used, what is the new period of oscillation?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$0.40\\,\\text{s}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$0.80\\,\\text{s}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$1.6\\,\\text{s}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$3.2\\,\\text{s}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "For a mass-spring oscillator, $T = 2\\pi\\sqrt{m/k}$, so the period is proportional to $\\sqrt{m}$. Multiplying the mass by $4$ multiplies the period by $\\sqrt{4} = 2$, giving a new period of $2 \\times 0.80 = 1.6\\,\\text{s}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Kinematics",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A particle moves along the $x$-axis with position $x(t) = 2t^3 - 9t^2 + 12t$, where $x$ is in meters and $t$ in seconds. Find all times $t > 0$ at which the particle is instantaneously at rest.",
+      "options": null,
+      "correctAnswer": "t = 1 s and t = 2 s",
+      "solution": "The particle is at rest when its velocity is zero. Differentiate the position: $v(t) = \\dfrac{dx}{dt} = 6t^2 - 18t + 12 = 6(t^2 - 3t + 2) = 6(t-1)(t-2)$. Setting $v = 0$ gives $t = 1\\,\\text{s}$ and $t = 2\\,\\text{s}$, both positive and therefore valid.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Work and Energy",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A particle moving along the $x$-axis is acted on by a net force $F(x) = (6x^2 - 4x)\\,\\text{N}$, where $x$ is in meters. How much work does this force do on the particle as it moves from $x = 1\\,\\text{m}$ to $x = 3\\,\\text{m}$?",
+      "options": null,
+      "correctAnswer": "36 J",
+      "solution": "Work done by a position-dependent force is $W = \\displaystyle\\int_{x_1}^{x_2} F\\,dx$. Here $W = \\int_{1}^{3}(6x^2 - 4x)\\,dx = \\left[\\,2x^3 - 2x^2\\,\\right]_{1}^{3}$. Evaluating: at $x = 3$, $2(27) - 2(9) = 54 - 18 = 36$; at $x = 1$, $2 - 2 = 0$. Therefore $W = 36 - 0 = 36\\,\\text{J}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Rotational Dynamics",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A solid uniform disk of mass $M = 4.0\\,\\text{kg}$ and radius $R = 0.25\\,\\text{m}$ rotates freely about a fixed horizontal axle through its center. A light cord is wrapped around the rim, and a block of mass $m = 2.0\\,\\text{kg}$ hangs from the free end. After the block is released, what is the magnitude of its downward acceleration? (Use $g = 10\\,\\text{m/s}^2$.)",
+      "options": [
+        {
+          "key": "a",
+          "text": "$3.3\\,\\text{m/s}^2$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$5.0\\,\\text{m/s}^2$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$6.7\\,\\text{m/s}^2$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$10\\,\\text{m/s}^2$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "For the block: $mg - T = ma$. For the disk (moment of inertia $I = \\tfrac{1}{2}MR^2$), the cord tension produces a torque $TR = I\\alpha$. With no slipping, $\\alpha = a/R$, so $TR = \\tfrac{1}{2}MR^2 \\cdot \\dfrac{a}{R}$, which gives $T = \\tfrac{1}{2}Ma$. Substituting into the block equation: $mg - \\tfrac{1}{2}Ma = ma$, so $a = \\dfrac{mg}{m + \\tfrac{1}{2}M} = \\dfrac{(2.0)(10)}{2.0 + 2.0} = 5.0\\,\\text{m/s}^2$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Impulse and Momentum",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A $0.50\\,\\text{kg}$ object, initially at rest, is acted on by a net force directed along the $x$-axis given by $F(t) = (12t)\\,\\text{N}$, with $t$ in seconds. What is the object's speed at $t = 2.0\\,\\text{s}$?",
+      "options": null,
+      "correctAnswer": "48 m/s",
+      "solution": "The impulse equals the change in momentum: $J = \\displaystyle\\int_0^{t} F\\,dt = \\Delta p$. Compute the impulse: $J = \\int_0^{2.0} 12t\\,dt = \\left[\\,6t^2\\,\\right]_0^{2.0} = 6(2.0)^2 = 24\\,\\text{kg}\\cdot\\text{m/s}$. Since the object starts from rest, $mv = 24$, so $v = \\dfrac{24}{0.50} = 48\\,\\text{m/s}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Gravitation",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A satellite is in a circular orbit of radius $r$ around a planet. If it is moved to a new circular orbit of radius $4r$ around the same planet, by what factor does its orbital period change?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$2$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$4$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$8$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$16$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "For a circular orbit, gravity supplies the centripetal force: $\\dfrac{GMm}{r^2} = \\dfrac{m v^2}{r}$. With $v = \\dfrac{2\\pi r}{T}$, this leads to $T^2 = \\dfrac{4\\pi^2}{GM}r^3$, so $T \\propto r^{3/2}$. Replacing $r$ with $4r$ multiplies the period by $4^{3/2} = 8$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Electric Fields",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Two point charges lie on the $x$-axis: $+q$ at the origin and $+4q$ at $x = 3.0\\,\\text{m}$. At what point between the charges is the net electric field equal to zero?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$x = 1.0\\,\\text{m}$",
+          "is_correct": true
+        },
+        {
+          "key": "b",
+          "text": "$x = 1.5\\,\\text{m}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$x = 2.0\\,\\text{m}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$x = 2.25\\,\\text{m}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Between two positive charges the two fields point in opposite directions, so they can cancel. Let the point be a distance $x$ from the $+q$ charge, and therefore $3.0 - x$ from the $+4q$ charge. Setting the magnitudes equal: $\\dfrac{kq}{x^2} = \\dfrac{k(4q)}{(3.0 - x)^2}$, which gives $(3.0 - x)^2 = 4x^2$, so $3.0 - x = 2x$ (positive root). Then $3.0 = 3x$, so $x = 1.0\\,\\text{m}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Gauss's Law",
+      "difficulty": "hard",
+      "type": "open",
+      "statement": "An infinitely long straight wire carries a uniform linear charge density $\\lambda = 3.0\\times10^{-9}\\,\\text{C/m}$. Using Gauss's law, find the magnitude of the electric field at a perpendicular distance of $0.20\\,\\text{m}$ from the wire. Take $\\dfrac{1}{4\\pi\\varepsilon_0} = 9.0\\times10^{9}\\,\\text{N}\\cdot\\text{m}^2/\\text{C}^2$.",
+      "options": null,
+      "correctAnswer": "270 N/C",
+      "solution": "Use a coaxial cylindrical Gaussian surface of radius $r$ and length $L$. By symmetry the field is radial and uniform over the curved surface, so $\\oint \\vec{E}\\cdot d\\vec{A} = E(2\\pi r L)$. The enclosed charge is $\\lambda L$, so Gauss's law gives $E(2\\pi r L) = \\dfrac{\\lambda L}{\\varepsilon_0}$, hence $E = \\dfrac{\\lambda}{2\\pi\\varepsilon_0 r} = \\dfrac{2k\\lambda}{r}$. Substituting, $E = \\dfrac{2(9.0\\times10^{9})(3.0\\times10^{-9})}{0.20} = \\dfrac{54}{0.20} = 270\\,\\text{N/C}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Capacitance",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A parallel-plate capacitor is connected to a battery and charged, storing energy $U$ at potential difference $V$. While it remains connected to the battery, the plate separation is reduced to half its original value. What is the new stored energy?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$U/2$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$U$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$2U$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$4U$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The capacitance is $C = \\dfrac{\\varepsilon_0 A}{d}$, so halving $d$ doubles $C$. Because the capacitor stays connected to the battery, the voltage $V$ is held fixed. The stored energy is $U = \\tfrac{1}{2}CV^2$; with $V$ constant and $C$ doubled, the energy also doubles, giving $2U$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: RC Circuits",
+      "difficulty": "hard",
+      "type": "open",
+      "statement": "In a series $RC$ circuit, an initially uncharged $2.0\\,\\mu\\text{F}$ capacitor is charged through a $5.0\\times10^{5}\\,\\Omega$ resistor by a $12\\,\\text{V}$ battery. What is the charge on the capacitor one time constant after the switch is closed? (Use $e^{-1} \\approx 0.37$.)",
+      "options": null,
+      "correctAnswer": "about 15 μC",
+      "solution": "The time constant is $\\tau = RC = (5.0\\times10^{5})(2.0\\times10^{-6}) = 1.0\\,\\text{s}$. The charge grows as $Q(t) = Q_{\\max}\\left(1 - e^{-t/\\tau}\\right)$, where $Q_{\\max} = CV = (2.0\\times10^{-6})(12) = 24\\,\\mu\\text{C}$. At $t = \\tau$, $Q = 24\\left(1 - e^{-1}\\right) \\approx 24(1 - 0.37) = 24(0.63) \\approx 15\\,\\mu\\text{C}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Magnetic Forces",
+      "difficulty": "easy",
+      "type": "multiple_choice",
+      "statement": "A proton moves at $2.0\\times10^{5}\\,\\text{m/s}$ perpendicular to a uniform magnetic field of magnitude $0.50\\,\\text{T}$. The proton's charge is $1.6\\times10^{-19}\\,\\text{C}$. What is the magnitude of the magnetic force on it?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$1.6\\times10^{-19}\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$8.0\\times10^{-15}\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$1.6\\times10^{-14}\\,\\text{N}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$3.2\\times10^{-14}\\,\\text{N}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "For a charge moving perpendicular to the field, $F = qvB$. Substituting, $F = (1.6\\times10^{-19})(2.0\\times10^{5})(0.50)$. First $(1.6\\times10^{-19})(2.0\\times10^{5}) = 3.2\\times10^{-14}$, and multiplying by $0.50$ gives $F = 1.6\\times10^{-14}\\,\\text{N}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Electromagnetic Induction",
+      "difficulty": "hard",
+      "type": "open",
+      "statement": "A circular conducting loop of radius $0.10\\,\\text{m}$ lies with its plane perpendicular to a uniform magnetic field. The field magnitude rises steadily from $0.20\\,\\text{T}$ to $0.80\\,\\text{T}$ over $0.30\\,\\text{s}$. What is the magnitude of the average emf induced in the loop?",
+      "options": null,
+      "correctAnswer": "about 0.063 V",
+      "solution": "The flux is $\\Phi = BA$, with area $A = \\pi r^2 = \\pi (0.10)^2 \\approx 0.0314\\,\\text{m}^2$. The field change is $\\Delta B = 0.80 - 0.20 = 0.60\\,\\text{T}$, so $\\Delta\\Phi = A\\,\\Delta B = (0.0314)(0.60) \\approx 0.0188\\,\\text{Wb}$. By Faraday's law the average emf magnitude is $|\\varepsilon| = \\dfrac{\\Delta\\Phi}{\\Delta t} = \\dfrac{0.0188}{0.30} \\approx 0.063\\,\\text{V}$.",
+      "hasMath": true,
+      "figure": null
+    }
+  ]
+}
+{
+  "source": "manual-2026-06-19",
+  "folder": "ap-physics-batch-2",
+  "questions": [
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Kinematics",
+      "difficulty": "easy",
+      "type": "multiple_choice",
+      "statement": "A runner jogs $120\\,\\text{m}$ east in $40\\,\\text{s}$, then turns and walks $40\\,\\text{m}$ west in $20\\,\\text{s}$. What is the magnitude of the runner's average velocity for the entire trip?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$1.3\\,\\text{m/s}$",
+          "is_correct": true
+        },
+        {
+          "key": "b",
+          "text": "$2.0\\,\\text{m/s}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$2.7\\,\\text{m/s}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$0\\,\\text{m/s}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Average velocity uses net displacement, not distance. The net displacement is $120 - 40 = 80\\,\\text{m}$ east, over a total time of $40 + 20 = 60\\,\\text{s}$. So $\\bar{v} = \\dfrac{80}{60} \\approx 1.3\\,\\text{m/s}$. (The value $2.7\\,\\text{m/s}$ would be the average *speed*, using total distance $160\\,\\text{m}$.)",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Kinematics",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A ball rolls off a horizontal tabletop $1.25\\,\\text{m}$ high with a horizontal speed of $3.0\\,\\text{m/s}$. Using $g = 10\\,\\text{m/s}^2$ and ignoring air resistance, how far from the base of the table does it land?",
+      "options": null,
+      "correctAnswer": "1.5 m",
+      "solution": "The horizontal and vertical motions are independent. Vertically the ball falls from rest: $h = \\tfrac{1}{2}g t^2$, so $1.25 = 5t^2$, giving $t^2 = 0.25$ and $t = 0.50\\,\\text{s}$. Horizontally it moves at constant speed: $x = v t = (3.0)(0.50) = 1.5\\,\\text{m}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Kinematics",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A stone dropped from rest from a height $h$ reaches the ground in time $T$. From what height must it be dropped so that it instead takes time $2T$ to reach the ground?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$2h$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$4h$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$8h$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$\\sqrt{2}\\,h$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "For an object dropped from rest, $h = \\tfrac{1}{2}g t^2$, so height is proportional to the square of the fall time, $h \\propto t^2$. Doubling the time multiplies the height by $2^2 = 4$, so the new height is $4h$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Newton's Laws",
+      "difficulty": "hard",
+      "type": "open",
+      "statement": "A $4.0\\,\\text{kg}$ block slides down a ramp inclined at $30^\\circ$ to the horizontal. The coefficient of kinetic friction between block and ramp is $0.20$. Using $g = 10\\,\\text{m/s}^2$, find the block's acceleration down the ramp.",
+      "options": null,
+      "correctAnswer": "about 3.3 m/s^2",
+      "solution": "Along the incline, the driving component of gravity is $mg\\sin\\theta$ and kinetic friction opposes motion with magnitude $\\mu mg\\cos\\theta$. Newton's second law gives $ma = mg\\sin\\theta - \\mu mg\\cos\\theta$, so the mass cancels: $a = g(\\sin\\theta - \\mu\\cos\\theta) = 10(\\sin 30^\\circ - 0.20\\cos 30^\\circ) = 10(0.50 - 0.20\\cdot 0.866) \\approx 10(0.327) \\approx 3.3\\,\\text{m/s}^2$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Newton's Laws",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Two masses, $3.0\\,\\text{kg}$ and $2.0\\,\\text{kg}$, hang from opposite ends of a light string passing over a frictionless, massless pulley. Using $g = 10\\,\\text{m/s}^2$, what is the magnitude of the acceleration of the system?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$1.0\\,\\text{m/s}^2$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$2.0\\,\\text{m/s}^2$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$4.0\\,\\text{m/s}^2$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$5.0\\,\\text{m/s}^2$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Treat the two masses as one system driven by the weight difference. The net force is $(m_1 - m_2)g = (3.0 - 2.0)(10) = 10\\,\\text{N}$, and the total mass being accelerated is $m_1 + m_2 = 5.0\\,\\text{kg}$. Thus $a = \\dfrac{10}{5.0} = 2.0\\,\\text{m/s}^2$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Newton's Laws",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A $60\\,\\text{kg}$ person stands on a bathroom scale inside an elevator that is accelerating upward at $2.0\\,\\text{m/s}^2$. Using $g = 10\\,\\text{m/s}^2$, what does the scale read (the normal force on the person)?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$120\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$480\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$600\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$720\\,\\text{N}$",
+          "is_correct": true
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The scale reads the normal force $N$. Newton's second law for the person (up positive) is $N - mg = ma$, so $N = m(g + a) = 60(10 + 2.0) = 720\\,\\text{N}$. The reading exceeds the person's normal weight of $600\\,\\text{N}$ because of the upward acceleration.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Newton's Laws",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A $1500\\,\\text{kg}$ car traveling at $20\\,\\text{m/s}$ brakes and skids to a stop. The coefficient of kinetic friction between the tires and the road is $0.50$. Using $g = 10\\,\\text{m/s}^2$, how far does the car travel before stopping?",
+      "options": null,
+      "correctAnswer": "40 m",
+      "solution": "The only horizontal force is kinetic friction, giving a deceleration $a = \\mu g = (0.50)(10) = 5.0\\,\\text{m/s}^2$ (the mass cancels). Using $v^2 = v_0^2 - 2 a s$ with final speed zero: $0 = (20)^2 - 2(5.0)s$, so $s = \\dfrac{400}{10} = 40\\,\\text{m}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Circular Motion",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A car rounds a flat (unbanked) curve of radius $50\\,\\text{m}$. The coefficient of static friction between the tires and the road is $0.40$. Using $g = 10\\,\\text{m/s}^2$, what is the maximum speed at which the car can round the curve without skidding?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$10\\,\\text{m/s}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$14\\,\\text{m/s}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$20\\,\\text{m/s}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$28\\,\\text{m/s}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Static friction supplies the centripetal force, and skidding begins when friction is at its maximum: $\\mu mg = \\dfrac{m v^2}{r}$. The mass cancels, giving $v = \\sqrt{\\mu g r} = \\sqrt{(0.40)(10)(50)} = \\sqrt{200} \\approx 14\\,\\text{m/s}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Gravitation",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Planet X has twice the mass of Earth and twice Earth's radius. If the gravitational field strength at Earth's surface is $g$, what is the gravitational field strength at the surface of Planet X?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$g/4$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$g/2$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$g$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$2g$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Surface gravity is $g = \\dfrac{GM}{R^2}$. For Planet X, substitute $M \\to 2M$ and $R \\to 2R$: $g_X = \\dfrac{G(2M)}{(2R)^2} = \\dfrac{2GM}{4R^2} = \\dfrac{1}{2}\\dfrac{GM}{R^2} = \\dfrac{g}{2}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Work and Energy",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A $2.0\\,\\text{kg}$ box, starting from rest, is pushed across a rough floor by a constant horizontal force of $15\\,\\text{N}$ over a distance of $4.0\\,\\text{m}$. Friction does $-24\\,\\text{J}$ of work on the box. What is the box's kinetic energy after the $4.0\\,\\text{m}$?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$24\\,\\text{J}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$36\\,\\text{J}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$60\\,\\text{J}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$84\\,\\text{J}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "By the work-energy theorem, the change in kinetic energy equals the net work. The applied force does $W = (15)(4.0) = 60\\,\\text{J}$, and friction does $-24\\,\\text{J}$, so the net work is $60 - 24 = 36\\,\\text{J}$. Starting from rest, the final kinetic energy is $36\\,\\text{J}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Work and Energy",
+      "difficulty": "easy",
+      "type": "open",
+      "statement": "A motor lifts a $50\\,\\text{kg}$ load straight up at a constant speed of $0.40\\,\\text{m/s}$. Using $g = 10\\,\\text{m/s}^2$, what is the power output of the motor?",
+      "options": null,
+      "correctAnswer": "200 W",
+      "solution": "At constant speed the lifting force equals the weight, $F = mg = (50)(10) = 500\\,\\text{N}$. Power is $P = Fv = (500)(0.40) = 200\\,\\text{W}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Work and Energy",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A pendulum bob is released from rest at a height $0.20\\,\\text{m}$ above its lowest point. Using $g = 10\\,\\text{m/s}^2$ and ignoring friction, what is the speed of the bob at the lowest point?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$0.40\\,\\text{m/s}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$1.0\\,\\text{m/s}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$2.0\\,\\text{m/s}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$4.0\\,\\text{m/s}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Mechanical energy is conserved, so the gravitational potential energy at the release point becomes kinetic energy at the bottom: $mgh = \\tfrac{1}{2}m v^2$. The mass cancels, giving $v = \\sqrt{2gh} = \\sqrt{2(10)(0.20)} = \\sqrt{4} = 2.0\\,\\text{m/s}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Momentum",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A $0.15\\,\\text{kg}$ ball moving at $8.0\\,\\text{m/s}$ strikes a wall and rebounds straight back at $6.0\\,\\text{m/s}$. What is the magnitude of the impulse the wall delivers to the ball?",
+      "options": null,
+      "correctAnswer": "2.1 N*s",
+      "solution": "Impulse equals the change in momentum, $J = m(v_f - v_i)$. Take the initial direction as positive, so the rebound velocity is $-6.0\\,\\text{m/s}$: $J = 0.15(-6.0 - 8.0) = 0.15(-14) = -2.1\\,\\text{kg}\\cdot\\text{m/s}$. The magnitude is $2.1\\,\\text{N}\\cdot\\text{s}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Momentum",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A stationary $4.0\\,\\text{kg}$ object explodes into two pieces. One piece, of mass $1.0\\,\\text{kg}$, flies east at $9.0\\,\\text{m/s}$. What is the speed of the other piece?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$2.25\\,\\text{m/s}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$3.0\\,\\text{m/s}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$9.0\\,\\text{m/s}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$27\\,\\text{m/s}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The total momentum before the explosion is zero, so it must remain zero afterward. The second piece has mass $4.0 - 1.0 = 3.0\\,\\text{kg}$. Setting momenta equal in magnitude: $(3.0)v = (1.0)(9.0)$, so $v = 3.0\\,\\text{m/s}$ (directed west).",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Momentum",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A $0.020\\,\\text{kg}$ bullet traveling at $300\\,\\text{m/s}$ embeds itself in a $1.98\\,\\text{kg}$ block of wood resting on a frictionless surface. What is the speed of the block-plus-bullet just after impact?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$1.5\\,\\text{m/s}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$3.0\\,\\text{m/s}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$6.0\\,\\text{m/s}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$30\\,\\text{m/s}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "This is a perfectly inelastic collision, so momentum is conserved. Before: $p = (0.020)(300) = 6.0\\,\\text{kg}\\cdot\\text{m/s}$. After, the combined mass is $0.020 + 1.98 = 2.00\\,\\text{kg}$ moving at speed $v$: $2.00\\,v = 6.0$, so $v = 3.0\\,\\text{m/s}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Rotational Motion",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A wheel spinning at $20\\,\\text{rad/s}$ is brought to rest with a constant angular deceleration of $4.0\\,\\text{rad/s}^2$. Through how many radians does it turn before stopping?",
+      "options": null,
+      "correctAnswer": "50 rad",
+      "solution": "Use the rotational analog of $v^2 = v_0^2 - 2 a \\Delta x$: $\\omega^2 = \\omega_0^2 - 2\\alpha\\theta$. With $\\omega = 0$: $0 = (20)^2 - 2(4.0)\\theta$, so $\\theta = \\dfrac{400}{8.0} = 50\\,\\text{rad}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Rotational Motion",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A disk with moment of inertia $0.50\\,\\text{kg}\\cdot\\text{m}^2$ experiences a net torque of $2.0\\,\\text{N}\\cdot\\text{m}$. What is its angular acceleration?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$1.0\\,\\text{rad/s}^2$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$2.0\\,\\text{rad/s}^2$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$4.0\\,\\text{rad/s}^2$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$8.0\\,\\text{rad/s}^2$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The rotational form of Newton's second law is $\\tau = I\\alpha$. Solving for the angular acceleration: $\\alpha = \\dfrac{\\tau}{I} = \\dfrac{2.0}{0.50} = 4.0\\,\\text{rad/s}^2$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Rotational Motion",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A solid sphere (moment of inertia $\\tfrac{2}{5}MR^2$) rolls without slipping along level ground. What fraction of its total kinetic energy is rotational?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$\\dfrac{2}{7}$",
+          "is_correct": true
+        },
+        {
+          "key": "b",
+          "text": "$\\dfrac{2}{5}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$\\dfrac{5}{7}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$\\dfrac{1}{2}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "For rolling without slipping, $\\omega = v/R$. The rotational kinetic energy is $\\tfrac{1}{2}I\\omega^2 = \\tfrac{1}{2}\\left(\\tfrac{2}{5}MR^2\\right)\\left(\\tfrac{v}{R}\\right)^2 = \\tfrac{1}{5}Mv^2$, and the translational kinetic energy is $\\tfrac{1}{2}Mv^2$. The total is $\\tfrac{1}{2}Mv^2 + \\tfrac{1}{5}Mv^2 = \\tfrac{7}{10}Mv^2$. The rotational fraction is $\\dfrac{1/5}{7/10} = \\dfrac{2}{7}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Simple Harmonic Motion",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A simple pendulum has a period of $2.0\\,\\text{s}$. By what factor must its length change so that the period becomes $4.0\\,\\text{s}$?",
+      "options": [
+        {
+          "key": "a",
+          "text": "length $\\times\\,2$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "length $\\times\\,4$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "length $\\times\\,\\sqrt{2}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "length $\\times\\,\\tfrac{1}{2}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "For a simple pendulum, $T = 2\\pi\\sqrt{L/g}$, so the period is proportional to $\\sqrt{L}$. Doubling the period requires multiplying the length by $2^2 = 4$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Physics 1: Fluids",
+      "difficulty": "hard",
+      "type": "open",
+      "statement": "A solid object weighs $50\\,\\text{N}$ in air and $30\\,\\text{N}$ when fully submerged in water. The density of water is $1000\\,\\text{kg/m}^3$ and $g = 10\\,\\text{m/s}^2$. What is the volume of the object?",
+      "options": null,
+      "correctAnswer": "0.002 m^3 (2 x 10^-3 m^3)",
+      "solution": "The apparent loss of weight equals the buoyant force: $F_b = 50 - 30 = 20\\,\\text{N}$. For a fully submerged object, $F_b = \\rho_{\\text{water}} V g$, so $20 = (1000)V(10) = 10000\\,V$. Solving, $V = \\dfrac{20}{10000} = 2\\times10^{-3}\\,\\text{m}^3$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Kinematics",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A particle starts from rest at $t = 0$ and has acceleration $a(t) = (6t)\\,\\text{m/s}^2$, with $t$ in seconds. What is its velocity at $t = 3.0\\,\\text{s}$?",
+      "options": null,
+      "correctAnswer": "27 m/s",
+      "solution": "Velocity is the integral of acceleration with the initial condition $v(0) = 0$: $v(t) = \\displaystyle\\int_0^t 6t'\\,dt' = 3t^2$. At $t = 3.0\\,\\text{s}$, $v = 3(3.0)^2 = 27\\,\\text{m/s}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Kinematics",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A particle moves with velocity $v(t) = (4t^2 - 2t)\\,\\text{m/s}$, with $t$ in seconds. What is its displacement between $t = 0$ and $t = 3.0\\,\\text{s}$?",
+      "options": null,
+      "correctAnswer": "27 m",
+      "solution": "Displacement is the definite integral of velocity: $\\Delta x = \\displaystyle\\int_0^{3.0}(4t^2 - 2t)\\,dt = \\left[\\tfrac{4}{3}t^3 - t^2\\right]_0^{3.0}$. Evaluating, $\\tfrac{4}{3}(27) - 9 = 36 - 9 = 27\\,\\text{m}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Kinematics",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A particle moves along the $x$-axis with velocity $v(t) = (t^2 - 6t + 5)\\,\\text{m/s}$ for $t \\ge 0$ (with $t$ in seconds). At what time does the particle first change its direction of motion?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$t = 1\\,\\text{s}$",
+          "is_correct": true
+        },
+        {
+          "key": "b",
+          "text": "$t = 2\\,\\text{s}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$t = 3\\,\\text{s}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$t = 5\\,\\text{s}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "A direction change occurs when the velocity passes through zero. Factor: $v(t) = (t-1)(t-5)$, which is zero at $t = 1\\,\\text{s}$ and $t = 5\\,\\text{s}$. Just before $t = 1$ (e.g. $t = 0$) the velocity is positive; just after (e.g. $t = 2$) it is negative, so the particle reverses direction first at $t = 1\\,\\text{s}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Dynamics",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A $2.0\\,\\text{kg}$ object initially moving at $4.0\\,\\text{m/s}$ along the $x$-axis is acted on by a net force $F(t) = (6t^2)\\,\\text{N}$, with $t$ in seconds. What is its velocity at $t = 2.0\\,\\text{s}$?",
+      "options": null,
+      "correctAnswer": "12 m/s",
+      "solution": "The impulse equals the change in momentum: $J = \\displaystyle\\int_0^{2.0} 6t^2\\,dt = \\left[2t^3\\right]_0^{2.0} = 16\\,\\text{N}\\cdot\\text{s}$. Then $\\Delta v = J/m = 16/2.0 = 8.0\\,\\text{m/s}$, so $v = 4.0 + 8.0 = 12\\,\\text{m/s}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Dynamics",
+      "difficulty": "hard",
+      "type": "open",
+      "statement": "An object of mass $0.50\\,\\text{kg}$ falls and experiences a drag force $F_d = bv$ with $b = 2.5\\,\\text{kg/s}$. Using $g = 10\\,\\text{m/s}^2$, what is its terminal velocity?",
+      "options": null,
+      "correctAnswer": "2.0 m/s",
+      "solution": "At terminal velocity the acceleration is zero, so the net force vanishes: $mg = b v_t$. Solving, $v_t = \\dfrac{mg}{b} = \\dfrac{(0.50)(10)}{2.5} = 2.0\\,\\text{m/s}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Work and Energy",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A force $F(x) = (10 - 2x)\\,\\text{N}$ acts on a particle as it moves along the $x$-axis from $x = 0$ to $x = 5.0\\,\\text{m}$ (with $x$ in meters). How much work does the force do?",
+      "options": null,
+      "correctAnswer": "25 J",
+      "solution": "Work is the integral of force over displacement: $W = \\displaystyle\\int_0^{5.0}(10 - 2x)\\,dx = \\left[10x - x^2\\right]_0^{5.0} = 50 - 25 = 25\\,\\text{J}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Energy",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A particle has potential energy $U(x) = (3x^2 - 12x)\\,\\text{J}$, with $x$ in meters. What is the force on the particle at $x = 1.0\\,\\text{m}$?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$-9\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$+6\\,\\text{N}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$-6\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$+9\\,\\text{N}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The conservative force is $F = -\\dfrac{dU}{dx} = -(6x - 12) = 12 - 6x$. At $x = 1.0\\,\\text{m}$, $F = 12 - 6(1.0) = +6\\,\\text{N}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Energy",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A particle has potential energy $U(x) = (2x^3 - 9x^2 + 12x)\\,\\text{J}$, with $x$ in meters. At which position is there a point of stable equilibrium?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$x = 0\\,\\text{m}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$x = 1\\,\\text{m}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$x = 2\\,\\text{m}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$x = 3\\,\\text{m}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Equilibrium occurs where the force is zero, i.e. $\\dfrac{dU}{dx} = 6x^2 - 18x + 12 = 6(x-1)(x-2) = 0$, giving $x = 1$ and $x = 2$. Stability requires the potential to be a minimum, i.e. $\\dfrac{d^2U}{dx^2} > 0$. Since $\\dfrac{d^2U}{dx^2} = 12x - 18$, at $x = 2$ it equals $+6 > 0$ (stable), while at $x = 1$ it equals $-6 < 0$ (unstable). So $x = 2\\,\\text{m}$ is stable.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Energy",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "At one instant a $1200\\,\\text{kg}$ car moves at $25\\,\\text{m/s}$ while a net forward force of $4000\\,\\text{N}$ acts on it. What is the instantaneous power delivered at that instant?",
+      "options": null,
+      "correctAnswer": "100 kW (1.0 x 10^5 W)",
+      "solution": "Instantaneous power is $P = F v = (4000)(25) = 1.0\\times10^{5}\\,\\text{W} = 100\\,\\text{kW}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Systems of Particles",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Two particles lie on the $x$-axis: a $2.0\\,\\text{kg}$ mass at $x = 1.0\\,\\text{m}$ and a $6.0\\,\\text{kg}$ mass at $x = 5.0\\,\\text{m}$. Where is the center of mass?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$3.0\\,\\text{m}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$3.5\\,\\text{m}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$4.0\\,\\text{m}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$4.5\\,\\text{m}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The center of mass is the mass-weighted average position: $x_{cm} = \\dfrac{m_1 x_1 + m_2 x_2}{m_1 + m_2} = \\dfrac{(2.0)(1.0) + (6.0)(5.0)}{2.0 + 6.0} = \\dfrac{2 + 30}{8} = 4.0\\,\\text{m}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Systems of Particles",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A $3.0\\,\\text{kg}$ cart moves right at $4.0\\,\\text{m/s}$ while a $1.0\\,\\text{kg}$ cart moves left at $2.0\\,\\text{m/s}$. Taking rightward as positive, what is the velocity of the center of mass of the system?",
+      "options": null,
+      "correctAnswer": "2.5 m/s (rightward)",
+      "solution": "The center-of-mass velocity is total momentum divided by total mass: $v_{cm} = \\dfrac{(3.0)(+4.0) + (1.0)(-2.0)}{3.0 + 1.0} = \\dfrac{12 - 2}{4.0} = 2.5\\,\\text{m/s}$, directed to the right.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Rotational Dynamics",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A thin uniform rod of mass $M$ and length $L$ rotates about an axis through one end, perpendicular to the rod. Using $I = \\int r^2\\,dm$, what is its moment of inertia?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$\\tfrac{1}{12}ML^2$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$\\tfrac{1}{3}ML^2$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$\\tfrac{1}{2}ML^2$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$ML^2$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The rod has linear mass density $\\lambda = M/L$, so $dm = \\tfrac{M}{L}\\,dx$. Integrating from the pivot at $x = 0$ to $x = L$: $I = \\displaystyle\\int_0^L x^2 \\tfrac{M}{L}\\,dx = \\tfrac{M}{L}\\left[\\tfrac{x^3}{3}\\right]_0^L = \\tfrac{M}{L}\\cdot\\tfrac{L^3}{3} = \\tfrac{1}{3}ML^2$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Rotational Dynamics",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A constant torque of $12\\,\\text{N}\\cdot\\text{m}$ is applied to a wheel of moment of inertia $3.0\\,\\text{kg}\\cdot\\text{m}^2$, initially at rest. What is its angular velocity after $4.0\\,\\text{s}$?",
+      "options": null,
+      "correctAnswer": "16 rad/s",
+      "solution": "The angular acceleration is $\\alpha = \\dfrac{\\tau}{I} = \\dfrac{12}{3.0} = 4.0\\,\\text{rad/s}^2$. Starting from rest, $\\omega = \\alpha t = (4.0)(4.0) = 16\\,\\text{rad/s}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Angular Momentum",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A disk of moment of inertia $I_0$ spins freely at angular velocity $\\omega_0$ about its central axis. An identical, non-rotating disk is dropped onto it so the two rotate together. What is their common angular velocity?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$\\omega_0/4$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$\\omega_0/2$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$\\omega_0$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$2\\omega_0$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "No external torque acts about the axis, so angular momentum is conserved: $I_0\\omega_0 = (I_0 + I_0)\\omega$. With the combined moment of inertia $2I_0$, $\\omega = \\dfrac{I_0\\omega_0}{2I_0} = \\dfrac{\\omega_0}{2}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Rotational Dynamics",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A uniform solid cylinder (moment of inertia $\\tfrac{1}{2}MR^2$) rolls without slipping down an incline of angle $30^\\circ$. Using $g = 10\\,\\text{m/s}^2$, what is the acceleration of its center of mass?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$2.5\\,\\text{m/s}^2$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$3.3\\,\\text{m/s}^2$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$5.0\\,\\text{m/s}^2$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$6.7\\,\\text{m/s}^2$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "For an object rolling without slipping down an incline, $a = \\dfrac{g\\sin\\theta}{1 + I/(MR^2)}$. For a solid cylinder $I/(MR^2) = \\tfrac{1}{2}$, so $a = \\dfrac{g\\sin\\theta}{1 + \\tfrac{1}{2}} = \\tfrac{2}{3}g\\sin\\theta = \\tfrac{2}{3}(10)(0.50) \\approx 3.3\\,\\text{m/s}^2$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Oscillations",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A $0.25\\,\\text{kg}$ mass on a spring of force constant $k = 100\\,\\text{N/m}$ oscillates in simple harmonic motion. What is the angular frequency of the oscillation?",
+      "options": null,
+      "correctAnswer": "20 rad/s",
+      "solution": "The angular frequency of a mass-spring oscillator is $\\omega = \\sqrt{\\dfrac{k}{m}} = \\sqrt{\\dfrac{100}{0.25}} = \\sqrt{400} = 20\\,\\text{rad/s}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Oscillations",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A particle in simple harmonic motion has amplitude $0.10\\,\\text{m}$ and angular frequency $8.0\\,\\text{rad/s}$. What is its maximum speed?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$0.080\\,\\text{m/s}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$0.80\\,\\text{m/s}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$1.6\\,\\text{m/s}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$6.4\\,\\text{m/s}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "In simple harmonic motion the maximum speed is $v_{\\max} = A\\omega = (0.10)(8.0) = 0.80\\,\\text{m/s}$, reached as the particle passes through equilibrium.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Oscillations",
+      "difficulty": "hard",
+      "type": "open",
+      "statement": "A block on a spring of force constant $k = 200\\,\\text{N/m}$ oscillates with amplitude $0.050\\,\\text{m}$. What is the total mechanical energy of the oscillation?",
+      "options": null,
+      "correctAnswer": "0.25 J",
+      "solution": "The total energy of a spring oscillator equals the elastic potential energy at maximum displacement: $E = \\tfrac{1}{2}kA^2 = \\tfrac{1}{2}(200)(0.050)^2 = (100)(0.0025) = 0.25\\,\\text{J}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Gravitation",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A satellite orbits a planet of mass $M$ in a circular orbit of radius $r$. Which expression gives its orbital speed?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$\\sqrt{\\dfrac{GM}{r}}$",
+          "is_correct": true
+        },
+        {
+          "key": "b",
+          "text": "$\\sqrt{GMr}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$\\dfrac{GM}{r}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$\\sqrt{\\dfrac{2GM}{r}}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Gravity provides the centripetal force: $\\dfrac{GMm}{r^2} = \\dfrac{m v^2}{r}$. Canceling $m$ and one factor of $r$ gives $v^2 = \\dfrac{GM}{r}$, so $v = \\sqrt{\\dfrac{GM}{r}}$. (Option d is the escape speed.)",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C Mechanics: Gravitation",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "The escape speed from the surface of a planet is $v_e$. A second planet has the same radius but four times the mass. What is its escape speed?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$v_e$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$\\sqrt{2}\\,v_e$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$2v_e$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$4v_e$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Escape speed is $v_e = \\sqrt{\\dfrac{2GM}{R}}$, so it is proportional to $\\sqrt{M}$ at fixed radius. Quadrupling the mass multiplies the escape speed by $\\sqrt{4} = 2$, giving $2v_e$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Electrostatics",
+      "difficulty": "easy",
+      "type": "multiple_choice",
+      "statement": "Two point charges, $+2.0\\,\\mu\\text{C}$ and $+3.0\\,\\mu\\text{C}$, are separated by $0.30\\,\\text{m}$. Using $k = 9.0\\times10^{9}\\,\\text{N}\\cdot\\text{m}^2/\\text{C}^2$, what is the magnitude of the electrostatic force between them?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$0.060\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$0.60\\,\\text{N}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$1.8\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$6.0\\,\\text{N}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Coulomb's law gives $F = \\dfrac{k q_1 q_2}{r^2} = \\dfrac{(9.0\\times10^{9})(2.0\\times10^{-6})(3.0\\times10^{-6})}{(0.30)^2} = \\dfrac{0.054}{0.09} = 0.60\\,\\text{N}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Electric Fields",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "What is the magnitude of the electric field at a point $0.20\\,\\text{m}$ from a point charge of $+4.0\\,\\text{nC}$? (Use $k = 9.0\\times10^{9}\\,\\text{N}\\cdot\\text{m}^2/\\text{C}^2$.)",
+      "options": [
+        {
+          "key": "a",
+          "text": "$180\\,\\text{N/C}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$450\\,\\text{N/C}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$900\\,\\text{N/C}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$1800\\,\\text{N/C}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The field of a point charge is $E = \\dfrac{kq}{r^2} = \\dfrac{(9.0\\times10^{9})(4.0\\times10^{-9})}{(0.20)^2} = \\dfrac{36}{0.04} = 900\\,\\text{N/C}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Electric Fields",
+      "difficulty": "hard",
+      "type": "open",
+      "statement": "Two charges sit on the $x$-axis: $+3.0\\,\\text{nC}$ at $x = 0$ and $-3.0\\,\\text{nC}$ at $x = 0.40\\,\\text{m}$. Using $k = 9.0\\times10^{9}\\,\\text{N}\\cdot\\text{m}^2/\\text{C}^2$, find the magnitude of the net electric field at the midpoint, $x = 0.20\\,\\text{m}$.",
+      "options": null,
+      "correctAnswer": "1350 N/C",
+      "solution": "Each charge is $0.20\\,\\text{m}$ from the midpoint, producing a field of magnitude $E = \\dfrac{kq}{r^2} = \\dfrac{(9.0\\times10^{9})(3.0\\times10^{-9})}{(0.20)^2} = \\dfrac{27}{0.04} = 675\\,\\text{N/C}$. At the midpoint the field from the positive charge points toward $+x$ (away from it), and the field from the negative charge also points toward $+x$ (toward it), so the two add: $E_{net} = 2(675) = 1350\\,\\text{N/C}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Gauss's Law",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A solid insulating sphere of radius $R$ carries total charge $Q$ distributed uniformly throughout its volume. What is the magnitude of the electric field at a distance $r = R/2$ from the center?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$\\dfrac{kQ}{R^2}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$\\dfrac{kQ}{2R^2}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$\\dfrac{kQ}{4R^2}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$\\dfrac{2kQ}{R^2}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Apply Gauss's law to a sphere of radius $r$ inside the charge. The enclosed charge scales with volume: $Q_{enc} = Q\\dfrac{r^3}{R^3}$. Then $E = \\dfrac{k Q_{enc}}{r^2} = \\dfrac{kQ r}{R^3}$. At $r = R/2$: $E = \\dfrac{kQ(R/2)}{R^3} = \\dfrac{kQ}{2R^2}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Gauss's Law",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A conducting sphere of radius $0.10\\,\\text{m}$ carries a net charge of $+8.0\\,\\text{nC}$. Using $k = 9.0\\times10^{9}\\,\\text{N}\\cdot\\text{m}^2/\\text{C}^2$, what is the electric field just outside its surface?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$0\\,\\text{N/C}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$720\\,\\text{N/C}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$3600\\,\\text{N/C}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$7200\\,\\text{N/C}$",
+          "is_correct": true
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Outside a charged conductor the field is the same as if all the charge were concentrated at the center: $E = \\dfrac{kQ}{R^2} = \\dfrac{(9.0\\times10^{9})(8.0\\times10^{-9})}{(0.10)^2} = \\dfrac{72}{0.01} = 7200\\,\\text{N/C}$. (Inside the conductor the field is zero.)",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Gauss's Law",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "An infinite nonconducting plane sheet carries a uniform surface charge density $\\sigma$. What is the magnitude of the electric field at a perpendicular distance from the sheet?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$\\dfrac{\\sigma}{\\varepsilon_0}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$\\dfrac{\\sigma}{2\\varepsilon_0}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$\\dfrac{\\sigma}{4\\pi\\varepsilon_0}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$\\dfrac{2\\sigma}{\\varepsilon_0}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Use a cylindrical Gaussian pillbox piercing the sheet. Flux exits through both end caps (area $A$ each), so $\\Phi = 2EA$, while the enclosed charge is $\\sigma A$. Gauss's law gives $2EA = \\dfrac{\\sigma A}{\\varepsilon_0}$, so $E = \\dfrac{\\sigma}{2\\varepsilon_0}$, independent of distance.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Electric Potential",
+      "difficulty": "easy",
+      "type": "multiple_choice",
+      "statement": "What is the electric potential at a distance $0.50\\,\\text{m}$ from a point charge of $+5.0\\,\\text{nC}$? (Use $k = 9.0\\times10^{9}\\,\\text{N}\\cdot\\text{m}^2/\\text{C}^2$.)",
+      "options": [
+        {
+          "key": "a",
+          "text": "$22.5\\,\\text{V}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$45\\,\\text{V}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$90\\,\\text{V}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$180\\,\\text{V}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The potential of a point charge is $V = \\dfrac{kq}{r} = \\dfrac{(9.0\\times10^{9})(5.0\\times10^{-9})}{0.50} = \\dfrac{45}{0.50} = 90\\,\\text{V}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Electric Potential",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "How much work is required to bring a $+2.0\\,\\text{nC}$ charge from infinity to a point $0.30\\,\\text{m}$ from a fixed $+6.0\\,\\text{nC}$ charge? (Use $k = 9.0\\times10^{9}\\,\\text{N}\\cdot\\text{m}^2/\\text{C}^2$.)",
+      "options": null,
+      "correctAnswer": "3.6 x 10^-7 J",
+      "solution": "The work done equals the electric potential energy of the final configuration (the initial energy at infinity is zero): $W = U = \\dfrac{k q_1 q_2}{r} = \\dfrac{(9.0\\times10^{9})(2.0\\times10^{-9})(6.0\\times10^{-9})}{0.30} = \\dfrac{1.08\\times10^{-7}}{0.30} = 3.6\\times10^{-7}\\,\\text{J}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Electric Potential",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Two large parallel plates are separated by $0.020\\,\\text{m}$ and held at a potential difference of $120\\,\\text{V}$. What is the magnitude of the uniform electric field between them?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$2.4\\,\\text{V/m}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$600\\,\\text{V/m}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$6000\\,\\text{V/m}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$60000\\,\\text{V/m}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "For a uniform field between parallel plates, $E = \\dfrac{V}{d} = \\dfrac{120}{0.020} = 6000\\,\\text{V/m}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Capacitance",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A parallel-plate capacitor has plates of area $0.50\\,\\text{m}^2$ separated by $1.0\\times10^{-3}\\,\\text{m}$ of vacuum. Using $\\varepsilon_0 = 8.85\\times10^{-12}\\,\\text{C}^2/(\\text{N}\\cdot\\text{m}^2)$, what is its capacitance?",
+      "options": null,
+      "correctAnswer": "about 4.4 nF (4.4 x 10^-9 F)",
+      "solution": "The capacitance of a parallel-plate capacitor is $C = \\dfrac{\\varepsilon_0 A}{d} = \\dfrac{(8.85\\times10^{-12})(0.50)}{1.0\\times10^{-3}} \\approx 4.4\\times10^{-9}\\,\\text{F} = 4.4\\,\\text{nF}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Capacitance",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A $4.0\\,\\mu\\text{F}$ capacitor is charged to a potential difference of $50\\,\\text{V}$. How much energy is stored in it?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$2.5\\,\\text{mJ}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$5.0\\,\\text{mJ}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$10\\,\\text{mJ}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$0.10\\,\\text{J}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The energy stored is $U = \\tfrac{1}{2}CV^2 = \\tfrac{1}{2}(4.0\\times10^{-6})(50)^2 = \\tfrac{1}{2}(4.0\\times10^{-6})(2500) = 5.0\\times10^{-3}\\,\\text{J} = 5.0\\,\\text{mJ}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Capacitance",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "Three capacitors of $2.0\\,\\mu\\text{F}$, $3.0\\,\\mu\\text{F}$, and $6.0\\,\\mu\\text{F}$ are connected in series. What is the equivalent capacitance?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$0.50\\,\\mu\\text{F}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$1.0\\,\\mu\\text{F}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$3.7\\,\\mu\\text{F}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$11\\,\\mu\\text{F}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "For capacitors in series the reciprocals add: $\\dfrac{1}{C} = \\dfrac{1}{2.0} + \\dfrac{1}{3.0} + \\dfrac{1}{6.0} = \\dfrac{3 + 2 + 1}{6} = 1\\,(\\mu\\text{F})^{-1}$. Therefore $C = 1.0\\,\\mu\\text{F}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Capacitance",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A parallel-plate capacitor has capacitance $C_0$ with vacuum between the plates. A dielectric of constant $\\kappa = 4$ is inserted, completely filling the gap. What is the new capacitance?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$C_0/4$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$C_0$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$4C_0$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$16C_0$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Inserting a dielectric multiplies the capacitance by the dielectric constant: $C = \\kappa C_0 = 4C_0$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: DC Circuits",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A $4.0\\,\\Omega$ resistor and a $12\\,\\Omega$ resistor are connected in parallel. What is their equivalent resistance?",
+      "options": null,
+      "correctAnswer": "3.0 ohms",
+      "solution": "For resistors in parallel, $\\dfrac{1}{R} = \\dfrac{1}{4.0} + \\dfrac{1}{12} = \\dfrac{3}{12} + \\dfrac{1}{12} = \\dfrac{4}{12} = \\dfrac{1}{3}$. Therefore $R = 3.0\\,\\Omega$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: DC Circuits",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A $25\\,\\Omega$ resistor carries a current of $0.40\\,\\text{A}$. What power does it dissipate?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$0.16\\,\\text{W}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$2.0\\,\\text{W}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$4.0\\,\\text{W}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$10\\,\\text{W}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Power dissipated in a resistor is $P = I^2 R = (0.40)^2(25) = (0.16)(25) = 4.0\\,\\text{W}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: RC Circuits",
+      "difficulty": "hard",
+      "type": "open",
+      "statement": "A $10\\,\\mu\\text{F}$ capacitor charged to $20\\,\\text{V}$ is discharged through a $50\\,\\text{k}\\Omega$ resistor. What is the current at the instant the switch is closed?",
+      "options": null,
+      "correctAnswer": "4.0 x 10^-4 A (0.40 mA)",
+      "solution": "At the instant of closing, the capacitor still holds its full voltage, which appears entirely across the resistor. By Ohm's law the initial current is $I_0 = \\dfrac{V_0}{R} = \\dfrac{20}{5.0\\times10^{4}} = 4.0\\times10^{-4}\\,\\text{A} = 0.40\\,\\text{mA}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Magnetic Fields",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A straight wire of length $0.25\\,\\text{m}$ carries a current of $8.0\\,\\text{A}$ perpendicular to a uniform magnetic field of $0.30\\,\\text{T}$. What is the magnitude of the magnetic force on the wire?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$0.30\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$0.60\\,\\text{N}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$1.0\\,\\text{N}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$2.4\\,\\text{N}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "For a current-carrying wire perpendicular to the field, $F = BIL = (0.30)(8.0)(0.25) = 0.60\\,\\text{N}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Ampere's Law",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A long straight wire carries a current of $5.0\\,\\text{A}$. Using $\\mu_0 = 4\\pi\\times10^{-7}\\,\\text{T}\\cdot\\text{m/A}$, what is the magnitude of the magnetic field at a perpendicular distance of $0.10\\,\\text{m}$ from the wire?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$1.0\\times10^{-6}\\,\\text{T}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$5.0\\times10^{-6}\\,\\text{T}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$1.0\\times10^{-5}\\,\\text{T}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$2.0\\times10^{-5}\\,\\text{T}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "For a long straight wire, $B = \\dfrac{\\mu_0 I}{2\\pi r} = \\dfrac{(4\\pi\\times10^{-7})(5.0)}{2\\pi(0.10)} = \\dfrac{20\\pi\\times10^{-7}}{0.20\\pi} = 1.0\\times10^{-5}\\,\\text{T}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Magnetic Fields",
+      "difficulty": "hard",
+      "type": "open",
+      "statement": "Two long parallel wires separated by $0.050\\,\\text{m}$ each carry a current of $10\\,\\text{A}$ in the same direction. Using $\\mu_0 = 4\\pi\\times10^{-7}\\,\\text{T}\\cdot\\text{m/A}$, what is the magnitude of the magnetic force per unit length on each wire?",
+      "options": null,
+      "correctAnswer": "4.0 x 10^-4 N/m (attractive)",
+      "solution": "The force per unit length between parallel currents is $\\dfrac{F}{L} = \\dfrac{\\mu_0 I_1 I_2}{2\\pi d} = \\dfrac{(4\\pi\\times10^{-7})(10)(10)}{2\\pi(0.050)} = \\dfrac{400\\pi\\times10^{-7}}{0.10\\pi} = 4.0\\times10^{-4}\\,\\text{N/m}$. Because the currents flow in the same direction, the force is attractive.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "Physics C E&M: Electromagnetic Induction",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A conducting rod of length $0.40\\,\\text{m}$ slides at $5.0\\,\\text{m/s}$ along parallel rails, moving perpendicular to a uniform magnetic field of $0.60\\,\\text{T}$. What is the magnitude of the motional emf induced across the rod?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$0.12\\,\\text{V}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$1.2\\,\\text{V}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$2.4\\,\\text{V}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$12\\,\\text{V}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The motional emf of a rod moving perpendicular to a field is $\\varepsilon = BLv = (0.60)(0.40)(5.0) = 1.2\\,\\text{V}$.",
+      "hasMath": true,
+      "figure": null
+    }
+  ]
+}
+
+{
+  "source": "manual-2026-06-19",
+  "folder": "ap-chem-bio-batch-1",
+  "questions": [
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Atomic Structure",
+      "difficulty": "easy",
+      "type": "multiple_choice",
+      "statement": "How many atoms are present in $0.50\\,\\text{mol}$ of pure iron? (Use $N_A = 6.0\\times10^{23}\\,\\text{mol}^{-1}$.)",
+      "options": [
+        {
+          "key": "a",
+          "text": "$3.0\\times10^{22}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$3.0\\times10^{23}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$6.0\\times10^{23}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$1.2\\times10^{24}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The number of particles equals moles times Avogadro's number: $N = n N_A = (0.50)(6.0\\times10^{23}) = 3.0\\times10^{23}$ atoms.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Stoichiometry",
+      "difficulty": "easy",
+      "type": "open",
+      "statement": "How many moles are in $36.0\\,\\text{g}$ of water? (Molar mass of $\\text{H}_2\\text{O} = 18.0\\,\\text{g/mol}$.)",
+      "options": null,
+      "correctAnswer": "2.00 mol",
+      "solution": "Moles equal mass divided by molar mass: $n = \\dfrac{36.0\\,\\text{g}}{18.0\\,\\text{g/mol}} = 2.00\\,\\text{mol}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Stoichiometry",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A compound is found to be $40.0\\%$ carbon, $6.7\\%$ hydrogen, and $53.3\\%$ oxygen by mass. What is its empirical formula? (Atomic masses: C $= 12$, H $= 1$, O $= 16$.)",
+      "options": [
+        {
+          "key": "a",
+          "text": "$\\text{CHO}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$\\text{CH}_2\\text{O}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$\\text{C}_2\\text{H}_4\\text{O}_2$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$\\text{CH}_4\\text{O}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "In a $100\\,\\text{g}$ sample: C $= 40.0/12 = 3.33\\,\\text{mol}$, H $= 6.7/1 = 6.7\\,\\text{mol}$, O $= 53.3/16 = 3.33\\,\\text{mol}$. Dividing each by the smallest ($3.33$) gives a ratio of C$_1$H$_2$O$_1$, so the empirical formula is $\\text{CH}_2\\text{O}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Stoichiometry",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "For the reaction $\\text{N}_2 + 3\\text{H}_2 \\rightarrow 2\\text{NH}_3$, if $2.0\\,\\text{mol}$ of $\\text{N}_2$ reacts completely with excess $\\text{H}_2$, how many moles of $\\text{NH}_3$ are produced?",
+      "options": null,
+      "correctAnswer": "4.0 mol",
+      "solution": "The balanced equation gives a $1{:}2$ mole ratio of $\\text{N}_2$ to $\\text{NH}_3$. Therefore $2.0\\,\\text{mol}\\,\\text{N}_2 \\times \\dfrac{2\\,\\text{mol}\\,\\text{NH}_3}{1\\,\\text{mol}\\,\\text{N}_2} = 4.0\\,\\text{mol}\\,\\text{NH}_3$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Stoichiometry",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "For the reaction $2\\text{H}_2 + \\text{O}_2 \\rightarrow 2\\text{H}_2\\text{O}$, a mixture contains $3.0\\,\\text{mol}$ $\\text{H}_2$ and $2.0\\,\\text{mol}$ $\\text{O}_2$. Which reactant limits the reaction, and how much water forms?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$\\text{H}_2$ limits; $3.0\\,\\text{mol}$ $\\text{H}_2\\text{O}$",
+          "is_correct": true
+        },
+        {
+          "key": "b",
+          "text": "$\\text{O}_2$ limits; $4.0\\,\\text{mol}$ $\\text{H}_2\\text{O}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$\\text{H}_2$ limits; $2.0\\,\\text{mol}$ $\\text{H}_2\\text{O}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$\\text{O}_2$ limits; $2.0\\,\\text{mol}$ $\\text{H}_2\\text{O}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Completely reacting $3.0\\,\\text{mol}$ $\\text{H}_2$ would require $3.0/2 = 1.5\\,\\text{mol}$ $\\text{O}_2$. Since $2.0\\,\\text{mol}$ $\\text{O}_2$ is available, $\\text{H}_2$ runs out first and is the limiting reactant. The $2{:}2$ ratio of $\\text{H}_2$ to $\\text{H}_2\\text{O}$ gives $3.0\\,\\text{mol}$ of water.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Gas Laws",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A $2.0\\,\\text{L}$ container holds a gas at $300\\,\\text{K}$ and a pressure of $1.5\\,\\text{atm}$. How many moles of gas are present? (Use $R = 0.0821\\,\\text{L}\\cdot\\text{atm/(mol}\\cdot\\text{K)}$.)",
+      "options": [
+        {
+          "key": "a",
+          "text": "$0.061\\,\\text{mol}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$0.12\\,\\text{mol}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$0.24\\,\\text{mol}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$1.2\\,\\text{mol}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "From the ideal gas law $PV = nRT$, $n = \\dfrac{PV}{RT} = \\dfrac{(1.5)(2.0)}{(0.0821)(300)} = \\dfrac{3.0}{24.6} \\approx 0.12\\,\\text{mol}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Gas Laws",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A gas at $1.0\\,\\text{atm}$ and $300\\,\\text{K}$ is heated at constant volume to $450\\,\\text{K}$. What is its new pressure?",
+      "options": null,
+      "correctAnswer": "1.5 atm",
+      "solution": "At constant volume, pressure is proportional to absolute temperature (Gay-Lussac's law): $\\dfrac{P_1}{T_1} = \\dfrac{P_2}{T_2}$. So $P_2 = P_1\\dfrac{T_2}{T_1} = (1.0)\\dfrac{450}{300} = 1.5\\,\\text{atm}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Periodic Trends",
+      "difficulty": "easy",
+      "type": "multiple_choice",
+      "statement": "Which of the following atoms has the largest atomic radius?",
+      "options": [
+        {
+          "key": "a",
+          "text": "Na",
+          "is_correct": true
+        },
+        {
+          "key": "b",
+          "text": "Mg",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "Al",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "Cl",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Within a period, atomic radius decreases from left to right because the increasing nuclear charge pulls the electrons in more tightly. Sodium (Na) is farthest to the left among these period-3 elements, so it has the largest radius.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Periodic Trends",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Which of these elements has the highest first ionization energy?",
+      "options": [
+        {
+          "key": "a",
+          "text": "Li",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "C",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "N",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "F",
+          "is_correct": true
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "First ionization energy generally increases across a period as nuclear charge grows and atomic size shrinks. Fluorine (F) lies farthest to the right among these period-2 elements, making its outer electron the hardest to remove.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Electron Configuration",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "What is the ground-state electron configuration of a neutral calcium atom ($Z = 20$)?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$1s^2\\,2s^2\\,2p^6\\,3s^2\\,3p^6\\,4s^2$",
+          "is_correct": true
+        },
+        {
+          "key": "b",
+          "text": "$1s^2\\,2s^2\\,2p^6\\,3s^2\\,3p^6\\,3d^2$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$1s^2\\,2s^2\\,2p^6\\,3s^2\\,3p^6\\,4s^2\\,4p^2$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$1s^2\\,2s^2\\,2p^6\\,3s^2\\,3p^8$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Calcium has $20$ electrons. Filling in order of increasing energy (the $4s$ subshell fills before $3d$): $1s^2\\,2s^2\\,2p^6\\,3s^2\\,3p^6\\,4s^2$, which accounts for all $20$ electrons.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Molecular Geometry",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "According to VSEPR theory, what is the molecular geometry of a molecule of $\\text{CO}_2$?",
+      "options": [
+        {
+          "key": "a",
+          "text": "bent",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "linear",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "trigonal planar",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "tetrahedral",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "In $\\text{CO}_2$ the central carbon has two double bonds and no lone pairs, giving two electron domains. Two domains arrange themselves $180^{\\circ}$ apart, producing a linear geometry.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Molecular Geometry",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "What is the molecular geometry of a water molecule, $\\text{H}_2\\text{O}$?",
+      "options": [
+        {
+          "key": "a",
+          "text": "linear",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "bent",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "trigonal pyramidal",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "tetrahedral",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The oxygen in water has four electron domains (two bonding pairs and two lone pairs), an overall tetrahedral electron geometry. With two positions occupied by lone pairs, the atoms form a bent shape with a bond angle near $104.5^{\\circ}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Intermolecular Forces",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Which type of intermolecular force is primarily responsible for the unusually high boiling point of water compared with other molecules of similar size?",
+      "options": [
+        {
+          "key": "a",
+          "text": "London dispersion forces",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "dipole-dipole forces",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "hydrogen bonding",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "ion-dipole forces",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Water's O-H bonds let each molecule form strong hydrogen bonds with neighbors. These bonds are much stronger than ordinary dipole-dipole or dispersion forces, so more energy is needed to separate the molecules, raising the boiling point.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Intermolecular Forces",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "Among $\\text{CH}_4$, $\\text{NH}_3$, and $\\text{H}_2\\text{O}$, which is expected to have the highest boiling point, and why?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$\\text{CH}_4$, because it has only dispersion forces",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$\\text{NH}_3$, because it has the strongest dipole-dipole forces",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$\\text{H}_2\\text{O}$, because it forms the most extensive hydrogen bonding",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "They all boil at the same temperature",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "All three are small molecules, but water can form the most hydrogen bonds per molecule because each $\\text{H}_2\\text{O}$ has two O-H bonds and two lone pairs on oxygen. This extensive hydrogen-bonding network gives water the highest boiling point of the three.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Solutions",
+      "difficulty": "easy",
+      "type": "open",
+      "statement": "What is the molarity of a solution made by dissolving $0.50\\,\\text{mol}$ of NaCl in enough water to make $250\\,\\text{mL}$ of solution?",
+      "options": null,
+      "correctAnswer": "2.0 M",
+      "solution": "Molarity is moles of solute per liter of solution. Converting $250\\,\\text{mL} = 0.250\\,\\text{L}$: $M = \\dfrac{0.50\\,\\text{mol}}{0.250\\,\\text{L}} = 2.0\\,\\text{M}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Solutions",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "To what final volume must $50.0\\,\\text{mL}$ of $6.0\\,\\text{M}$ HCl be diluted to make a $1.5\\,\\text{M}$ solution?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$100\\,\\text{mL}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$150\\,\\text{mL}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$200\\,\\text{mL}$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$400\\,\\text{mL}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Use the dilution relation $M_1 V_1 = M_2 V_2$: $(6.0)(50.0) = (1.5)V_2$, so $V_2 = \\dfrac{300}{1.5} = 200\\,\\text{mL}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Chemical Reactions",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "When aqueous solutions of silver nitrate and sodium chloride are mixed, a white precipitate forms. What is the precipitate?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$\\text{NaNO}_3$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$\\text{AgCl}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$\\text{AgNO}_3$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$\\text{NaCl}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The silver and chloride ions combine to form insoluble silver chloride: $\\text{Ag}^+ + \\text{Cl}^- \\rightarrow \\text{AgCl}(s)$. The sodium and nitrate ions remain dissolved as spectator ions, so the precipitate is $\\text{AgCl}$.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Thermochemistry",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "How much heat is required to raise the temperature of $200\\,\\text{g}$ of water by $25\\,\\text{K}$? (Specific heat of water $= 4.18\\,\\text{J/(g}\\cdot\\text{K)}$.)",
+      "options": null,
+      "correctAnswer": "20900 J (about 20.9 kJ)",
+      "solution": "Use $q = mc\\Delta T = (200\\,\\text{g})(4.18\\,\\text{J/(g}\\cdot\\text{K)})(25\\,\\text{K}) = 20900\\,\\text{J}$, or about $20.9\\,\\text{kJ}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Thermochemistry",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "Using $\\Delta H_{\\text{rxn}} = \\sum \\Delta H_f(\\text{products}) - \\sum \\Delta H_f(\\text{reactants})$ and the values $\\Delta H_f(\\text{CO}_2,g) = -394\\,\\text{kJ/mol}$, $\\Delta H_f(\\text{H}_2\\text{O},l) = -286\\,\\text{kJ/mol}$, $\\Delta H_f(\\text{CH}_4,g) = -75\\,\\text{kJ/mol}$, $\\Delta H_f(\\text{O}_2,g) = 0$, what is $\\Delta H$ for $\\text{CH}_4 + 2\\text{O}_2 \\rightarrow \\text{CO}_2 + 2\\text{H}_2\\text{O}$?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$-605\\,\\text{kJ}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$-891\\,\\text{kJ}$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$-966\\,\\text{kJ}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$+891\\,\\text{kJ}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Products: $\\Delta H_f(\\text{CO}_2) + 2\\Delta H_f(\\text{H}_2\\text{O}) = -394 + 2(-286) = -966\\,\\text{kJ}$. Reactants: $\\Delta H_f(\\text{CH}_4) + 2\\Delta H_f(\\text{O}_2) = -75 + 0 = -75\\,\\text{kJ}$. Then $\\Delta H = -966 - (-75) = -891\\,\\text{kJ}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Thermochemistry",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A reaction releases heat to its surroundings, and the temperature of the surroundings rises. This reaction is best described as:",
+      "options": [
+        {
+          "key": "a",
+          "text": "endothermic, with $\\Delta H > 0$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "exothermic, with $\\Delta H < 0$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "endothermic, with $\\Delta H < 0$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "exothermic, with $\\Delta H > 0$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "A reaction that releases heat to the surroundings is exothermic. By convention, the system loses energy, so the enthalpy change is negative: $\\Delta H < 0$.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Kinetics",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A reaction is second order in reactant A. If the concentration of A is doubled (everything else held constant), by what factor does the reaction rate change?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$\\times 2$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$\\times 4$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$\\times 8$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "no change",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "For a second-order dependence, $\\text{rate} = k[\\text{A}]^2$. Doubling $[\\text{A}]$ multiplies the rate by $2^2 = 4$.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Kinetics",
+      "difficulty": "easy",
+      "type": "multiple_choice",
+      "statement": "How does adding a catalyst affect a chemical reaction?",
+      "options": [
+        {
+          "key": "a",
+          "text": "It lowers the activation energy and increases the reaction rate",
+          "is_correct": true
+        },
+        {
+          "key": "b",
+          "text": "It raises the activation energy",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "It shifts the equilibrium toward products",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "It makes the reaction more exothermic",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "A catalyst provides an alternative reaction pathway with a lower activation energy, speeding up the reaction. It is not consumed and does not change the reaction's enthalpy or the position of equilibrium.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Equilibrium",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "For the equilibrium $\\text{N}_2(g) + 3\\text{H}_2(g) \\rightleftharpoons 2\\text{NH}_3(g)$, which expression correctly represents the equilibrium constant $K_c$?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$\\dfrac{[\\text{NH}_3]^2}{[\\text{N}_2][\\text{H}_2]^3}$",
+          "is_correct": true
+        },
+        {
+          "key": "b",
+          "text": "$\\dfrac{[\\text{N}_2][\\text{H}_2]^3}{[\\text{NH}_3]^2}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$\\dfrac{[\\text{NH}_3]}{[\\text{N}_2][\\text{H}_2]}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$\\dfrac{[\\text{NH}_3]^2}{[\\text{N}_2]^3[\\text{H}_2]}$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The equilibrium expression places product concentrations in the numerator and reactant concentrations in the denominator, each raised to the power of its stoichiometric coefficient: $K_c = \\dfrac{[\\text{NH}_3]^2}{[\\text{N}_2][\\text{H}_2]^3}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Equilibrium",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "For the exothermic equilibrium $\\text{N}_2(g) + 3\\text{H}_2(g) \\rightleftharpoons 2\\text{NH}_3(g)$, increasing the temperature will:",
+      "options": [
+        {
+          "key": "a",
+          "text": "shift the equilibrium right, increasing $\\text{NH}_3$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "shift the equilibrium left, decreasing $\\text{NH}_3$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "have no effect on the equilibrium",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "increase the value of $K$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "For an exothermic reaction, heat behaves like a product. By Le Chatelier's principle, adding heat (raising the temperature) shifts the equilibrium toward the reactants, decreasing the amount of $\\text{NH}_3$ and lowering $K$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Equilibrium",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "At a particular moment the reaction quotient $Q$ is greater than the equilibrium constant $K$. In which direction will the reaction proceed to reach equilibrium?",
+      "options": [
+        {
+          "key": "a",
+          "text": "toward products (forward)",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "toward reactants (reverse)",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "it is already at equilibrium",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "the direction cannot be determined",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "When $Q > K$ there are too many products relative to equilibrium, so the reaction proceeds in the reverse direction (toward reactants) until $Q$ falls to equal $K$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Acids and Bases",
+      "difficulty": "medium",
+      "type": "open",
+      "statement": "A solution has a hydrogen ion concentration of $[\\text{H}^+] = 1.0\\times10^{-3}\\,\\text{M}$. What is its pH?",
+      "options": null,
+      "correctAnswer": "3.0",
+      "solution": "By definition $\\text{pH} = -\\log[\\text{H}^+] = -\\log(1.0\\times10^{-3}) = 3.0$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Acids and Bases",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "What is the pH of a $0.010\\,\\text{M}$ solution of NaOH (a strong base) at $25\\,^{\\circ}\\text{C}$?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$1$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$2$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$10$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$12$",
+          "is_correct": true
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "NaOH dissociates completely, so $[\\text{OH}^-] = 0.010\\,\\text{M}$ and $\\text{pOH} = -\\log(0.010) = 2$. At $25\\,^{\\circ}\\text{C}$, $\\text{pH} + \\text{pOH} = 14$, so $\\text{pH} = 14 - 2 = 12$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Acids and Bases",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "At the equivalence point of a titration of a strong acid with a strong base, the pH of the resulting solution at 25 degrees Celsius is approximately:",
+      "options": [
+        {
+          "key": "a",
+          "text": "1",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "7",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "10",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "14",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Neutralizing a strong acid with a strong base produces a salt of a strong acid and strong base, which does not hydrolyze. The solution is therefore neutral, with a pH of about 7 at this temperature.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Chemistry: Electrochemistry",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A galvanic cell is built from two half-reactions whose standard reduction potentials are $+0.34\\,\\text{V}$ and $-0.76\\,\\text{V}$. What is the standard cell potential?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$-1.10\\,\\text{V}$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$-0.42\\,\\text{V}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$0.42\\,\\text{V}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$1.10\\,\\text{V}$",
+          "is_correct": true
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "In a galvanic cell the half-reaction with the higher reduction potential is the cathode. Using $E^{\\circ}_{\\text{cell}} = E^{\\circ}_{\\text{cathode}} - E^{\\circ}_{\\text{anode}} = (+0.34) - (-0.76) = 1.10\\,\\text{V}$, which is positive, confirming a spontaneous cell.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Chemistry: Thermodynamics",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A reaction has $\\Delta H < 0$ and $\\Delta S > 0$. Using $\\Delta G = \\Delta H - T\\Delta S$, at what temperatures is the reaction spontaneous?",
+      "options": [
+        {
+          "key": "a",
+          "text": "only at high temperatures",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "only at low temperatures",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "at all temperatures",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "at no temperature",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "With $\\Delta H < 0$, the enthalpy term is negative. With $\\Delta S > 0$, the term $-T\\Delta S$ is also negative for any positive temperature. Both contributions make $\\Delta G$ negative, so the reaction is spontaneous at all temperatures.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Chemistry of Life",
+      "difficulty": "easy",
+      "type": "multiple_choice",
+      "statement": "Which property of water most directly allows it to moderate temperature in organisms and large bodies of water?",
+      "options": [
+        {
+          "key": "a",
+          "text": "its high specific heat",
+          "is_correct": true
+        },
+        {
+          "key": "b",
+          "text": "its low density as a liquid",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "its nonpolar nature",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "its inability to form hydrogen bonds",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Hydrogen bonding between water molecules gives water a high specific heat: it must absorb or release a large amount of energy to change temperature. This resists rapid temperature swings, helping organisms and bodies of water stay thermally stable.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Chemistry of Life",
+      "difficulty": "easy",
+      "type": "multiple_choice",
+      "statement": "Which monomer is the building block of proteins?",
+      "options": [
+        {
+          "key": "a",
+          "text": "nucleotides",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "monosaccharides",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "amino acids",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "fatty acids",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Proteins are polymers of amino acids linked together by peptide bonds. Nucleotides build nucleic acids, monosaccharides build carbohydrates, and fatty acids are components of many lipids.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Chemistry of Life",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Two monosaccharides join to form a disaccharide. This reaction is best described as:",
+      "options": [
+        {
+          "key": "a",
+          "text": "hydrolysis, which adds a water molecule",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "dehydration synthesis, which removes a water molecule",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "denaturation",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "oxidation",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Monomers are joined by dehydration synthesis (condensation), in which a covalent bond forms and a water molecule is removed. Hydrolysis is the reverse process, using water to break the bond.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Cell Structure",
+      "difficulty": "easy",
+      "type": "multiple_choice",
+      "statement": "Which organelle is the primary site of ATP production through aerobic respiration in eukaryotic cells?",
+      "options": [
+        {
+          "key": "a",
+          "text": "ribosome",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "mitochondrion",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "Golgi apparatus",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "lysosome",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Mitochondria carry out the citric acid cycle and oxidative phosphorylation, generating most of a eukaryotic cell's ATP. Ribosomes make proteins, the Golgi modifies and ships them, and lysosomes handle digestion.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Cell Structure",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Which feature is found in eukaryotic cells but NOT in prokaryotic cells?",
+      "options": [
+        {
+          "key": "a",
+          "text": "a plasma membrane",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "ribosomes",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "a membrane-bound nucleus",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "DNA",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "All cells have a plasma membrane, ribosomes, and DNA. The defining difference is that eukaryotes enclose their DNA in a membrane-bound nucleus (and have other membrane-bound organelles), which prokaryotes lack.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Cell Structure",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "As a spherical cell grows larger, its surface-area-to-volume ratio:",
+      "options": [
+        {
+          "key": "a",
+          "text": "increases",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "decreases",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "stays the same",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "doubles",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Volume increases with the cube of the radius while surface area increases only with the square. As the cell enlarges, volume grows faster than surface area, so the surface-area-to-volume ratio decreases, limiting how large a cell can efficiently exchange materials.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Cell Membrane",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "A cell is placed in a hypertonic solution. What happens to the cell?",
+      "options": [
+        {
+          "key": "a",
+          "text": "water enters and the cell swells",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "water leaves and the cell shrinks",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "there is no net movement of water",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "solutes rush into the cell",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "A hypertonic solution has a higher solute concentration outside than inside the cell. Water moves by osmosis toward the higher solute concentration, so it leaves the cell and the cell shrinks.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Biology: Water Potential",
+      "difficulty": "hard",
+      "type": "open",
+      "statement": "A plant cell has a solute potential of $-0.80\\,\\text{MPa}$ and a pressure potential of $+0.30\\,\\text{MPa}$. What is its water potential? (Use $\\Psi = \\Psi_S + \\Psi_P$.)",
+      "options": null,
+      "correctAnswer": "-0.50 MPa",
+      "solution": "Water potential is the sum of the solute and pressure potentials: $\\Psi = \\Psi_S + \\Psi_P = (-0.80) + (+0.30) = -0.50\\,\\text{MPa}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Cell Membrane",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Which process requires the cell to expend energy in the form of ATP?",
+      "options": [
+        {
+          "key": "a",
+          "text": "simple diffusion",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "osmosis",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "facilitated diffusion",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "active transport",
+          "is_correct": true
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Simple diffusion, osmosis, and facilitated diffusion all move substances down their concentration gradients without energy input. Active transport moves substances against their gradient and therefore requires energy from ATP.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Cellular Energetics",
+      "difficulty": "easy",
+      "type": "multiple_choice",
+      "statement": "What are the primary reactants of photosynthesis?",
+      "options": [
+        {
+          "key": "a",
+          "text": "glucose and oxygen",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "carbon dioxide and water",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "oxygen and water",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "glucose and carbon dioxide",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Photosynthesis uses carbon dioxide and water, along with light energy, to produce glucose and oxygen. Glucose and oxygen are the products, not the reactants.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Cellular Energetics",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "In aerobic cellular respiration, what serves as the final electron acceptor in the electron transport chain?",
+      "options": [
+        {
+          "key": "a",
+          "text": "glucose",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "carbon dioxide",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "oxygen",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$\\text{NAD}^+$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "In aerobic respiration, oxygen accepts electrons at the end of the electron transport chain and combines with hydrogen ions to form water. Without oxygen as the final acceptor, the chain backs up and stops.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Cellular Energetics",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Where in a eukaryotic cell does glycolysis occur?",
+      "options": [
+        {
+          "key": "a",
+          "text": "the mitochondrial matrix",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "the cytoplasm",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "the inner mitochondrial membrane",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "the nucleus",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Glycolysis takes place in the cytoplasm (cytosol) and does not require oxygen or mitochondria. The later stages of aerobic respiration (the citric acid cycle and electron transport) occur in the mitochondria.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Cellular Energetics",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "Which products of the light-dependent reactions are used to power the Calvin cycle?",
+      "options": [
+        {
+          "key": "a",
+          "text": "glucose and oxygen",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "ATP and NADPH",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "carbon dioxide and water",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "oxygen only",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "The light-dependent reactions capture light energy to produce ATP and NADPH. The Calvin cycle then uses this ATP and NADPH to fix carbon dioxide into sugar. Oxygen is a byproduct of the light reactions but is not used by the Calvin cycle.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Cell Communication",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "In a signal transduction pathway, the molecule that binds to a receptor and triggers the cellular response is called the:",
+      "options": [
+        {
+          "key": "a",
+          "text": "second messenger",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "ligand",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "substrate",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "enzyme",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "A ligand is the signaling molecule that binds to a specific receptor, initiating the transduction pathway. Second messengers relay the signal inside the cell after the receptor is activated.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Cell Cycle",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "During which phase of mitosis do sister chromatids separate and move toward opposite poles of the cell?",
+      "options": [
+        {
+          "key": "a",
+          "text": "prophase",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "metaphase",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "anaphase",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "telophase",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "During anaphase the cohesion holding sister chromatids together breaks, and the spindle fibers pull the now-separated chromatids toward opposite poles of the cell.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Cell Cycle",
+      "difficulty": "easy",
+      "type": "multiple_choice",
+      "statement": "During which phase of the cell cycle is DNA replicated?",
+      "options": [
+        {
+          "key": "a",
+          "text": "G1",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "S phase",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "G2",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "M phase",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "DNA replication occurs during the S (synthesis) phase of interphase. The G1 and G2 phases are growth and preparation periods, and M phase is when the cell divides.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Heredity",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Meiosis of a single diploid cell produces how many cells, and what is their ploidy?",
+      "options": [
+        {
+          "key": "a",
+          "text": "2 diploid cells",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "4 haploid cells",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "2 haploid cells",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "4 diploid cells",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Meiosis involves one round of DNA replication followed by two divisions, producing four cells, each with half the original chromosome number. The result is four haploid cells.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Biology: Heredity",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "In a cross between two heterozygous individuals ($Aa \\times Aa$) for a simple dominant trait, what fraction of the offspring are expected to show the recessive phenotype?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$\\tfrac{1}{4}$",
+          "is_correct": true
+        },
+        {
+          "key": "b",
+          "text": "$\\tfrac{1}{2}$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$\\tfrac{3}{4}$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$0$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "A Punnett square for $Aa \\times Aa$ gives genotypes in the ratio $1\\,AA : 2\\,Aa : 1\\,aa$. Only the homozygous recessive $aa$ shows the recessive phenotype, which is $1$ of the $4$ outcomes, or $\\tfrac{1}{4}$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Biology: Heredity",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "In a dihybrid cross between two individuals heterozygous for two independently assorting genes ($AaBb \\times AaBb$), what phenotypic ratio is expected among the offspring?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$3:1$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$1:1:1:1$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$9:3:3:1$",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "$1:2:1$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "With independent assortment, each gene gives a $3:1$ phenotypic ratio, and combining the two independent $3:1$ ratios produces the classic dihybrid ratio of $9:3:3:1$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Biology: Hardy-Weinberg",
+      "difficulty": "hard",
+      "type": "open",
+      "statement": "In a population at Hardy-Weinberg equilibrium, the recessive phenotype (genotype $aa$) occurs in $16\\%$ of individuals. What is the frequency of the recessive allele $a$? (Use $q^2 = $ frequency of $aa$.)",
+      "options": null,
+      "correctAnswer": "0.40",
+      "solution": "The frequency of the homozygous recessive genotype equals $q^2$, so $q^2 = 0.16$. Taking the square root, $q = \\sqrt{0.16} = 0.40$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Biology: Hardy-Weinberg",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "In a population at Hardy-Weinberg equilibrium, the recessive allele $a$ has a frequency of $q = 0.40$. What fraction of the population is expected to be heterozygous (genotype $Aa$)? (Use $2pq$.)",
+      "options": [
+        {
+          "key": "a",
+          "text": "$0.16$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$0.24$",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "$0.36$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$0.48$",
+          "is_correct": true
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Since allele frequencies sum to $1$, $p = 1 - q = 1 - 0.40 = 0.60$. The heterozygote frequency is $2pq = 2(0.60)(0.40) = 0.48$.",
+      "hasMath": true,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Gene Expression",
+      "difficulty": "easy",
+      "type": "multiple_choice",
+      "statement": "The process by which information in DNA is used to build a complementary strand of messenger RNA is called:",
+      "options": [
+        {
+          "key": "a",
+          "text": "translation",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "transcription",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "replication",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "transduction",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Transcription is the synthesis of an mRNA strand from a DNA template. Translation is the next step, in which the mRNA is read to build a protein; replication copies DNA itself.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Gene Expression",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "At which cellular structure does translation (protein synthesis) take place?",
+      "options": [
+        {
+          "key": "a",
+          "text": "the nucleus",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "the ribosome",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "the smooth endoplasmic reticulum",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "the nucleolus",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Ribosomes read the sequence of codons on mRNA and assemble the corresponding chain of amino acids into a polypeptide. The nucleolus assembles ribosomal subunits but is not where translation occurs.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Gene Expression",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A single nucleotide substitution converts a codon that specified an amino acid into a stop codon. This type of mutation is called a:",
+      "options": [
+        {
+          "key": "a",
+          "text": "silent mutation",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "missense mutation",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "nonsense mutation",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "frameshift mutation",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "A point mutation that creates a premature stop codon is a nonsense mutation, which truncates the protein. A silent mutation leaves the amino acid unchanged, a missense changes one amino acid, and a frameshift results from insertions or deletions that shift the reading frame.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Gene Regulation",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "In the bacterial lac operon, the presence of lactose ultimately leads to:",
+      "options": [
+        {
+          "key": "a",
+          "text": "the repressor binding tightly to the operator",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "transcription of the genes for lactose metabolism",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "permanent shutdown of the operon",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "replication of the operon",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Lactose (as allolactose) binds the lac repressor and inactivates it, so the repressor releases the operator. RNA polymerase can then transcribe the genes needed to metabolize lactose. This is an example of an inducible operon.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Evolution",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Which of the following is a requirement for natural selection to act on a population?",
+      "options": [
+        {
+          "key": "a",
+          "text": "all individuals are genetically identical",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "heritable variation that affects survival and reproduction",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "a constant, unchanging environment",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "the complete absence of variation",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Natural selection requires heritable variation that influences an individual's ability to survive and reproduce. Individuals with advantageous heritable traits reproduce more, so those traits become more common over generations.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Evolution",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "The forelimbs of humans, whales, and bats share the same underlying bone structure despite serving different functions. These structures are best described as:",
+      "options": [
+        {
+          "key": "a",
+          "text": "analogous structures",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "homologous structures",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "purely vestigial structures",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "convergent structures",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Homologous structures share a common underlying anatomy inherited from a common ancestor, even when their functions differ. Analogous structures, by contrast, have similar functions but arose independently and do not share common ancestry.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Evolution",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A random event sharply reduces a population's size, and by chance the survivors have allele frequencies very different from the original population. This is an example of:",
+      "options": [
+        {
+          "key": "a",
+          "text": "natural selection",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "gene flow",
+          "is_correct": false
+        },
+        {
+          "key": "c",
+          "text": "the bottleneck effect, a form of genetic drift",
+          "is_correct": true
+        },
+        {
+          "key": "d",
+          "text": "directional selection",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "A sudden, non-selective reduction in population size that randomly changes allele frequencies is the bottleneck effect, a type of genetic drift. Because the change is due to chance rather than fitness differences, it is not natural selection.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "reading_writing",
+      "topic": "AP Biology: Ecology",
+      "difficulty": "medium",
+      "type": "multiple_choice",
+      "statement": "Approximately what percentage of energy is typically transferred from one trophic level to the next in an ecosystem?",
+      "options": [
+        {
+          "key": "a",
+          "text": "about $1\\%$",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "about $10\\%$",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "about $50\\%$",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "about $90\\%$",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "On average only about $10\\%$ of the energy stored at one trophic level is passed to the next. The rest is lost mainly as heat through metabolism and is not captured by the level above, which limits the length of food chains.",
+      "hasMath": false,
+      "figure": null
+    },
+    {
+      "section": "math",
+      "topic": "AP Biology: Ecology",
+      "difficulty": "hard",
+      "type": "multiple_choice",
+      "statement": "A population grows exponentially according to $\\dfrac{dN}{dt} = rN$. If the per-capita growth rate is $r = 0.10\\,\\text{yr}^{-1}$ and the current population is $N = 500$, what is the instantaneous growth rate $\\dfrac{dN}{dt}$?",
+      "options": [
+        {
+          "key": "a",
+          "text": "$5$ individuals per year",
+          "is_correct": false
+        },
+        {
+          "key": "b",
+          "text": "$50$ individuals per year",
+          "is_correct": true
+        },
+        {
+          "key": "c",
+          "text": "$500$ individuals per year",
+          "is_correct": false
+        },
+        {
+          "key": "d",
+          "text": "$0.10$ individuals per year",
+          "is_correct": false
+        }
+      ],
+      "correctAnswer": null,
+      "solution": "Substitute the values directly into the exponential growth equation: $\\dfrac{dN}{dt} = rN = (0.10)(500) = 50$ individuals per year.",
+      "hasMath": true,
+      "figure": null
+    }
+  ]
+}

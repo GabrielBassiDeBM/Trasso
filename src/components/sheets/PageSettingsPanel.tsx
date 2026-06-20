@@ -135,17 +135,31 @@ export function PageSettingsPanel({ sheetId, settings, accessibility, onChange, 
         onChange={(value) => onChange({ ...settings, mcqStyle: value === "bubble" ? "bubble" : "lettered" })}
       />
 
-      <div className="max-w-[10rem]">
-        <Label htmlFor="default-answer-lines">Answer lines (default)</Label>
-        <Input
-          id="default-answer-lines"
-          type="number"
-          min={0}
-          max={20}
-          value={settings.answerLines}
-          onChange={(event) => onChange({ ...settings, answerLines: Number(event.target.value) })}
-        />
+      <div>
+        <label className="flex cursor-pointer items-center gap-3">
+          <input
+            type="checkbox"
+            checked={settings.showAnswerLines}
+            onChange={(event) => onChange({ ...settings, showAnswerLines: event.target.checked })}
+            className="h-4 w-4 rounded border-line accent-brand"
+          />
+          <span className="text-sm text-ink">Show lines for short-answer questions</span>
+        </label>
       </div>
+
+      {settings.showAnswerLines && (
+        <div className="max-w-[10rem]">
+          <Label htmlFor="default-answer-lines">Answer lines (default)</Label>
+          <Input
+            id="default-answer-lines"
+            type="number"
+            min={0}
+            max={20}
+            value={settings.answerLines}
+            onChange={(event) => onChange({ ...settings, answerLines: Number(event.target.value) })}
+          />
+        </div>
+      )}
 
       {/* Accessibility variant */}
       <div className="border-t border-line pt-4">

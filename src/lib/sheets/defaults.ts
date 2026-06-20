@@ -20,6 +20,7 @@ export interface PageSettings {
   columns: 1 | 2;
   numbering: "numeric" | "none";
   answerLines: number;
+  showAnswerLines: boolean;
   mcqStyle: "lettered" | "bubble";
   pointsPerQuestion: boolean;
 }
@@ -51,6 +52,7 @@ export const DEFAULT_PAGE_SETTINGS: PageSettings = {
   columns: 1,
   numbering: "numeric",
   answerLines: 3,
+  showAnswerLines: true,
   mcqStyle: "lettered",
   pointsPerQuestion: false,
 };

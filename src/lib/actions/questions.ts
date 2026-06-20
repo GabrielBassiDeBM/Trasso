@@ -298,6 +298,35 @@ export async function deleteManyFromBankAction(questionIds: string[]): Promise<{
   return { error: null };
 }
 
+export async function addManyToPersonalBankAction(questionIds: string[]): Promise<{ error: string | null }> {
+  if (questionIds.length === 0) return { error: null };
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return { error: "Session expired." };
+
+  const { data: rows, error: fetchError } = await supabase
+    .from("questions")
+    .select(
+      "statement, statement_format, type, options, answer, subject_id, topic_id, difficulty, has_math, source, tags, bncc_code, solution, solution_format",
+    )
+    .in("id", questionIds);
+
+  if (fetchError) return { error: fetchError.message };
+  if (!rows || rows.length === 0) return { error: "Questions not found." };
+
+  const copies = rows.map((row) => ({
+    ...row,
+    owner_id: userData.user!.id,
+    is_public: false,
+  }));
+
+  const { error } = await supabase.from("questions").insert(copies);
+  if (error) return { error: error.message };
+
+  revalidatePath("/banco");
+  return { error: null };
+}
+
 export async function pullManyFromBankAction(
   sheetId: string,
   bankQuestionIds: string[],

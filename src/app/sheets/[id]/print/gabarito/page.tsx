@@ -22,7 +22,7 @@ export default async function SheetGabaritoPage({ params }: { params: Promise<{ 
       position: sheetQuestion.position,
     }));
 
-  const pageSettings = (sheet.page_settings as unknown as PageSettings | null) ?? DEFAULT_PAGE_SETTINGS;
+  const pageSettings = { ...DEFAULT_PAGE_SETTINGS, ...((sheet.page_settings as unknown as Partial<PageSettings> | null) ?? {}) };
   const coverLayout = (sheet.cover_layout as unknown as CoverLayout | null) ?? DEFAULT_COVER_LAYOUT;
 
   return (

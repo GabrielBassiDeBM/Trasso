@@ -28,7 +28,7 @@ export default async function VariantsPrintPage({ params }: { params: Promise<{ 
       position: sq.position,
     }));
 
-  const pageSettings = (sheet.page_settings as unknown as PageSettings | null) ?? DEFAULT_PAGE_SETTINGS;
+  const pageSettings = { ...DEFAULT_PAGE_SETTINGS, ...((sheet.page_settings as unknown as Partial<PageSettings> | null) ?? {}) };
   const coverLayout = (sheet.cover_layout as unknown as CoverLayout | null) ?? DEFAULT_COVER_LAYOUT;
 
   const mcqCount = items.filter((i) => i.content.type === "multiple_choice").length;
