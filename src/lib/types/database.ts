@@ -81,6 +81,8 @@ export interface Database {
           source: string | null;
           tags: string[];
           bncc_code: string | null;
+          solution: string | null;
+          solution_format: StatementFormat;
           is_adapted: boolean;
           is_public: boolean;
           adaptation_type: AdaptationType | null;
@@ -104,6 +106,8 @@ export interface Database {
           source?: string | null;
           tags?: string[];
           bncc_code?: string | null;
+          solution?: string | null;
+          solution_format?: StatementFormat;
           is_adapted?: boolean;
           is_public?: boolean;
           adaptation_type?: AdaptationType | null;
@@ -122,6 +126,8 @@ export interface Database {
           source?: string | null;
           tags?: string[];
           bncc_code?: string | null;
+          solution?: string | null;
+          solution_format?: StatementFormat;
           is_adapted?: boolean;
           is_public?: boolean;
           adaptation_type?: AdaptationType | null;
