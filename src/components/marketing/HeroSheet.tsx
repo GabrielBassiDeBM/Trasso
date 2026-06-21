@@ -69,7 +69,7 @@ export function HeroSheet({ t }: { t: T }) {
             number={3}
             statement={
               <>
-                {t("landing.preview.q3")} <Frac num="d" den="dx" /> [x³ sin(x)] at x = π.
+                {t("landing.preview.q3")} <Frac num="d" den="dx" /> [x³ sin(x)] {t("landing.preview.q3.after")}
               </>
             }
             options={[
