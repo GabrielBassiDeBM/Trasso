@@ -23,7 +23,7 @@ export function QuestionRenderer({ item, index, numbering, mcqStyle, pointsPerQu
   const number = numbering === "numeric" ? `${index + 1}. ` : "";
 
   return (
-    <div className="sheet-question mb-5 break-inside-avoid text-[11pt] leading-relaxed text-black">
+    <div className="sheet-question font-print-serif mb-5 break-inside-avoid text-[11pt] leading-relaxed text-black">
       <p className="font-medium">
         {number}
         {content.type === "fill_blank" ? (

@@ -110,7 +110,7 @@ export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
 
         <div className="flex max-h-[calc(100vh-80px)] flex-col overflow-y-auto p-7">
           <div className="mb-5 flex items-center justify-between">
-            <h2 id="modal-title" className="text-xl font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
+            <h2 id="modal-title" className="text-xl font-bold tracking-heading text-ink">
               {t("newSheet.title")}
             </h2>
             <button
@@ -138,7 +138,7 @@ export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
               >
                 <m.icon size={18} />
                 <span className="text-xs font-semibold">{m.label}</span>
-                <span className="text-[10px] text-ink-faint">{m.description}</span>
+                <span className="text-2xs text-ink-faint">{m.description}</span>
               </button>
             ))}
           </div>

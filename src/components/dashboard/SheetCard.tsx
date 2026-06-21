@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils/cn";
 import type { SheetWithTaxonomy, SubjectRow, TopicRow } from "@/lib/data/sheets";
 import { useT, useLocale } from "@/lib/i18n/client";
 import { translateTopicName } from "@/lib/i18n/translations";
+import { useConfirm } from "@/lib/hooks/useConfirm";
 import { getSubjectIcon, getSubjectColor, getSubjectGradient, getTopicIcon } from "@/components/banco/BankBrowser";
 import { WhiteDifficultyBars } from "@/components/banco/BankQuestionCard";
 import { EditSheetModal } from "./EditSheetModal";
@@ -36,7 +37,7 @@ const STATUS_STYLES: Record<SheetWithTaxonomy["status"], string> = {
 function OverflowTooltip({ count, children }: { count: number; children: React.ReactNode }) {
   return (
     <span className="group/of relative inline-flex">
-      <span className="cursor-default rounded-lg bg-muted px-2 py-0.5 text-[11px] font-semibold text-ink-soft transition-colors hover:bg-muted-strong">
+      <span className="cursor-default rounded-lg bg-muted px-2 py-0.5 text-2xs font-semibold text-ink-soft transition-colors hover:bg-muted-strong">
         +{count}
       </span>
       <div
@@ -85,6 +86,7 @@ export function SheetCard({
 }: SheetCardProps) {
   const t = useT();
   const locale = useLocale();
+  const { confirm, dialog: confirmDialog } = useConfirm();
   const [editOpen, setEditOpen] = useState(false);
   const [, startTransition] = useTransition();
 
@@ -123,8 +125,14 @@ export function SheetCard({
     return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(new Date(value));
   }
 
-  function handleDelete() {
-    if (!confirm(t("sheet.deleteConfirm", { title: sheet.title }))) return;
+  async function handleDelete() {
+    const ok = await confirm({
+      title: t("sheet.delete"),
+      message: t("sheet.deleteConfirm", { title: sheet.title }),
+      confirmLabel: t("common.delete"),
+      cancelLabel: t("common.cancel"),
+    });
+    if (!ok) return;
     const fd = new FormData();
     fd.set("id", sheet.id);
     startTransition(() => deleteSheetAction(fd));
@@ -203,11 +211,11 @@ export function SheetCard({
 
       {/* Body */}
       <div className="flex flex-1 flex-col gap-3 rounded-b-2xl bg-surface p-4">
-        <span className={cn("w-fit rounded-full px-2.5 py-0.5 text-[11px] font-semibold", STATUS_STYLES[sheet.status])}>
+        <span className={cn("w-fit rounded-full px-2.5 py-0.5 text-2xs font-semibold", STATUS_STYLES[sheet.status])}>
           {STATUS_LABELS[sheet.status]}
         </span>
 
-        <Link href={`/sheets/${sheet.id}`} className="block text-[15px] font-bold leading-snug text-ink hover:text-brand" style={{ letterSpacing: "-0.01em" }}>
+        <Link href={`/sheets/${sheet.id}`} className="block text-base font-bold leading-snug tracking-heading text-ink hover:text-brand">
           {sheet.title}
         </Link>
 
@@ -218,7 +226,7 @@ export function SheetCard({
               const Icon = getSubjectIcon(subject.name);
               const colorClass = getSubjectColor(subject.name);
               return (
-                <span key={subject.id} className={cn("flex items-center gap-1 rounded-lg px-2 py-0.5 text-[11px] font-semibold", colorClass)}>
+                <span key={subject.id} className={cn("flex items-center gap-1 rounded-lg px-2 py-0.5 text-2xs font-semibold", colorClass)}>
                   <Icon size={10} aria-hidden="true" />
                   {subject.name}
                 </span>
@@ -230,7 +238,7 @@ export function SheetCard({
                   const Icon = getSubjectIcon(subject.name);
                   const colorClass = getSubjectColor(subject.name);
                   return (
-                    <span key={subject.id} className={cn("flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-1 text-[11px] font-semibold", colorClass)}>
+                    <span key={subject.id} className={cn("flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-1 text-2xs font-semibold", colorClass)}>
                       <Icon size={10} aria-hidden="true" />
                       {subject.name}
                     </span>
@@ -241,7 +249,7 @@ export function SheetCard({
             {visibleTopics.map((topic) => {
               const TopicIcon = getTopicIcon(topic.name);
               return (
-                <span key={topic.id} className="flex items-center gap-1 rounded-lg bg-topic-soft px-2 py-0.5 text-[11px] font-medium text-ink-soft">
+                <span key={topic.id} className="flex items-center gap-1 rounded-lg bg-topic-soft px-2 py-0.5 text-2xs font-medium text-ink-soft">
                   {TopicIcon && <TopicIcon size={9} aria-hidden="true" />}
                   {translateTopicName(topic.name, locale)}
                 </span>
@@ -252,7 +260,7 @@ export function SheetCard({
                 {overflowTopics.map((topic) => {
                   const TopicIcon = getTopicIcon(topic.name);
                   return (
-                    <span key={topic.id} className="flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-topic-soft px-2 py-1 text-[11px] font-medium text-ink-soft">
+                    <span key={topic.id} className="flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-topic-soft px-2 py-1 text-2xs font-medium text-ink-soft">
                       {TopicIcon && <TopicIcon size={10} aria-hidden="true" />}
                       {translateTopicName(topic.name, locale)}
                     </span>
@@ -265,7 +273,7 @@ export function SheetCard({
 
         {/* Footer */}
         <div className="mt-auto flex items-center justify-between pt-1">
-          <span className="text-[12px] text-ink-faint">{t("sheet.edited", { time: formatDate(sheet.updated_at) })}</span>
+          <span className="text-xs text-ink-faint">{t("sheet.edited", { time: formatDate(sheet.updated_at) })}</span>
           <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
             <button
               onClick={() => setEditOpen(true)}
@@ -294,6 +302,8 @@ export function SheetCard({
           allTopics={allTopics}
         />
       )}
+
+      {confirmDialog}
     </div>
   );
 }

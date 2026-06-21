@@ -59,6 +59,8 @@
   /* Semantic status */
   --color-success: #16a34a;
   --color-danger: #e0394b;
+  /* Darkened from --color-danger for solid white-text fills (4.32:1 was just under AA) */
+  --color-danger-strong: #ca3344;
 
   /* Muted neutrals — hover/pressed surfaces */
   --color-muted: #f1f0f5;
@@ -115,6 +117,8 @@
   /* Semantic status */
   --color-success: #34d058;
   --color-danger: #ff6b78;
+  /* Darkened from --color-danger for solid white-text fills (2.75:1 failed AA badly) */
+  --color-danger-strong: #b34b54;
 
   /* Muted neutrals — hover/pressed surfaces */
   --color-muted: #261f3c;
@@ -164,6 +168,7 @@
   --color-line: var(--color-line);
   --color-success: var(--color-success);
   --color-danger: var(--color-danger);
+  --color-danger-strong: var(--color-danger-strong);
 
   --color-muted: var(--color-muted);
   --color-muted-strong: var(--color-muted-strong);
@@ -196,6 +201,14 @@
   --font-display: var(--font-jakarta);
   --font-sans: var(--font-jakarta);
   --font-mono: var(--font-spline-mono);
+  --font-print-serif: var(--font-print-serif);
+
+  /* Micro text: badges, chips, tooltip labels — one step below text-xs */
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+
+  /* Shared tracking for bold headings (page titles, modal titles, card titles) */
+  --tracking-heading: -0.01em;
 
   /* Violet-tinted shadows */
   --shadow-xs: 0 1px 2px rgba(27, 20, 48, 0.06);

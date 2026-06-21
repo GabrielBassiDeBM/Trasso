@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils/cn";
 import { Latex } from "@/components/math/Latex";
 import { getSubjectIcon, getSubjectColor, getSubjectGradient, getTopicIcon } from "./BankBrowser";
 import { translateTopicName } from "@/lib/i18n/translations";
+import { useConfirm } from "@/lib/hooks/useConfirm";
 
 type BankQuestion = {
   id: string;
@@ -134,6 +135,7 @@ export function BankQuestionCard({
   sheets = [],
 }: BankQuestionCardProps) {
   const t = useT();
+  const { confirm, dialog: confirmDialog } = useConfirm();
   const locale = useLocale();
   const [expanded, setExpanded] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -166,8 +168,14 @@ export function BankQuestionCard({
     setPickerOpen(false);
   }
 
-  function handleDelete() {
-    if (!confirm(t("bank.question.deleteConfirm"))) return;
+  async function handleDelete() {
+    const ok = await confirm({
+      title: t("bank.question.delete"),
+      message: t("bank.question.deleteConfirm"),
+      confirmLabel: t("common.delete"),
+      cancelLabel: t("common.cancel"),
+    });
+    if (!ok) return;
     startTransition(async () => { await deleteQuestionFromBankAction(question.id); });
   }
 
@@ -180,182 +188,185 @@ export function BankQuestionCard({
   const showAddButton = !isPersonal && sheets.length > 0 && !inSelectionMode;
 
   return (
-    <div
-      className={cn(
-        "group relative flex flex-col rounded-2xl border transition-all duration-150",
-        selected
-          ? "border-brand shadow-[0_0_0_3px_rgba(167,30,251,0.12)] hover:shadow-[0_0_0_3px_rgba(167,30,251,0.18)]"
-          : "border-line bg-surface hover:-translate-y-0.5 hover:shadow-md",
-      )}
-    >
-      {/* ── Gradient banner ── */}
+    <>
       <div
-        className="relative h-[72px] shrink-0 rounded-t-2xl"
-        style={{ background: bannerGradient }}
+        className={cn(
+          "group relative flex flex-col rounded-2xl border transition-all duration-150",
+          selected
+            ? "border-brand shadow-[0_0_0_3px_rgba(167,30,251,0.12)] hover:shadow-[0_0_0_3px_rgba(167,30,251,0.18)]"
+            : "border-line bg-surface hover:-translate-y-0.5 hover:shadow-md",
+        )}
       >
-        {/* Checkbox (top-left) */}
-        {onToggleSelect && (
-          <button
-            type="button"
-            role="checkbox"
-            aria-checked={selected}
-            aria-label="Select question"
-            onClick={handleCheckboxClick}
-            className={cn(
-              "absolute left-3 top-3 z-10 flex h-[18px] w-[18px] items-center justify-center rounded border-2 transition-all duration-150",
-              selected
-                ? "border-white bg-white/30 opacity-100"
-                : inSelectionMode
-                  ? "border-white/80 bg-transparent opacity-100"
-                  : "border-white/80 bg-transparent opacity-0 group-hover:opacity-100",
-            )}
-          >
-            {selected && <Check size={10} className="text-white" strokeWidth={3} aria-hidden="true" />}
-          </button>
-        )}
-
-        {/* Type icon — top-right, prominent */}
-        <TypeIcon
-          size={22}
-          className="absolute right-3 top-3 text-white/90"
-          aria-hidden="true"
-        />
-
-        {/* Subject icon + difficulty bars — bottom-left */}
-        <div className="absolute bottom-2.5 left-3 flex items-end gap-2">
-          {SubjectIcon && (
-            <SubjectIcon
-              size={18}
-              className="pointer-events-none shrink-0 text-white/90"
-              aria-hidden="true"
-            />
-          )}
-          {question.difficulty && <WhiteDifficultyBars level={question.difficulty} />}
-        </div>
-
-        {/* Badges (bottom-right) */}
-        <div className="absolute bottom-2.5 right-3 flex gap-1">
-          {question.is_adapted && (
-            <span className="rounded-md bg-white/20 px-1.5 py-0.5 text-[10px] font-semibold text-white">
-              {t("bank.question.adapted")}
-            </span>
-          )}
-          {isPublic && (
-            <span className="flex items-center gap-0.5 rounded-md bg-white/20 px-1.5 py-0.5 text-[10px] font-semibold text-white">
-              <Globe size={8} aria-hidden="true" />
-              {t("bank.question.public")}
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* ── Body ── */}
-      <div className="flex flex-1 flex-col rounded-b-2xl bg-surface px-4 py-3.5">
-        {/* Metadata chips */}
-        <div className="mb-2.5 flex flex-wrap items-center gap-1.5">
-          {subjectName && SubjectIcon && (
-            <span className={cn("flex items-center gap-1 rounded-lg px-2 py-0.5 text-[11px] font-semibold", subjectColor)}>
-              <SubjectIcon size={10} aria-hidden="true" />
-              {subjectName}
-            </span>
-          )}
-          {question.topic && (() => {
-            const TopicIcon = getTopicIcon(question.topic.name);
-            return (
-              <span className="flex items-center gap-1 rounded-lg bg-topic-soft px-2 py-0.5 text-[11px] font-medium text-ink-soft">
-                {TopicIcon && <TopicIcon size={9} aria-hidden="true" />}
-                {translateTopicName(question.topic.name, locale)}
-              </span>
-            );
-          })()}
-          <span className="ml-auto rounded-lg bg-muted px-2 py-0.5 text-[11px] font-semibold text-ink-soft">
-            {TYPE_LABELS[question.type] ?? question.type}
-          </span>
-        </div>
-
-        {/* Statement */}
+        {/* ── Gradient banner ── */}
         <div
-          className={cn(
-            "flex-1 cursor-pointer text-[13px] leading-relaxed text-ink",
-            !expanded && isLong && "line-clamp-3",
-          )}
-          onClick={() => isLong && setExpanded((e) => !e)}
+          className="relative h-[72px] shrink-0 rounded-t-2xl"
+          style={{ background: bannerGradient }}
         >
-          <Latex text={question.statement} />
+          {/* Checkbox (top-left) */}
+          {onToggleSelect && (
+            <button
+              type="button"
+              role="checkbox"
+              aria-checked={selected}
+              aria-label="Select question"
+              onClick={handleCheckboxClick}
+              className={cn(
+                "absolute left-3 top-3 z-10 flex h-[18px] w-[18px] items-center justify-center rounded border-2 transition-all duration-150",
+                selected
+                  ? "border-white bg-white/30 opacity-100"
+                  : inSelectionMode
+                    ? "border-white/80 bg-transparent opacity-100"
+                    : "border-white/80 bg-transparent opacity-0 group-hover:opacity-100",
+              )}
+            >
+              {selected && <Check size={10} className="text-white" strokeWidth={3} aria-hidden="true" />}
+            </button>
+          )}
+
+          {/* Type icon — top-right, prominent */}
+          <TypeIcon
+            size={22}
+            className="absolute right-3 top-3 text-white/90"
+            aria-hidden="true"
+          />
+
+          {/* Subject icon + difficulty bars — bottom-left */}
+          <div className="absolute bottom-2.5 left-3 flex items-end gap-2">
+            {SubjectIcon && (
+              <SubjectIcon
+                size={18}
+                className="pointer-events-none shrink-0 text-white/90"
+                aria-hidden="true"
+              />
+            )}
+            {question.difficulty && <WhiteDifficultyBars level={question.difficulty} />}
+          </div>
+
+          {/* Badges (bottom-right) */}
+          <div className="absolute bottom-2.5 right-3 flex gap-1">
+            {question.is_adapted && (
+              <span className="rounded-md bg-white/20 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                {t("bank.question.adapted")}
+              </span>
+            )}
+            {isPublic && (
+              <span className="flex items-center gap-0.5 rounded-md bg-white/20 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                <Globe size={8} aria-hidden="true" />
+                {t("bank.question.public")}
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* Expand / collapse */}
-        {isLong && (
-          <button
-            type="button"
-            onClick={() => setExpanded((e) => !e)}
-            className="mt-1.5 flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
-          >
-            {expanded ? (
-              <><ChevronUp size={11} aria-hidden="true" />{t("bank.question.showLess")}</>
-            ) : (
-              <><ChevronDown size={11} aria-hidden="true" />{t("bank.question.showFull")}</>
+        {/* ── Body ── */}
+        <div className="flex flex-1 flex-col rounded-b-2xl bg-surface px-4 py-3.5">
+          {/* Metadata chips */}
+          <div className="mb-2.5 flex flex-wrap items-center gap-1.5">
+            {subjectName && SubjectIcon && (
+              <span className={cn("flex items-center gap-1 rounded-lg px-2 py-0.5 text-[11px] font-semibold", subjectColor)}>
+                <SubjectIcon size={10} aria-hidden="true" />
+                {subjectName}
+              </span>
             )}
-          </button>
-        )}
-
-        {/* Tags */}
-        {question.tags.length > 0 && (
-          <div className="mt-2 flex flex-wrap items-center gap-1.5">
-            <Tag size={10} className="text-ink-faint" aria-hidden="true" />
-            {question.tags.map((tag) => (
-              <span key={tag} className="text-[11px] text-ink-faint">{tag}</span>
-            ))}
+            {question.topic && (() => {
+              const TopicIcon = getTopicIcon(question.topic.name);
+              return (
+                <span className="flex items-center gap-1 rounded-lg bg-topic-soft px-2 py-0.5 text-[11px] font-medium text-ink-soft">
+                  {TopicIcon && <TopicIcon size={9} aria-hidden="true" />}
+                  {translateTopicName(question.topic.name, locale)}
+                </span>
+              );
+            })()}
+            <span className="ml-auto rounded-lg bg-muted px-2 py-0.5 text-[11px] font-semibold text-ink-soft">
+              {TYPE_LABELS[question.type] ?? question.type}
+            </span>
           </div>
-        )}
 
-        {/* Footer actions */}
-        {(showAddButton || isPersonal) && (
-          <div className="relative mt-3 flex items-center justify-end gap-1 border-t border-line pt-2.5">
-            {showAddButton && (
-              <>
+          {/* Statement */}
+          <div
+            className={cn(
+              "flex-1 cursor-pointer text-[13px] leading-relaxed text-ink",
+              !expanded && isLong && "line-clamp-3",
+            )}
+            onClick={() => isLong && setExpanded((e) => !e)}
+          >
+            <Latex text={question.statement} />
+          </div>
+
+          {/* Expand / collapse */}
+          {isLong && (
+            <button
+              type="button"
+              onClick={() => setExpanded((e) => !e)}
+              className="mt-1.5 flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
+            >
+              {expanded ? (
+                <><ChevronUp size={11} aria-hidden="true" />{t("bank.question.showLess")}</>
+              ) : (
+                <><ChevronDown size={11} aria-hidden="true" />{t("bank.question.showFull")}</>
+              )}
+            </button>
+          )}
+
+          {/* Tags */}
+          {question.tags.length > 0 && (
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
+              <Tag size={10} className="text-ink-faint" aria-hidden="true" />
+              {question.tags.map((tag) => (
+                <span key={tag} className="text-[11px] text-ink-faint">{tag}</span>
+              ))}
+            </div>
+          )}
+
+          {/* Footer actions */}
+          {(showAddButton || isPersonal) && (
+            <div className="relative mt-3 flex items-center justify-end gap-1 border-t border-line pt-2.5">
+              {showAddButton && (
+                <>
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); setPickerOpen((v) => !v); }}
+                    disabled={adding}
+                    className="flex items-center gap-1 rounded-lg bg-brand-soft px-2.5 py-1 text-[11px] font-semibold text-brand transition-colors hover:bg-brand hover:text-white disabled:opacity-60"
+                  >
+                    <Plus size={11} aria-hidden="true" />
+                    {adding ? t("bank.selection.adding") : t("bank.selection.addToSheet")}
+                  </button>
+                  {pickerOpen && (
+                    <InlineSheetPicker
+                      sheets={sheets}
+                      working={adding}
+                      onSelect={handleSingleAdd}
+                      onClose={() => setPickerOpen(false)}
+                    />
+                  )}
+                </>
+              )}
+              {isPersonal && onEdit && (
                 <button
                   type="button"
-                  onClick={(e) => { e.stopPropagation(); setPickerOpen((v) => !v); }}
-                  disabled={adding}
-                  className="flex items-center gap-1 rounded-lg bg-brand-soft px-2.5 py-1 text-[11px] font-semibold text-brand transition-colors hover:bg-brand hover:text-white disabled:opacity-60"
+                  onClick={(e) => { e.stopPropagation(); onEdit(question.id); }}
+                  aria-label={t("bank.question.edit")}
+                  className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint opacity-0 transition-all group-hover:opacity-100 hover:bg-brand-soft hover:text-brand"
                 >
-                  <Plus size={11} aria-hidden="true" />
-                  {adding ? t("bank.selection.adding") : t("bank.selection.addToSheet")}
+                  <Pencil size={13} aria-hidden="true" />
                 </button>
-                {pickerOpen && (
-                  <InlineSheetPicker
-                    sheets={sheets}
-                    working={adding}
-                    onSelect={handleSingleAdd}
-                    onClose={() => setPickerOpen(false)}
-                  />
-                )}
-              </>
-            )}
-            {isPersonal && onEdit && (
-              <button
-                type="button"
-                onClick={(e) => { e.stopPropagation(); onEdit(question.id); }}
-                aria-label={t("bank.question.edit")}
-                className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint opacity-0 transition-all group-hover:opacity-100 hover:bg-brand-soft hover:text-brand"
-              >
-                <Pencil size={13} aria-hidden="true" />
-              </button>
-            )}
-            {isPersonal && (
-              <button
-                type="button"
-                onClick={handleDelete}
-                aria-label={t("bank.question.delete")}
-                className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint opacity-0 transition-all group-hover:opacity-100 hover:bg-danger-soft hover:text-danger"
-              >
-                <Trash2 size={13} aria-hidden="true" />
-              </button>
-            )}
-          </div>
-        )}
+              )}
+              {isPersonal && (
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  aria-label={t("bank.question.delete")}
+                  className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-faint opacity-0 transition-all group-hover:opacity-100 hover:bg-danger-soft hover:text-danger"
+                >
+                  <Trash2 size={13} aria-hidden="true" />
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      {confirmDialog}
+    </>
   );
 }

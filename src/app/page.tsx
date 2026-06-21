@@ -1,115 +1,70 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { buttonStyles } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
+import { SheetPreviewMock } from "@/components/marketing/SheetPreviewMock";
+import { getLocale } from "@/lib/i18n/server";
+import { translate } from "@/lib/i18n/translations";
 
-const FEATURES = [
-  {
-    title: "Question Bank",
-    description:
-      "Build a reusable library of questions organized by subject and topic. Pull any question into a new sheet in one click.",
-    icon: (
-      <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-13Z M8 8h8M8 12h8M8 16h5" />
-    ),
-  },
-  {
-    title: "LaTeX Math",
-    description:
-      "Type equations with a visual math editor and see them rendered instantly, exactly as they'll appear in print.",
-    icon: <path d="M5 19 12 5l3 7 2-3 2 4M4 19h16" />,
-  },
-  {
-    title: "PDF + Answer Key",
-    description:
-      "Export a print-ready A4 PDF and generate a complete answer key in one click. Works for every question type.",
-    icon: <path d="M7 3.5h7l3 3v14a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-17Zm0 9 2 2 4-5" />,
-  },
-];
+export default async function Home() {
+  const locale = await getLocale();
+  const t = (key: Parameters<typeof translate>[1], vars?: Parameters<typeof translate>[2]) =>
+    translate(locale, key, vars);
 
-const STEPS = [
-  {
-    number: "01",
-    title: "Create a sheet",
-    description: "Give it a title, choose the type (test, problem set, practice test), and start from scratch or generate with AI.",
-  },
-  {
-    number: "02",
-    title: "Add questions",
-    description: "Write or paste the prompt, pick the format (multiple choice, open answer, T/F, essay...) and add math formulas.",
-  },
-  {
-    number: "03",
-    title: "Print",
-    description: "Preview the A4 layout, adjust the design, and export the PDF with a matching answer key.",
-  },
-];
+  const STEPS = [
+    { number: "01", title: t("landing.howItWorks.step1.title"), description: t("landing.howItWorks.step1.desc") },
+    { number: "02", title: t("landing.howItWorks.step2.title"), description: t("landing.howItWorks.step2.desc") },
+    { number: "03", title: t("landing.howItWorks.step3.title"), description: t("landing.howItWorks.step3.desc") },
+  ];
 
-export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative flex min-h-[600px] items-center overflow-hidden lg:min-h-[680px]">
-          <Image
-            src="/FundoHero.png"
-            alt=""
-            fill
-            className="object-cover object-center"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-canvas via-canvas/92 to-canvas/30" />
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-canvas to-transparent" />
-
-          <div className="relative mx-auto w-full max-w-6xl px-4 py-24 sm:px-6 lg:py-32">
+        <section className="relative overflow-hidden">
+          <div className="mx-auto grid w-full max-w-6xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-28">
             <div className="max-w-xl">
-              <p className="font-display text-sm font-semibold uppercase tracking-[0.2em] text-brand">
-                For SAT & AP Teachers
-              </p>
-              <h1 className="mt-4 font-display text-4xl font-bold leading-[1.08] text-ink sm:text-5xl lg:text-[3.5rem]">
-                Tests and problem sets ready to print, in minutes.
+              <h1 className="font-display text-5xl font-extrabold leading-[1.04] tracking-[-0.02em] text-ink sm:text-6xl">
+                {t("landing.hero.heading1")}{" "}
+                <span className="text-brand">{t("landing.hero.heading2")}</span>
               </h1>
-              <p className="mt-5 max-w-lg text-lg leading-relaxed text-ink-soft">
-                Build SAT and AP STEM worksheets with math formulas, organize by topic, and export a clean PDF with a
-                separate answer key — no manual formatting.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
+              <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink-soft">{t("landing.hero.subhead")}</p>
+              <div className="mt-9 flex flex-wrap gap-3">
                 <Link href="/signup" className={buttonStyles("primary", "lg")}>
-                  Create free account
+                  {t("landing.hero.ctaPrimary")}
                 </Link>
                 <Link href="/login" className={buttonStyles("outline", "lg")}>
-                  Sign in
+                  {t("landing.hero.ctaSecondary")}
                 </Link>
               </div>
-              <p className="mt-4 text-sm text-ink-faint">Free to start. No credit card required.</p>
+              <p className="mt-4 text-sm text-ink-faint">{t("landing.hero.freeNote")}</p>
+            </div>
+
+            <div className="relative">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -inset-x-10 -inset-y-16 -z-10 bg-[radial-gradient(closest-side,var(--color-brand-soft),transparent)] opacity-70"
+              />
+              <SheetPreviewMock t={t} />
             </div>
           </div>
         </section>
 
-        {/* Features */}
+        {/* Capabilities */}
         <section className="border-t border-line bg-surface/60 py-16 sm:py-20">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">Everything you need</h2>
-            <div className="mt-8 grid gap-6 sm:grid-cols-3">
-              {FEATURES.map((feature) => (
-                <Card key={feature.title} className="p-6">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-9 w-9 text-brand"
-                  >
-                    {feature.icon}
-                  </svg>
-                  <h3 className="mt-4 font-display text-lg font-semibold text-ink">{feature.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">{feature.description}</p>
-                </Card>
-              ))}
+            <h2 className="max-w-md font-display text-3xl font-bold leading-tight text-ink sm:text-4xl">
+              {t("landing.capabilities.heading")}
+            </h2>
+
+            <div className="mt-10 grid gap-10 lg:grid-cols-[0.55fr_0.45fr]">
+              <LatexShowcase t={t} />
+
+              <div className="flex flex-col gap-8 lg:pt-2">
+                <Capability title={t("landing.capabilities.bank.title")} description={t("landing.capabilities.bank.desc")} />
+                <Capability title={t("landing.capabilities.export.title")} description={t("landing.capabilities.export.desc")} />
+              </div>
             </div>
           </div>
         </section>
@@ -117,12 +72,18 @@ export default function Home() {
         {/* How it works */}
         <section className="py-16 sm:py-20">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">How it works</h2>
-            <div className="mt-8 grid gap-8 sm:grid-cols-3">
+            <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{t("landing.howItWorks.heading")}</h2>
+            <div className="relative mt-10 grid gap-10 sm:grid-cols-3">
+              <div
+                aria-hidden="true"
+                className="absolute top-6 right-0 left-0 hidden h-px bg-line sm:block"
+              />
               {STEPS.map((step) => (
-                <div key={step.number}>
-                  <p className="font-display text-3xl font-semibold text-brand">{step.number}</p>
-                  <h3 className="mt-2 font-display text-lg font-semibold text-ink">{step.title}</h3>
+                <div key={step.number} className="relative">
+                  <p className="relative z-10 inline-block bg-canvas pr-4 font-display text-4xl font-extrabold text-brand sm:bg-transparent sm:pr-0">
+                    {step.number}
+                  </p>
+                  <h3 className="mt-4 font-display text-lg font-semibold text-ink">{step.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-ink-soft">{step.description}</p>
                 </div>
               ))}
@@ -131,15 +92,28 @@ export default function Home() {
         </section>
 
         {/* CTA */}
-        <section className="border-t border-line py-16 sm:py-20">
-          <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-            <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">
-              Ready to build your next test?
-            </h2>
-            <p className="mt-3 text-ink-soft">Create a free account and make your first sheet right now.</p>
-            <div className="mt-6 flex justify-center">
-              <Link href="/signup" className={buttonStyles("primary", "lg")}>
-                Create free account
+        <section className="relative overflow-hidden border-t border-line py-20 sm:py-24">
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 -z-10"
+            style={{ background: "linear-gradient(120deg, var(--color-brand-dark) 0%, var(--color-brand) 55%, var(--color-accent) 100%)" }}
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/trasso-logo-watermark.svg"
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-24 -bottom-24 w-[28rem] opacity-[0.12]"
+          />
+          <div className="relative mx-auto max-w-2xl px-4 text-center sm:px-6">
+            <h2 className="font-display text-3xl font-bold text-white sm:text-4xl">{t("landing.cta.heading")}</h2>
+            <p className="mt-3 text-white/80">{t("landing.cta.subhead")}</p>
+            <div className="mt-7 flex justify-center">
+              <Link
+                href="/signup"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-7 text-base font-semibold text-brand-dark transition-opacity hover:opacity-90"
+              >
+                {t("landing.cta.button")}
               </Link>
             </div>
           </div>
@@ -149,6 +123,48 @@ export default function Home() {
       <footer className="border-t border-line py-8 text-center text-sm text-ink-faint">
         © {new Date().getFullYear()} trasso
       </footer>
+    </div>
+  );
+}
+
+type T = (key: Parameters<typeof translate>[1], vars?: Parameters<typeof translate>[2]) => string;
+
+function Capability({ title, description }: { title: string; description: string }) {
+  return (
+    <div>
+      <h3 className="font-display text-xl font-bold text-ink">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-ink-soft">{description}</p>
+    </div>
+  );
+}
+
+/** Static facsimile of the LaTeX editor: raw input above, the rendered result below. */
+function LatexShowcase({ t }: { t: T }) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-line bg-canvas">
+      <div className="border-b border-line bg-surface px-5 py-3">
+        <h3 className="font-display text-xl font-bold text-ink">{t("landing.capabilities.latexHeading")}</h3>
+      </div>
+      <div className="grid divide-y divide-line sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+        <div className="p-5">
+          <p className="text-xs font-semibold text-ink-faint">{t("landing.capabilities.youType")}</p>
+          <pre className="mt-2 overflow-x-auto rounded-lg bg-surface p-3 font-mono text-[13px] text-ink-soft">
+            x = \frac{"{"}-b \pm \sqrt{"{"}b^2-4ac{"}"}{"}"}{"{"}2a{"}"}
+          </pre>
+        </div>
+        <div className="flex flex-col p-5">
+          <p className="text-xs font-semibold text-ink-faint">{t("landing.capabilities.itPrints")}</p>
+          <div className="mt-2 flex flex-1 items-center justify-center rounded-lg bg-surface p-4">
+            <p className="font-display text-lg text-ink">
+              x ={" "}
+              <span className="mx-1 inline-flex flex-col items-center text-center align-middle text-base leading-none">
+                <span className="px-1">−b ± √(b² − 4ac)</span>
+                <span className="w-full border-t border-ink/60 px-1">2a</span>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

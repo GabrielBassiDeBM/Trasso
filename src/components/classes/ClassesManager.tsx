@@ -32,6 +32,7 @@ import { Input, Label } from "@/components/ui/Input";
 import { buttonStyles } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
 import { useT } from "@/lib/i18n/client";
+import { useConfirm } from "@/lib/hooks/useConfirm";
 
 const initial: ClassActionState = { error: null };
 
@@ -87,6 +88,7 @@ interface Props { initialRosters: ClassRoster[] }
 
 export function ClassesManager({ initialRosters }: Props) {
   const t = useT();
+  const { confirm, dialog: confirmDialog } = useConfirm();
   const [rosters, setRosters] = useOptimistic(initialRosters);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -108,9 +110,15 @@ export function ClassesManager({ initialRosters }: Props) {
     setSelectedIds(new Set());
   }
 
-  function handleBulkDelete() {
+  async function handleBulkDelete() {
     const count = selectedIds.size;
-    if (!confirm(t("classes.deleteSelectedConfirm", { n: count }))) return;
+    const ok = await confirm({
+      title: t("classes.deleteSelectedTitle"),
+      message: t("classes.deleteSelectedConfirm", { n: count }),
+      confirmLabel: t("common.delete"),
+      cancelLabel: t("common.cancel"),
+    });
+    if (!ok) return;
     const ids = Array.from(selectedIds);
     setRosters(prev => prev.filter(r => !selectedIds.has(r.id)));
     exitSelect();
@@ -242,6 +250,8 @@ export function ClassesManager({ initialRosters }: Props) {
           }}
         />
       )}
+
+      {confirmDialog}
     </div>
   );
 }
@@ -393,6 +403,7 @@ function ClassPanel({
   onStudentsChange: (students: Student[]) => void;
 }) {
   const t = useT();
+  const { confirm, dialog: confirmDialog } = useConfirm();
   const [, startTransition] = useTransition();
   const [students, setStudents] = useState(initialRoster.students);
   const [query, setQuery] = useState("");
@@ -473,8 +484,14 @@ function ClassPanel({
     syncStudents(updated);
   }
 
-  function handleDelete() {
-    if (!confirm(t("classes.class.deleteConfirm", { name: initialRoster.turma }))) return;
+  async function handleDelete() {
+    const ok = await confirm({
+      title: t("classes.class.deleteTitle"),
+      message: t("classes.class.deleteConfirm", { name: initialRoster.turma }),
+      confirmLabel: t("common.delete"),
+      cancelLabel: t("common.cancel"),
+    });
+    if (!ok) return;
     onDelete();
     const fd = new FormData();
     fd.set("id", initialRoster.id);
@@ -782,6 +799,8 @@ function ClassPanel({
           </div>
         </div>
       </div>
+
+      {confirmDialog}
     </>
   );
 }

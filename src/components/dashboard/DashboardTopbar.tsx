@@ -26,7 +26,7 @@ export function DashboardTopbar() {
 
   return (
     <header className="sticky top-0 z-10 flex items-center gap-4 border-b border-line bg-surface/95 px-8 py-4 backdrop-blur-[8px]">
-      <h1 className="text-[20px] font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
+      <h1 className="text-xl font-bold tracking-heading text-ink">
         {t("dashboard.title")}
       </h1>
 

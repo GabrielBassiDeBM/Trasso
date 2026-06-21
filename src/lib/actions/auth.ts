@@ -2,6 +2,8 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getLocale } from "@/lib/i18n/server";
+import { translate } from "@/lib/i18n/translations";
 
 export interface AuthActionState {
   error: string | null;
@@ -18,15 +20,16 @@ function safeRedirectTarget(formData: FormData): string {
 }
 
 export async function signUpAction(_prev: AuthActionState, formData: FormData): Promise<AuthActionState> {
+  const locale = await getLocale();
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
   const displayName = String(formData.get("displayName") ?? "").trim();
 
   if (!email || !password) {
-    return { error: "Informe e-mail e senha." };
+    return { error: translate(locale, "auth.error.emailPasswordRequired") };
   }
   if (password.length < 6) {
-    return { error: "A senha precisa ter pelo menos 6 caracteres." };
+    return { error: translate(locale, "auth.error.passwordTooShort") };
   }
 
   const supabase = await createClient();
@@ -43,7 +46,7 @@ export async function signUpAction(_prev: AuthActionState, formData: FormData): 
   if (!data.session) {
     return {
       error: null,
-      success: "Conta criada! Verifique seu e-mail para confirmar o cadastro antes de entrar.",
+      success: translate(locale, "auth.success.signupConfirm"),
     };
   }
 
@@ -51,11 +54,12 @@ export async function signUpAction(_prev: AuthActionState, formData: FormData): 
 }
 
 export async function signInAction(_prev: AuthActionState, formData: FormData): Promise<AuthActionState> {
+  const locale = await getLocale();
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
 
   if (!email || !password) {
-    return { error: "Informe e-mail e senha." };
+    return { error: translate(locale, "auth.error.emailPasswordRequired") };
   }
 
   const supabase = await createClient();
@@ -63,19 +67,20 @@ export async function signInAction(_prev: AuthActionState, formData: FormData): 
 
   if (error) {
     if (error.code === "email_not_confirmed") {
-      return { error: "Please confirm your email before signing in. Check your inbox (and spam)." };
+      return { error: translate(locale, "auth.error.confirmEmail") };
     }
-    return { error: "Invalid email or password." };
+    return { error: translate(locale, "auth.error.invalidCredentials") };
   }
 
   redirect(safeRedirectTarget(formData));
 }
 
 export async function sendMagicLinkAction(_prev: AuthActionState, formData: FormData): Promise<AuthActionState> {
+  const locale = await getLocale();
   const email = String(formData.get("email") ?? "").trim();
 
   if (!email) {
-    return { error: "Informe seu e-mail." };
+    return { error: translate(locale, "auth.error.emailRequired") };
   }
 
   const supabase = await createClient();
@@ -88,7 +93,7 @@ export async function sendMagicLinkAction(_prev: AuthActionState, formData: Form
     return { error: error.message };
   }
 
-  return { error: null, success: "Enviamos um link de acesso para o seu e-mail." };
+  return { error: null, success: translate(locale, "auth.success.magicLinkSent") };
 }
 
 export async function signOutAction() {

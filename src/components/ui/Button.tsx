@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils/cn";
 
-export type ButtonVariant = "primary" | "accent" | "outline" | "ghost";
+export type ButtonVariant = "primary" | "accent" | "outline" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
 
 const variantStyles: Record<ButtonVariant, string> = {
@@ -9,6 +9,7 @@ const variantStyles: Record<ButtonVariant, string> = {
   accent: "bg-accent text-white hover:bg-accent-dark",
   outline: "border border-line bg-surface text-ink hover:bg-brand-soft",
   ghost: "text-brand hover:bg-brand-soft",
+  danger: "bg-danger-strong text-white hover:brightness-90",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {

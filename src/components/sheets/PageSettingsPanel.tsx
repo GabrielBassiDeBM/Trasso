@@ -85,7 +85,7 @@ export function PageSettingsPanel({ sheetId, settings, accessibility, onChange, 
 
   return (
     <Card className="space-y-4 p-5">
-      <h2 className="font-display text-base font-semibold text-ink">Page settings</h2>
+      <h2 className="text-base font-semibold text-ink">Page settings</h2>
 
       <div>
         <span className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Size</span>

@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { acceptInviteAction } from "@/lib/actions/orgs";
+import { getLocale } from "@/lib/i18n/server";
+import { translate } from "@/lib/i18n/translations";
 
 export default async function AcceptInvitePage({
   searchParams,
@@ -11,7 +13,7 @@ export default async function AcceptInvitePage({
 
   if (!token) redirect("/dashboard");
 
-  const result = await acceptInviteAction(token);
+  const [result, locale] = await Promise.all([acceptInviteAction(token), getLocale()]);
 
   if (result.error) {
     return (
@@ -19,7 +21,7 @@ export default async function AcceptInvitePage({
         <div className="rounded-2xl border border-line bg-surface p-8 text-center shadow-sm max-w-sm w-full">
           <p className="font-semibold text-ink">{result.error}</p>
           <a href="/dashboard" className="mt-4 inline-block text-sm text-brand hover:underline">
-            Ir para o dashboard
+            {translate(locale, "invite.goToDashboard")}
           </a>
         </div>
       </div>

@@ -17,14 +17,16 @@ import type { GroupItem } from "./QuestionGroupEditor";
 import { ScanModal } from "@/components/ai/ScanModal";
 import { GenerateModal } from "@/components/ai/GenerateModal";
 import { PrintConfigModal } from "./PrintConfigModal";
-import { addQuestionAction } from "@/lib/actions/questions";
+import { addQuestionsBatchAction } from "@/lib/actions/questions";
+import { useSaveShortcut } from "@/lib/hooks/useKeyboardShortcuts";
+import { useT } from "@/lib/i18n/client";
 import { Printer } from "lucide-react";
 
-const EXAM_TYPE_LABELS: Record<ExamType, string> = {
-  prova: "Test",
-  lista: "Problem Set",
-  simulado: "Practice Test",
-  recuperacao: "Review",
+const EXAM_TYPE_KEYS: Record<ExamType, "examType.test" | "examType.problemSet" | "examType.practiceTest" | "examType.review"> = {
+  prova: "examType.test",
+  lista: "examType.problemSet",
+  simulado: "examType.practiceTest",
+  recuperacao: "examType.review",
 };
 
 interface SheetEditorProps {
@@ -46,6 +48,7 @@ export function SheetEditor({
   subjects,
   allTopics,
 }: SheetEditorProps) {
+  const t = useT();
   const searchParams = useSearchParams();
   const aiParam = searchParams.get("ai");
 
@@ -60,10 +63,13 @@ export function SheetEditor({
   const [scanOpen, setScanOpen] = useState(aiParam === "scan");
   const [generateOpen, setGenerateOpen] = useState(aiParam === "generate");
   const [printConfigOpen, setPrintConfigOpen] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const [aiAcceptError, setAiAcceptError] = useState<string | null>(null);
   const [, startTransition] = useTransition();
 
   const coverSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const skipFirstCoverSave = useRef(true);
+  const savedStatusTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (skipFirstCoverSave.current) {
@@ -97,27 +103,59 @@ export function SheetEditor({
     });
   }
 
+  function flashSaved() {
+    setSaveStatus("saved");
+    if (savedStatusTimer.current) clearTimeout(savedStatusTimer.current);
+    savedStatusTimer.current = setTimeout(() => setSaveStatus("idle"), 1800);
+  }
+
+  function handleForceSave() {
+    setSaveStatus("saving");
+    handleRename();
+    if (coverSaveTimer.current) clearTimeout(coverSaveTimer.current);
+    updateCoverLayoutAction(sheet.id, coverLayout).then(flashSaved);
+  }
+
+  useSaveShortcut(handleForceSave);
+
   async function handleAiAccept(questions: import("@/lib/types/question").QuestionContent[]) {
-    for (const q of questions) {
-      const result = await addQuestionAction(sheet.id, q.type, q);
-      if ("error" in result) continue;
-      setItems((prev) => [
-        ...prev,
-        {
-          sheetQuestionId: result.sheetQuestionId,
-          questionId: result.questionId,
-          points: 1,
-          content: result.content,
-          position: result.position,
-          subjectId: result.subjectId,
-          topicId: result.topicId,
-          difficulty: result.difficulty,
-        },
-      ]);
+    setAiAcceptError(null);
+    const result = await addQuestionsBatchAction(
+      sheet.id,
+      questions.map((q) => ({ type: q.type, content: q })),
+    );
+
+    if ("error" in result) {
+      setAiAcceptError(result.error);
+      return;
+    }
+
+    setItems((prev) => [
+      ...prev,
+      ...result.added.map((added) => ({
+        sheetQuestionId: added.sheetQuestionId,
+        questionId: added.questionId,
+        points: 1,
+        content: added.content,
+        position: added.position,
+        subjectId: added.subjectId,
+        topicId: added.topicId,
+        difficulty: added.difficulty,
+      })),
+    ]);
+
+    if (result.failed > 0) {
+      setAiAcceptError(
+        t(questions.length === 1 ? "editor.aiAcceptError.partial_one" : "editor.aiAcceptError.partial_many", {
+          added: result.added.length,
+          total: questions.length,
+          failed: result.failed,
+        }),
+      );
     }
   }
 
-  const examLabel = sheet.exam_type ? EXAM_TYPE_LABELS[sheet.exam_type] : null;
+  const examLabel = sheet.exam_type ? t(EXAM_TYPE_KEYS[sheet.exam_type]) : null;
   const hasAccessibility = !!(accessibility?.enabled);
   const defaultSubjectIds = sheet.subject_ids?.length ? sheet.subject_ids : sheet.subject_id ? [sheet.subject_id] : [];
   const defaultTopicIds = sheet.topic_ids ?? [];
@@ -132,7 +170,7 @@ export function SheetEditor({
             href="/dashboard"
             className="inline-flex items-center gap-1 text-xs font-medium text-ink-faint transition-colors hover:text-ink"
           >
-            ← Dashboard
+            {t("editor.backToDashboard")}
           </Link>
           <div className="mt-1 flex flex-wrap items-baseline gap-3">
             <input
@@ -142,9 +180,17 @@ export function SheetEditor({
               onKeyDown={(event) => {
                 if (event.key === "Enter") event.currentTarget.blur();
               }}
-              aria-label="Sheet title"
+              aria-label={t("editor.titleAriaLabel")}
               className="-mx-1 block min-w-0 flex-1 rounded-md border border-transparent bg-transparent px-1 font-display text-2xl font-semibold text-ink transition-colors focus:border-line focus:bg-canvas focus:outline-none sm:text-3xl"
             />
+            {saveStatus !== "idle" && (
+              <span
+                role="status"
+                className="text-xs font-medium text-ink-faint transition-opacity"
+              >
+                {saveStatus === "saving" ? t("editor.status.saving") : t("editor.status.saved")}
+              </span>
+            )}
           </div>
           {/* Metadata chips */}
           <div className="mt-1.5 flex flex-wrap items-center gap-2">
@@ -167,13 +213,29 @@ export function SheetEditor({
         </div>
       </div>
 
+      {aiAcceptError && (
+        <div
+          role="alert"
+          className="flex items-start justify-between gap-3 rounded-xl border border-danger/30 bg-danger-soft px-4 py-3 text-sm text-danger"
+        >
+          <span>{aiAcceptError}</span>
+          <button
+            type="button"
+            onClick={() => setAiAcceptError(null)}
+            className="shrink-0 font-semibold text-danger hover:underline"
+          >
+            {t("editor.dismiss")}
+          </button>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_440px]">
         <div className="space-y-6">
           <Card className="space-y-4 p-5">
             <div>
-              <h2 className="font-display text-base font-semibold text-ink">Cover</h2>
+              <h2 className="text-base font-semibold text-ink">{t("editor.cover.heading")}</h2>
               <p className="mt-1 text-sm text-ink-soft">
-                Drag, resize, and edit the blocks on the first page: title, student fields, instructions, score box, and logo.
+                {t("editor.cover.desc")}
               </p>
             </div>
             <CoverDesigner title={title} layout={coverLayout} onChange={setCoverLayout} />
@@ -203,7 +265,7 @@ export function SheetEditor({
         <div className="lg:sticky lg:top-8 lg:self-start">
           <div className="mb-2 flex items-center justify-between gap-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft">
-              Preview
+              {t("editor.preview.label")}
             </p>
             <div className="flex shrink-0 flex-wrap gap-2">
               <button
@@ -212,7 +274,7 @@ export function SheetEditor({
                 className={buttonStyles("primary", "sm")}
               >
                 <Printer size={14} />
-                Print
+                {t("editor.preview.print")}
               </button>
               <a
                 href={`/sheets/${sheet.id}/print/gabarito`}
@@ -220,7 +282,7 @@ export function SheetEditor({
                 rel="noreferrer"
                 className={buttonStyles("outline", "sm")}
               >
-                Answer Key
+                {t("editor.preview.answerKey")}
               </a>
             </div>
           </div>

@@ -64,7 +64,7 @@ export function SettingsClient({ initialDisplayName, initialInstitution, current
   return (
     <div className="flex min-h-full flex-col">
       <header className="sticky top-0 z-10 flex items-center gap-4 border-b border-line bg-surface/95 px-8 py-4 backdrop-blur-[8px]">
-        <h1 className="text-[20px] font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
+        <h1 className="text-xl font-bold tracking-heading text-ink">
           {t("settings.title")}
         </h1>
       </header>
@@ -93,7 +93,7 @@ export function SettingsClient({ initialDisplayName, initialInstitution, current
         {/* Profile */}
         {tab === "profile" && (
           <section className="rounded-2xl border border-line bg-surface p-6 space-y-5">
-            <h2 className="text-base font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
+            <h2 className="text-base font-bold tracking-heading text-ink">
               {t("settings.profile.heading")}
             </h2>
             <form action={profileAction} className="space-y-4">
@@ -134,7 +134,7 @@ export function SettingsClient({ initialDisplayName, initialInstitution, current
         {tab === "account" && (
           <div className="space-y-5">
             <section className="rounded-2xl border border-line bg-surface p-6 space-y-4">
-              <h2 className="text-base font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
+              <h2 className="text-base font-bold tracking-heading text-ink">
                 {t("settings.account.changeEmail")}
               </h2>
               <p className="text-sm text-ink-soft">
@@ -160,7 +160,7 @@ export function SettingsClient({ initialDisplayName, initialInstitution, current
             </section>
 
             <section className="rounded-2xl border border-line bg-surface p-6 space-y-4">
-              <h2 className="text-base font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
+              <h2 className="text-base font-bold tracking-heading text-ink">
                 {t("settings.account.changePassword")}
               </h2>
               <form action={pwAction} className="space-y-4">
@@ -191,7 +191,7 @@ export function SettingsClient({ initialDisplayName, initialInstitution, current
         {/* Appearance */}
         {tab === "appearance" && (
           <section className="rounded-2xl border border-line bg-surface p-6 space-y-5">
-            <h2 className="text-base font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
+            <h2 className="text-base font-bold tracking-heading text-ink">
               {t("settings.appearance.heading")}
             </h2>
             <div className="space-y-4">

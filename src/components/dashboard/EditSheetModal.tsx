@@ -113,7 +113,7 @@ export function EditSheetModal({ open, onClose, sheet, subjects, allTopics }: Pr
 
         <div className="flex max-h-[calc(100vh-80px)] flex-col overflow-y-auto p-7">
           <div className="mb-5 flex items-center justify-between">
-            <h2 id="edit-modal-title" className="text-xl font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
+            <h2 id="edit-modal-title" className="text-xl font-bold tracking-heading text-ink">
               {t("editSheet.title")}
             </h2>
             <button

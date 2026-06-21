@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Spline_Sans_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Spline_Sans_Mono, Source_Serif_4 } from "next/font/google";
 import { getTheme, resolveTheme } from "@/lib/theme/server";
 import { ThemeProvider } from "@/lib/theme/client";
 import "./globals.css";
@@ -16,6 +16,14 @@ const splineMono = Spline_Sans_Mono({
   variable: "--font-spline-mono",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
+});
+
+// Print-only body serif: trialed for exam body/passage text, where teachers
+// expect the serif convention set by official exam papers (ENEM, AP, SAT).
+const sourceSerif = Source_Serif_4({
+  variable: "--font-print-serif",
+  subsets: ["latin"],
+  weight: ["400", "600"],
 });
 
 export const metadata: Metadata = {
@@ -37,7 +45,7 @@ export default async function RootLayout({
       data-theme={resolveTheme(theme)}
       data-theme-pref={theme}
       suppressHydrationWarning
-      className={`${plusJakarta.variable} ${splineMono.variable} h-full`}
+      className={`${plusJakarta.variable} ${splineMono.variable} ${sourceSerif.variable} h-full`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />

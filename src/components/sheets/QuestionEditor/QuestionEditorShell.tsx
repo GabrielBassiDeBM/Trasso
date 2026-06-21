@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { QuestionTypeEditor } from "./QuestionTypeEditor";
 import { cn } from "@/lib/utils/cn";
+import { useConfirm } from "@/lib/hooks/useConfirm";
 
 interface QuestionEditorShellProps {
   sheetId: string;
@@ -47,6 +48,7 @@ export function QuestionEditorShell({
   onRemoved,
   dragHandle,
 }: QuestionEditorShellProps) {
+  const { confirm, dialog: confirmDialog } = useConfirm();
   const [localPoints, setLocalPoints] = useState(points ?? 1);
   const [status, setStatus] = useState<"idle" | "saving" | "saved">("idle");
   const [aiMenuOpen, setAiMenuOpen] = useState(false);
@@ -90,8 +92,14 @@ export function QuestionEditorShell({
     updateQuestionPointsAction(sheetId, sheetQuestionId, value);
   }
 
-  function handleRemove() {
-    if (!confirm("Remove this question from the sheet?")) return;
+  async function handleRemove() {
+    const ok = await confirm({
+      title: "Remove question",
+      message: "Remove this question from the sheet?",
+      confirmLabel: "Remove",
+      cancelLabel: "Cancel",
+    });
+    if (!ok) return;
     removeQuestionAction(sheetId, sheetQuestionId);
     onRemoved();
   }
@@ -121,78 +129,81 @@ export function QuestionEditorShell({
   }
 
   return (
-    <Card className="p-5">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-3">
-        <div className="flex items-center gap-2">
-          {dragHandle}
-          <span className="font-display text-base font-semibold text-ink">Question {index + 1}</span>
-          <span className="rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-medium text-brand-dark">
-            {QUESTION_TYPE_LABELS[content.type]}
-          </span>
-        </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          {/* AI co-author menu */}
-          <div className="relative" ref={menuRef}>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => setAiMenuOpen((o) => !o)}
-              disabled={aiLoading}
-              className="gap-1"
-              aria-label="AI actions"
-            >
-              <Sparkles size={13} className="text-brand" />
-              {aiLoading ? "AI…" : "AI"}
-              <ChevronDown size={12} />
-            </Button>
-
-            {aiMenuOpen && (
-              <div className="absolute right-0 top-full z-20 mt-1 min-w-[196px] overflow-hidden rounded-xl border border-line bg-surface shadow-md">
-                {COAUTHOR_ACTIONS.map(({ action, label }) => (
-                  <button
-                    key={action}
-                    type="button"
-                    onClick={() => handleCoauthor(action)}
-                    className="flex w-full items-center px-4 py-2.5 text-left text-sm text-ink-soft hover:bg-brand-soft hover:text-brand"
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            )}
+    <>
+      <Card className="p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-3">
+          <div className="flex items-center gap-2">
+            {dragHandle}
+            <span className="text-base font-semibold text-ink">Question {index + 1}</span>
+            <span className="rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-medium text-brand-dark">
+              {QUESTION_TYPE_LABELS[content.type]}
+            </span>
           </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* AI co-author menu */}
+            <div className="relative" ref={menuRef}>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setAiMenuOpen((o) => !o)}
+                disabled={aiLoading}
+                className="gap-1"
+                aria-label="AI actions"
+              >
+                <Sparkles size={13} className="text-brand" />
+                {aiLoading ? "AI…" : "AI"}
+                <ChevronDown size={12} />
+              </Button>
 
-          {showPoints && (
-            <label className="flex items-center gap-1.5 text-xs text-ink-soft">
-              Points
-              <Input
-                type="number"
-                min={0}
-                step="0.5"
-                value={localPoints}
-                onChange={(event) => handlePointsChange(Number(event.target.value))}
-                className="w-16 px-2 py-1 text-center"
-              />
-            </label>
-          )}
-          <Button type="button" variant="ghost" size="sm" onClick={handleRemove}>
-            Remove
-          </Button>
+              {aiMenuOpen && (
+                <div className="absolute right-0 top-full z-20 mt-1 min-w-[196px] overflow-hidden rounded-xl border border-line bg-surface shadow-md">
+                  {COAUTHOR_ACTIONS.map(({ action, label }) => (
+                    <button
+                      key={action}
+                      type="button"
+                      onClick={() => handleCoauthor(action)}
+                      className="flex w-full items-center px-4 py-2.5 text-left text-sm text-ink-soft hover:bg-brand-soft hover:text-brand"
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {showPoints && (
+              <label className="flex items-center gap-1.5 text-xs text-ink-soft">
+                Points
+                <Input
+                  type="number"
+                  min={0}
+                  step="0.5"
+                  value={localPoints}
+                  onChange={(event) => handlePointsChange(Number(event.target.value))}
+                  className="w-16 px-2 py-1 text-center"
+                />
+              </label>
+            )}
+            <Button type="button" variant="ghost" size="sm" onClick={handleRemove}>
+              Remove
+            </Button>
+          </div>
         </div>
-      </div>
 
-      {aiError && (
-        <p className={cn("mt-2 text-xs text-danger")}>{aiError}</p>
-      )}
+        {aiError && (
+          <p className={cn("mt-2 text-xs text-danger")}>{aiError}</p>
+        )}
 
-      <div className="mt-4">
-        <QuestionTypeEditor content={content} onChange={onContentChange} />
-      </div>
+        <div className="mt-4">
+          <QuestionTypeEditor content={content} onChange={onContentChange} />
+        </div>
 
-      <p className="mt-3 text-right text-xs text-ink-faint">
-        {status === "saving" ? "Saving…" : status === "saved" ? "Saved" : " "}
-      </p>
-    </Card>
+        <p className="mt-3 text-right text-xs text-ink-faint">
+          {status === "saving" ? "Saving…" : status === "saved" ? "Saved" : " "}
+        </p>
+      </Card>
+      {confirmDialog}
+    </>
   );
 }

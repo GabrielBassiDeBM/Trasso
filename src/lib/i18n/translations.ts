@@ -42,6 +42,7 @@ const en = {
   "dashboard.selection.selectAll": "Select all",
   "dashboard.selection.clear": "Clear",
   "dashboard.selection.deleteSelected": "Delete",
+  "dashboard.selection.deleteTitle": "Delete sheets",
   "dashboard.selection.deleteConfirm": "Delete {n} sheets? This cannot be undone.",
 
   // Sheet card
@@ -96,6 +97,21 @@ const en = {
   "editSheet.btn.save": "Save changes",
   "editSheet.btn.saving": "Saving…",
 
+  // Sheet editor (workspace)
+  "editor.backToDashboard": "← Dashboard",
+  "editor.titleAriaLabel": "Sheet title",
+  "editor.status.saving": "Saving…",
+  "editor.status.saved": "Saved",
+  "editor.dismiss": "Dismiss",
+  "editor.aiAcceptError.partial_one": "{added} of {total} question added. {failed} failed.",
+  "editor.aiAcceptError.partial_many": "{added} of {total} questions added. {failed} failed.",
+  "editor.cover.heading": "Cover",
+  "editor.cover.desc":
+    "Drag, resize, and edit the blocks on the first page: title, student fields, instructions, score box, and logo.",
+  "editor.preview.label": "Preview",
+  "editor.preview.print": "Print",
+  "editor.preview.answerKey": "Answer Key",
+
   // Exam types
   "examType.select": "Select…",
   "examType.test": "Test / Exam",
@@ -122,6 +138,56 @@ const en = {
   "question.type.fill_blank": "Fill in the Blank",
   "question.type.matching": "Matching",
   "question.type.essay": "Essay",
+
+  // AI: Scan from photo modal
+  "aiScan.title": "Import questions from photo",
+  "aiScan.desc.before": "Take a photo or upload an image of printed questions. AI extracts ",
+  "aiScan.desc.bold": "all",
+  "aiScan.desc.after": " questions found automatically — text, type, and answer choices.",
+  "aiScan.dropzone.cta": "Click to select a photo",
+  "aiScan.dropzone.hint": "PNG, JPG, HEIC — up to 5 MB",
+  "aiScan.removeImage": "Remove image",
+  "aiScan.error.failed": "Failed to scan questions.",
+  "aiScan.error.noneFound": "No questions found in the image.",
+  "aiScan.selectFile": "Select file",
+  "aiScan.analyzing": "Analyzing…",
+  "aiScan.extractAll": "Extract all questions",
+  "aiScan.extracted_one": "{n} question extracted",
+  "aiScan.extracted_many": "{n} questions extracted",
+
+  // AI: Generate questions modal
+  "aiGenerate.title": "Generate questions with AI",
+  "aiGenerate.topic.label": "Topic",
+  "aiGenerate.topic.placeholder": "e.g. Integration by parts, Electrostatics, Cell respiration…",
+  "aiGenerate.types.label": "Question types",
+  "aiGenerate.error.failed": "Failed to generate questions.",
+  "aiGenerate.generating": "Generating…",
+  "aiGenerate.submit": "Generate questions",
+  "aiGenerate.reviewTitle": "Generated: {topic}",
+
+  // AI: Review panel
+  "aiReview.subtitle": "Review and accept the AI-generated questions",
+  "aiReview.closePanel": "Close panel",
+  "aiReview.generating": "AI is generating questions…",
+  "aiReview.noneYet": "No questions generated yet.",
+  "aiReview.regenerate": "Regenerate",
+  "aiReview.acceptAll": "Accept all ({n})",
+  "aiReview.questionLabel": "Question {n}",
+  "aiReview.accept": "Accept",
+  "aiReview.answerPrefix": "Answer:",
+
+  // Print config modal
+  "printConfig.title": "Print settings",
+  "printConfig.desc":
+    "Configure the versions to generate. With more than one version, questions are shuffled — each version gets its own answer card.",
+  "printConfig.versionsLabel": "Number of versions",
+  "printConfig.versionsHint": "Max 6 versions (A–F)",
+  "printConfig.shuffle.label": "Shuffle answer choices (MCQ)",
+  "printConfig.shuffle.hint": "Reorders options A, B, C… per version",
+  "printConfig.accessible.label": "Include accessible version",
+  "printConfig.accessible.hint": "Opens a second window with OpenDyslexic font and wider spacing",
+  "printConfig.preparing": "Preparing…",
+  "printConfig.submit": "Print / Save PDF",
 
   // Question Bank
   "bank.title": "Question Bank",
@@ -156,6 +222,7 @@ const en = {
   "bank.selection.selectAll": "Select all",
   "bank.selection.selectGroup": "Select group",
   "bank.selection.deleteSelected": "Delete",
+  "bank.selection.deleteTitle": "Delete questions",
   "bank.selection.deleteConfirm": "Delete {n} questions? This cannot be undone.",
   "bank.selection.addToSheet": "Add to sheet",
   "bank.selection.addToBank": "Add to my bank",
@@ -241,12 +308,14 @@ const en = {
   "classes.selectCancel": "Cancel",
   "classes.selectedCount": "{n} selected",
   "classes.deleteSelected": "Delete ({n})",
+  "classes.deleteSelectedTitle": "Delete classes",
   "classes.deleteSelectedConfirm": "Delete {n} class(es)? This cannot be undone.",
   "classes.count.none": "No students",
   "classes.count.one": "1 student",
   "classes.count.many": "{n} students",
   "classes.empty.title": "No classes yet",
   "classes.empty.desc": "Create a class to organize your students, track rosters, and assign sheets.",
+  "classes.class.deleteTitle": "Delete class",
   "classes.class.deleteConfirm": "Delete \"{name}\"? This cannot be undone.",
   "classes.a11y.count_one": "{n} student with accessibility needs",
   "classes.a11y.count_many": "{n} students with accessibility needs",
@@ -278,6 +347,124 @@ const en = {
 
   // Common
   "common.error.sessionExpired": "Session expired.",
+  "common.cancel": "Cancel",
+  "common.delete": "Delete",
+  "common.remove": "Remove",
+
+  // Organizations
+  "orgs.newButton": "New organization",
+  "orgs.create": "Create organization",
+  "orgs.empty.title": "No organizations yet",
+  "orgs.empty.desc":
+    "Create an organization to share sheets with your team, manage members, and set default cover templates.",
+  "orgs.viewDetails": "View details",
+  "orgs.role.owner": "Owner",
+  "orgs.role.admin": "Admin",
+  "orgs.role.member": "Member",
+  "orgs.new.desc": "Organize sheets with your team. All members can view and edit content.",
+  "orgs.new.nameLabel": "Organization name",
+  "orgs.new.namePlaceholder": "e.g. Jefferson High, Ms. Rivera's Class…",
+  "orgs.new.creating": "Creating…",
+  "orgs.members.title": "Members ({n})",
+  "orgs.members.fallbackName": "User",
+  "orgs.members.remove": "Remove member",
+  "orgs.members.removeConfirm": "Remove this member from the organization? They will lose access immediately.",
+  "orgs.invite.heading": "Invite person",
+  "orgs.invite.emailPlaceholder": "email@school.edu",
+  "orgs.invite.roleLabel": "Role",
+  "orgs.invite.success": "Invitation sent successfully!",
+  "orgs.invite.sending": "Sending…",
+  "orgs.invite.submit": "Send invitation",
+  "orgs.pending.title": "Pending invitations ({n})",
+  "orgs.pending.expires": "expires {date}",
+  "orgs.pending.badge": "Pending",
+  "invite.goToDashboard": "Go to dashboard",
+
+  // Landing nav (logged-out)
+  "nav.mySheets": "My sheets",
+  "nav.signIn": "Sign in",
+  "nav.signUp": "Sign up",
+  "nav.signOut": "Sign out",
+
+  // Landing page
+  "landing.hero.heading1": "Build the test.",
+  "landing.hero.heading2": "Skip the formatting.",
+  "landing.hero.subhead":
+    "trasso turns SAT and AP STEM questions, math formulas included, into a print-ready A4 PDF with a matching answer key. Write, paste, or scan a question; the layout takes care of itself.",
+  "landing.hero.ctaPrimary": "Create free account",
+  "landing.hero.ctaSecondary": "Sign in",
+  "landing.hero.freeNote": "Free to start. No credit card required.",
+  "landing.preview.title": "Calculus Practice — Set 4",
+  "landing.preview.name": "Name: _________________",
+  "landing.preview.size": "A4",
+  "landing.preview.q3": "Evaluate",
+  "landing.preview.q3.optionA": "3π² sin(π)",
+  "landing.preview.q3.optionB": "−π³",
+  "landing.preview.q3.optionC": "π³",
+  "landing.preview.q3.optionD": "3π² + π³",
+  "landing.preview.q4": "Find all critical points of f(x) = x³ − 3x² + 2 on [−1, 3].",
+  "landing.preview.page": "Page 1 of 3",
+  "landing.capabilities.heading": "Everything a problem set needs, nothing it doesn't.",
+  "landing.capabilities.latexHeading": "Type it once, see it rendered instantly",
+  "landing.capabilities.youType": "You type",
+  "landing.capabilities.itPrints": "It prints as",
+  "landing.capabilities.bank.title": "Reuse what you've already written",
+  "landing.capabilities.bank.desc":
+    "Save every question to a shared library, organized by subject and topic. Pull any of them into a new sheet in one click.",
+  "landing.capabilities.export.title": "One PDF, one answer key",
+  "landing.capabilities.export.desc":
+    "Export a print-ready A4 PDF and its complete answer key together. Works the same for multiple choice, open response, and essay.",
+  "landing.howItWorks.heading": "How it works",
+  "landing.howItWorks.step1.title": "Create a sheet",
+  "landing.howItWorks.step1.desc":
+    "Give it a title, choose the type (test, problem set, practice test), and start from scratch or generate with AI.",
+  "landing.howItWorks.step2.title": "Add questions",
+  "landing.howItWorks.step2.desc":
+    "Write or paste the prompt, pick the format (multiple choice, open answer, T/F, essay...) and add math formulas.",
+  "landing.howItWorks.step3.title": "Print",
+  "landing.howItWorks.step3.desc": "Preview the A4 layout, adjust the design, and export the PDF with a matching answer key.",
+  "landing.cta.heading": "Make your next test in the time it takes to print it.",
+  "landing.cta.subhead": "Create a free account and build your first sheet right now.",
+  "landing.cta.button": "Create free account",
+
+  // Auth — login
+  "auth.login.heading": "Sign in",
+  "auth.login.subhead": "Access your account to continue building your sheets.",
+  "auth.login.tabPassword": "Password",
+  "auth.login.tabMagic": "Email link",
+  "auth.login.email": "Email",
+  "auth.login.emailPlaceholder": "you@school.edu",
+  "auth.login.password": "Password",
+  "auth.login.passwordPlaceholder": "••••••••",
+  "auth.login.submit": "Sign in",
+  "auth.login.submitting": "Signing in…",
+  "auth.login.sendLink": "Send login link",
+  "auth.login.sending": "Sending…",
+  "auth.login.noAccount": "Don't have an account?",
+  "auth.login.createOne": "Create one now",
+
+  // Auth — signup
+  "auth.signup.heading": "Create account",
+  "auth.signup.subhead": "Build tests and worksheets in minutes, with an answer key included.",
+  "auth.signup.name": "Name",
+  "auth.signup.namePlaceholder": "Your name",
+  "auth.signup.email": "Email",
+  "auth.signup.emailPlaceholder": "you@school.edu",
+  "auth.signup.password": "Password",
+  "auth.signup.passwordPlaceholder": "At least 6 characters",
+  "auth.signup.submit": "Create account",
+  "auth.signup.submitting": "Creating account…",
+  "auth.signup.haveAccount": "Already have an account?",
+  "auth.signup.signIn": "Sign in",
+
+  // Auth — server-side errors and confirmations
+  "auth.error.emailPasswordRequired": "Please enter your email and password.",
+  "auth.error.passwordTooShort": "Password must be at least 6 characters.",
+  "auth.error.emailRequired": "Please enter your email.",
+  "auth.error.confirmEmail": "Please confirm your email before signing in. Check your inbox (and spam).",
+  "auth.error.invalidCredentials": "Invalid email or password.",
+  "auth.success.signupConfirm": "Account created! Check your email to confirm your sign-up before logging in.",
+  "auth.success.magicLinkSent": "We sent a login link to your email.",
 } as const;
 
 const pt: Record<keyof typeof en, string> = {
@@ -322,6 +509,7 @@ const pt: Record<keyof typeof en, string> = {
   "dashboard.selection.selectAll": "Selecionar todas",
   "dashboard.selection.clear": "Limpar",
   "dashboard.selection.deleteSelected": "Excluir",
+  "dashboard.selection.deleteTitle": "Excluir listas",
   "dashboard.selection.deleteConfirm": "Excluir {n} listas? Esta ação não pode ser desfeita.",
 
   // Sheet card
@@ -376,6 +564,21 @@ const pt: Record<keyof typeof en, string> = {
   "editSheet.btn.save": "Salvar alterações",
   "editSheet.btn.saving": "Salvando…",
 
+  // Sheet editor (workspace)
+  "editor.backToDashboard": "← Painel",
+  "editor.titleAriaLabel": "Título da lista",
+  "editor.status.saving": "Salvando…",
+  "editor.status.saved": "Salvo",
+  "editor.dismiss": "Dispensar",
+  "editor.aiAcceptError.partial_one": "{added} de {total} questão adicionada. {failed} falharam.",
+  "editor.aiAcceptError.partial_many": "{added} de {total} questões adicionadas. {failed} falharam.",
+  "editor.cover.heading": "Capa",
+  "editor.cover.desc":
+    "Arraste, redimensione e edite os blocos da primeira página: título, campos do aluno, instruções, caixa de pontuação e logo.",
+  "editor.preview.label": "Pré-visualização",
+  "editor.preview.print": "Imprimir",
+  "editor.preview.answerKey": "Gabarito",
+
   // Exam types
   "examType.select": "Selecionar…",
   "examType.test": "Lista / Exame",
@@ -402,6 +605,56 @@ const pt: Record<keyof typeof en, string> = {
   "question.type.fill_blank": "Preencher Lacunas",
   "question.type.matching": "Correspondência",
   "question.type.essay": "Dissertação",
+
+  // AI: Scan from photo modal
+  "aiScan.title": "Importar questões de uma foto",
+  "aiScan.desc.before": "Tire uma foto ou envie uma imagem de questões impressas. A IA extrai ",
+  "aiScan.desc.bold": "todas",
+  "aiScan.desc.after": " as questões encontradas automaticamente — texto, tipo e alternativas.",
+  "aiScan.dropzone.cta": "Clique para selecionar uma foto",
+  "aiScan.dropzone.hint": "PNG, JPG, HEIC — até 5 MB",
+  "aiScan.removeImage": "Remover imagem",
+  "aiScan.error.failed": "Falha ao escanear as questões.",
+  "aiScan.error.noneFound": "Nenhuma questão encontrada na imagem.",
+  "aiScan.selectFile": "Selecionar arquivo",
+  "aiScan.analyzing": "Analisando…",
+  "aiScan.extractAll": "Extrair todas as questões",
+  "aiScan.extracted_one": "{n} questão extraída",
+  "aiScan.extracted_many": "{n} questões extraídas",
+
+  // AI: Generate questions modal
+  "aiGenerate.title": "Gerar questões com IA",
+  "aiGenerate.topic.label": "Tópico",
+  "aiGenerate.topic.placeholder": "ex: Integração por partes, Eletrostática, Respiração celular…",
+  "aiGenerate.types.label": "Tipos de questão",
+  "aiGenerate.error.failed": "Falha ao gerar questões.",
+  "aiGenerate.generating": "Gerando…",
+  "aiGenerate.submit": "Gerar questões",
+  "aiGenerate.reviewTitle": "Gerado: {topic}",
+
+  // AI: Review panel
+  "aiReview.subtitle": "Revise e aceite as questões geradas pela IA",
+  "aiReview.closePanel": "Fechar painel",
+  "aiReview.generating": "A IA está gerando as questões…",
+  "aiReview.noneYet": "Nenhuma questão gerada ainda.",
+  "aiReview.regenerate": "Regerar",
+  "aiReview.acceptAll": "Aceitar todas ({n})",
+  "aiReview.questionLabel": "Questão {n}",
+  "aiReview.accept": "Aceitar",
+  "aiReview.answerPrefix": "Resposta:",
+
+  // Print config modal
+  "printConfig.title": "Configurações de impressão",
+  "printConfig.desc":
+    "Configure as versões a gerar. Com mais de uma versão, as questões são embaralhadas — cada versão recebe seu próprio gabarito.",
+  "printConfig.versionsLabel": "Número de versões",
+  "printConfig.versionsHint": "Máx. 6 versões (A–F)",
+  "printConfig.shuffle.label": "Embaralhar alternativas (múltipla escolha)",
+  "printConfig.shuffle.hint": "Reordena as alternativas A, B, C… por versão",
+  "printConfig.accessible.label": "Incluir versão acessível",
+  "printConfig.accessible.hint": "Abre uma segunda janela com fonte OpenDyslexic e espaçamento maior",
+  "printConfig.preparing": "Preparando…",
+  "printConfig.submit": "Imprimir / Salvar PDF",
 
   // Question Bank
   "bank.title": "Banco de Questões",
@@ -436,6 +689,7 @@ const pt: Record<keyof typeof en, string> = {
   "bank.selection.selectAll": "Selecionar todas",
   "bank.selection.selectGroup": "Selecionar grupo",
   "bank.selection.deleteSelected": "Excluir",
+  "bank.selection.deleteTitle": "Excluir questões",
   "bank.selection.deleteConfirm": "Excluir {n} questões? Esta ação não pode ser desfeita.",
   "bank.selection.addToSheet": "Adicionar à lista",
   "bank.selection.addToBank": "Adicionar ao meu banco",
@@ -521,12 +775,14 @@ const pt: Record<keyof typeof en, string> = {
   "classes.selectCancel": "Cancelar",
   "classes.selectedCount": "{n} selecionada(s)",
   "classes.deleteSelected": "Excluir ({n})",
+  "classes.deleteSelectedTitle": "Excluir turmas",
   "classes.deleteSelectedConfirm": "Excluir {n} turma(s)? Esta ação não pode ser desfeita.",
   "classes.count.none": "Sem alunos",
   "classes.count.one": "1 aluno",
   "classes.count.many": "{n} alunos",
   "classes.empty.title": "Nenhuma turma ainda",
   "classes.empty.desc": "Crie uma turma para organizar seus alunos, gerenciar a lista e atribuir atividades.",
+  "classes.class.deleteTitle": "Excluir turma",
   "classes.class.deleteConfirm": "Excluir \"{name}\"? Esta ação não pode ser desfeita.",
   "classes.a11y.count_one": "{n} aluno com necessidades de acessibilidade",
   "classes.a11y.count_many": "{n} alunos com necessidades de acessibilidade",
@@ -558,6 +814,124 @@ const pt: Record<keyof typeof en, string> = {
 
   // Common
   "common.error.sessionExpired": "Sessão expirada.",
+  "common.cancel": "Cancelar",
+  "common.delete": "Excluir",
+  "common.remove": "Remover",
+
+  // Organizations
+  "orgs.newButton": "Nova organização",
+  "orgs.create": "Criar organização",
+  "orgs.empty.title": "Nenhuma organização ainda",
+  "orgs.empty.desc":
+    "Crie uma organização para compartilhar listas com sua equipe, gerenciar membros e definir modelos de capa padrão.",
+  "orgs.viewDetails": "Ver detalhes",
+  "orgs.role.owner": "Proprietário",
+  "orgs.role.admin": "Admin",
+  "orgs.role.member": "Membro",
+  "orgs.new.desc": "Organize listas com sua equipe. Todos os membros podem visualizar e editar o conteúdo.",
+  "orgs.new.nameLabel": "Nome da organização",
+  "orgs.new.namePlaceholder": "ex: Escola Jefferson, Turma da Profa. Rivera…",
+  "orgs.new.creating": "Criando…",
+  "orgs.members.title": "Membros ({n})",
+  "orgs.members.fallbackName": "Usuário",
+  "orgs.members.remove": "Remover membro",
+  "orgs.members.removeConfirm": "Remover este membro da organização? Ele perderá o acesso imediatamente.",
+  "orgs.invite.heading": "Convidar pessoa",
+  "orgs.invite.emailPlaceholder": "email@escola.edu",
+  "orgs.invite.roleLabel": "Função",
+  "orgs.invite.success": "Convite enviado com sucesso!",
+  "orgs.invite.sending": "Enviando…",
+  "orgs.invite.submit": "Enviar convite",
+  "orgs.pending.title": "Convites pendentes ({n})",
+  "orgs.pending.expires": "expira em {date}",
+  "orgs.pending.badge": "Pendente",
+  "invite.goToDashboard": "Ir para o dashboard",
+
+  // Landing nav (logged-out)
+  "nav.mySheets": "Minhas listas",
+  "nav.signIn": "Entrar",
+  "nav.signUp": "Cadastrar",
+  "nav.signOut": "Sair",
+
+  // Landing page
+  "landing.hero.heading1": "Crie a prova.",
+  "landing.hero.heading2": "Sem se preocupar com formatação.",
+  "landing.hero.subhead":
+    "O trasso transforma questões de SAT e AP de exatas, com fórmulas matemáticas, em um PDF A4 pronto para impressão com gabarito incluído. Escreva, cole ou escaneie uma questão; a formatação cuida de si mesma.",
+  "landing.hero.ctaPrimary": "Criar conta gratuita",
+  "landing.hero.ctaSecondary": "Entrar",
+  "landing.hero.freeNote": "Gratuito para começar. Sem cartão de crédito.",
+  "landing.preview.title": "Lista de Cálculo — Série 4",
+  "landing.preview.name": "Nome: _________________",
+  "landing.preview.size": "A4",
+  "landing.preview.q3": "Calcule",
+  "landing.preview.q3.optionA": "3π² sin(π)",
+  "landing.preview.q3.optionB": "−π³",
+  "landing.preview.q3.optionC": "π³",
+  "landing.preview.q3.optionD": "3π² + π³",
+  "landing.preview.q4": "Encontre todos os pontos críticos de f(x) = x³ − 3x² + 2 em [−1, 3].",
+  "landing.preview.page": "Página 1 de 3",
+  "landing.capabilities.heading": "Tudo que uma lista de exercícios precisa, nada do que não precisa.",
+  "landing.capabilities.latexHeading": "Digite uma vez, veja renderizado na hora",
+  "landing.capabilities.youType": "Você digita",
+  "landing.capabilities.itPrints": "Imprime como",
+  "landing.capabilities.bank.title": "Reaproveite o que você já escreveu",
+  "landing.capabilities.bank.desc":
+    "Salve cada questão em uma biblioteca compartilhada, organizada por disciplina e tópico. Use qualquer uma delas em uma nova lista com um clique.",
+  "landing.capabilities.export.title": "Um PDF, um gabarito",
+  "landing.capabilities.export.desc":
+    "Exporte um PDF A4 pronto para impressão junto com o gabarito completo. Funciona da mesma forma para múltipla escolha, resposta aberta e dissertação.",
+  "landing.howItWorks.heading": "Como funciona",
+  "landing.howItWorks.step1.title": "Crie uma lista",
+  "landing.howItWorks.step1.desc":
+    "Dê um título, escolha o tipo (prova, lista de exercícios, simulado) e comece do zero ou gere com IA.",
+  "landing.howItWorks.step2.title": "Adicione questões",
+  "landing.howItWorks.step2.desc":
+    "Escreva ou cole o enunciado, escolha o formato (múltipla escolha, resposta aberta, V/F, dissertação...) e adicione fórmulas matemáticas.",
+  "landing.howItWorks.step3.title": "Imprima",
+  "landing.howItWorks.step3.desc": "Veja o layout A4, ajuste o design e exporte o PDF com o gabarito correspondente.",
+  "landing.cta.heading": "Crie sua próxima prova no tempo que leva para imprimir.",
+  "landing.cta.subhead": "Crie uma conta gratuita e monte sua primeira lista agora mesmo.",
+  "landing.cta.button": "Criar conta gratuita",
+
+  // Auth — login
+  "auth.login.heading": "Entrar",
+  "auth.login.subhead": "Acesse sua conta para continuar montando suas listas.",
+  "auth.login.tabPassword": "Senha",
+  "auth.login.tabMagic": "Link por e-mail",
+  "auth.login.email": "E-mail",
+  "auth.login.emailPlaceholder": "voce@escola.edu",
+  "auth.login.password": "Senha",
+  "auth.login.passwordPlaceholder": "••••••••",
+  "auth.login.submit": "Entrar",
+  "auth.login.submitting": "Entrando…",
+  "auth.login.sendLink": "Enviar link de acesso",
+  "auth.login.sending": "Enviando…",
+  "auth.login.noAccount": "Ainda não tem uma conta?",
+  "auth.login.createOne": "Crie uma agora",
+
+  // Auth — signup
+  "auth.signup.heading": "Criar conta",
+  "auth.signup.subhead": "Monte provas e listas de exercícios em minutos, com gabarito incluído.",
+  "auth.signup.name": "Nome",
+  "auth.signup.namePlaceholder": "Seu nome",
+  "auth.signup.email": "E-mail",
+  "auth.signup.emailPlaceholder": "voce@escola.edu",
+  "auth.signup.password": "Senha",
+  "auth.signup.passwordPlaceholder": "Pelo menos 6 caracteres",
+  "auth.signup.submit": "Criar conta",
+  "auth.signup.submitting": "Criando conta…",
+  "auth.signup.haveAccount": "Já tem uma conta?",
+  "auth.signup.signIn": "Entrar",
+
+  // Auth — server-side errors and confirmations
+  "auth.error.emailPasswordRequired": "Informe e-mail e senha.",
+  "auth.error.passwordTooShort": "A senha precisa ter pelo menos 6 caracteres.",
+  "auth.error.emailRequired": "Informe seu e-mail.",
+  "auth.error.confirmEmail": "Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada (e o spam).",
+  "auth.error.invalidCredentials": "E-mail ou senha inválidos.",
+  "auth.success.signupConfirm": "Conta criada! Verifique seu e-mail para confirmar o cadastro antes de entrar.",
+  "auth.success.magicLinkSent": "Enviamos um link de acesso para o seu e-mail.",
 };
 
 export const translations: Record<Locale, Record<keyof typeof en, string>> = { en, pt };

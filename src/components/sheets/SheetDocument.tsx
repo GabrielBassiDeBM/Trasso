@@ -153,12 +153,12 @@ function PassageBlock({ group }: { group: GroupItem }) {
   return (
     <div className="mb-5 break-inside-avoid">
       {group.passage && (
-        <div className="mb-3 rounded-md border border-black/15 bg-black/[0.02] p-3 text-[10.5pt] leading-relaxed text-black">
+        <div className="font-print-serif mb-3 rounded-md border border-black/15 bg-black/[0.02] p-3 text-[10.5pt] leading-relaxed text-black">
           <Latex text={group.passage} />
         </div>
       )}
       {group.instructions && (
-        <p className="mb-3 text-[10.5pt] italic leading-relaxed text-black">
+        <p className="font-print-serif mb-3 text-[10.5pt] italic leading-relaxed text-black">
           <Latex text={group.instructions} />
         </p>
       )}

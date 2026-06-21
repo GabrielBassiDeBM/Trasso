@@ -3,21 +3,31 @@ import type { Metadata } from "next";
 import { Building2, Plus, ArrowRight, Users } from "lucide-react";
 import { getUserOrgs } from "@/lib/data/sheets";
 import { buttonStyles } from "@/components/ui/Button";
+import { getLocale } from "@/lib/i18n/server";
+import { translate } from "@/lib/i18n/translations";
 
 export const metadata: Metadata = { title: "Organizations — trasso" };
 
+const ROLE_KEYS = {
+  dono: "orgs.role.owner",
+  admin: "orgs.role.admin",
+  membro: "orgs.role.member",
+} as const;
+
 export default async function OrgsPage() {
-  const orgs = await getUserOrgs();
+  const [orgs, locale] = await Promise.all([getUserOrgs(), getLocale()]);
+  const t = (key: Parameters<typeof translate>[1], vars?: Parameters<typeof translate>[2]) =>
+    translate(locale, key, vars);
 
   return (
     <div className="flex min-h-full flex-col">
       <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-line bg-surface/82 px-8 py-4 backdrop-blur-[8px]">
-        <h1 className="text-[20px] font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
-          Organizations
+        <h1 className="text-xl font-bold tracking-heading text-ink">
+          {t("nav.organizations")}
         </h1>
         <Link href="/orgs/new" className={buttonStyles("primary", "sm")}>
           <Plus size={15} />
-          New organization
+          {t("orgs.newButton")}
         </Link>
       </header>
 
@@ -27,12 +37,12 @@ export default async function OrgsPage() {
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-soft" aria-hidden="true">
               <Building2 size={24} className="text-brand" />
             </div>
-            <p className="font-semibold text-ink">No organizations yet</p>
+            <p className="font-semibold text-ink">{t("orgs.empty.title")}</p>
             <p className="mt-1 max-w-sm text-sm text-ink-soft">
-              Create an organization to share sheets with your team, manage members, and set default cover templates.
+              {t("orgs.empty.desc")}
             </p>
             <Link href="/orgs/new" className={`mt-6 ${buttonStyles("primary", "sm")}`}>
-              Create organization
+              {t("orgs.create")}
               <ArrowRight size={15} />
             </Link>
           </div>
@@ -48,8 +58,8 @@ export default async function OrgsPage() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-soft">
                     <Building2 size={18} className="text-brand" aria-hidden="true" />
                   </div>
-                  <span className="rounded-full bg-muted px-2.5 py-0.5 text-[11px] font-semibold capitalize text-ink-soft">
-                    {role === "dono" ? "Owner" : role === "admin" ? "Admin" : "Member"}
+                  <span className="rounded-full bg-muted px-2.5 py-0.5 text-2xs font-semibold capitalize text-ink-soft">
+                    {t(ROLE_KEYS[role as keyof typeof ROLE_KEYS] ?? "orgs.role.member")}
                   </span>
                 </div>
                 <div>
@@ -62,7 +72,7 @@ export default async function OrgsPage() {
                 </div>
                 <div className="mt-auto flex items-center gap-1.5 text-xs font-medium text-ink-soft">
                   <Users size={12} />
-                  View details
+                  {t("orgs.viewDetails")}
                   <ArrowRight size={12} className="ml-auto group-hover:translate-x-0.5 transition-transform" />
                 </div>
               </Link>

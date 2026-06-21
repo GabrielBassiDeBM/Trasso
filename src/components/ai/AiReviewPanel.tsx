@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
 import { X, Check, RefreshCw } from "lucide-react";
 import type { QuestionContent } from "@/lib/types/question";
-import { QUESTION_TYPE_LABELS } from "@/lib/types/question";
 import { Button } from "@/components/ui/Button";
 import { Latex } from "@/components/math/Latex";
 import { cn } from "@/lib/utils/cn";
+import { useEscapeToClose } from "@/lib/hooks/useKeyboardShortcuts";
+import { useT } from "@/lib/i18n/client";
 
 interface AiReviewPanelProps {
   open: boolean;
@@ -29,12 +29,8 @@ export function AiReviewPanel({
   onRegenerate,
   onClose,
 }: AiReviewPanelProps) {
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [open, onClose]);
+  const t = useT();
+  useEscapeToClose(open, onClose);
 
   if (!open) return null;
 
@@ -54,16 +50,16 @@ export function AiReviewPanel({
       >
         <div className="flex items-center justify-between border-b border-line px-6 py-4">
           <div>
-            <h2 id="ai-panel-title" className="font-display text-base font-semibold text-ink">
+            <h2 id="ai-panel-title" className="text-base font-semibold text-ink">
               {title}
             </h2>
             <p className="mt-0.5 text-xs text-ink-soft">
-              Review and accept the AI-generated questions
+              {t("aiReview.subtitle")}
             </p>
           </div>
           <button
             onClick={onClose}
-            aria-label="Close panel"
+            aria-label={t("aiReview.closePanel")}
             className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-ink-soft hover:bg-muted-strong hover:text-ink"
           >
             <X size={16} />
@@ -74,11 +70,11 @@ export function AiReviewPanel({
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20 gap-3">
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-brand border-t-transparent" />
-              <p className="text-sm text-ink-soft">AI is generating questions…</p>
+              <p className="text-sm text-ink-soft">{t("aiReview.generating")}</p>
             </div>
           ) : questions.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-              <p className="text-sm text-ink-soft">No questions generated yet.</p>
+              <p className="text-sm text-ink-soft">{t("aiReview.noneYet")}</p>
             </div>
           ) : (
             questions.map((q, i) => (
@@ -97,12 +93,12 @@ export function AiReviewPanel({
             {onRegenerate && (
               <Button type="button" variant="outline" size="sm" onClick={onRegenerate}>
                 <RefreshCw size={14} />
-                Regenerate
+                {t("aiReview.regenerate")}
               </Button>
             )}
             <div className="flex-1" />
             <Button type="button" variant="ghost" size="sm" onClick={onClose}>
-              Cancel
+              {t("newSheet.btn.cancel")}
             </Button>
             <Button
               type="button"
@@ -111,7 +107,7 @@ export function AiReviewPanel({
               onClick={() => onAccept(questions)}
             >
               <Check size={14} />
-              Accept all ({questions.length})
+              {t("aiReview.acceptAll", { n: questions.length })}
             </Button>
           </div>
         )}
@@ -129,18 +125,19 @@ function AiQuestionPreview({
   index: number;
   onAccept: () => void;
 }) {
+  const t = useT();
   return (
     <div className="rounded-xl border border-line bg-canvas p-4 space-y-2">
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="font-display text-sm font-semibold text-ink">Question {index + 1}</span>
+          <span className="text-sm font-semibold text-ink">{t("aiReview.questionLabel", { n: index + 1 })}</span>
           <span className="rounded-full bg-brand-soft px-2 py-0.5 text-[10px] font-medium text-brand-dark">
-            {QUESTION_TYPE_LABELS[question.type]}
+            {t(`question.type.${question.type}` as const)}
           </span>
         </div>
         <Button type="button" variant="accent" size="sm" onClick={onAccept}>
           <Check size={13} />
-          Accept
+          {t("aiReview.accept")}
         </Button>
       </div>
 
@@ -162,7 +159,7 @@ function AiQuestionPreview({
 
       {question.type === "true_false" && (
         <p className="text-xs text-ink-soft">
-          Answer: <span className="font-semibold text-ink">{question.answer ? "True" : "False"}</span>
+          {t("aiReview.answerPrefix")} <span className="font-semibold text-ink">{question.answer ? t("bank.addModal.tf.true") : t("bank.addModal.tf.false")}</span>
         </p>
       )}
     </div>

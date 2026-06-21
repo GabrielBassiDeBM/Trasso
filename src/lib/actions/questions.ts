@@ -77,6 +77,88 @@ export async function addQuestionAction(
   };
 }
 
+export interface BatchAddResult {
+  added: AddQuestionResult[];
+  /** Count of items that failed to insert (the request still succeeds for the rest). */
+  failed: number;
+}
+
+/**
+ * Inserts several questions at once (e.g. accepting an AI-generated batch). Runs the
+ * per-question inserts concurrently instead of one full request-response cycle at a time,
+ * and looks up the starting sheet position and revalidates the path once for the whole
+ * batch rather than once per question.
+ */
+export async function addQuestionsBatchAction(
+  sheetId: string,
+  items: { type: QuestionType; content: QuestionContent }[],
+): Promise<ActionResult<BatchAddResult>> {
+  if (items.length === 0) return { added: [], failed: 0 };
+
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return { error: "Session expired. Please sign in again." };
+  const ownerId = userData.user.id;
+
+  const sheet = await getSheet(sheetId);
+  const defaultAnswerLines = (sheet?.page_settings as { answerLines?: number } | null)?.answerLines;
+
+  const preparedContents = items.map(({ content }) =>
+    defaultAnswerLines && (content.type === "open" || content.type === "essay") && !content.answerLines
+      ? { ...content, answerLines: defaultAnswerLines }
+      : content,
+  );
+
+  const insertedQuestions = await Promise.all(
+    preparedContents.map(async (content) => {
+      const { data, error } = await supabase
+        .from("questions")
+        .insert({ owner_id: ownerId, ...toDbColumns(content) })
+        .select("id")
+        .single();
+      if (error || !data) return null;
+      return { questionId: data.id, content };
+    }),
+  );
+
+  const successfulQuestions = insertedQuestions.filter(
+    (r): r is { questionId: string; content: QuestionContent } => r !== null,
+  );
+  if (successfulQuestions.length === 0) {
+    return { error: "Could not create any of the questions." };
+  }
+
+  const startPosition = await getNextSheetPosition(supabase, sheetId);
+
+  const insertedLinks = await Promise.all(
+    successfulQuestions.map(async (q, i) => {
+      const { data, error } = await supabase
+        .from("sheet_questions")
+        .insert({ sheet_id: sheetId, question_id: q.questionId, position: startPosition + i, points: 1 })
+        .select("id")
+        .single();
+      if (error || !data) return null;
+      return { sheetQuestionId: data.id, position: startPosition + i, ...q };
+    }),
+  );
+
+  const added: AddQuestionResult[] = insertedLinks
+    .filter((r): r is { sheetQuestionId: string; position: number; questionId: string; content: QuestionContent } => r !== null)
+    .map((r) => ({
+      sheetQuestionId: r.sheetQuestionId,
+      questionId: r.questionId,
+      content: r.content,
+      position: r.position,
+      subjectId: null,
+      topicId: null,
+      difficulty: null,
+    }));
+
+  if (added.length > 0) revalidatePath(`/sheets/${sheetId}`);
+
+  return { added, failed: items.length - added.length };
+}
+
 export async function updateQuestionAction(
   sheetId: string,
   questionId: string,

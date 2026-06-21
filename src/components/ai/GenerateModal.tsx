@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { Wand2, X } from "lucide-react";
 import type { QuestionContent } from "@/lib/types/question";
-import { QUESTION_TYPES, QUESTION_TYPE_LABELS } from "@/lib/types/question";
+import { QUESTION_TYPES } from "@/lib/types/question";
 import type { Difficulty, QuestionType } from "@/lib/types/database";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Select } from "@/components/ui/Input";
 import { AiReviewPanel } from "./AiReviewPanel";
 import { cn } from "@/lib/utils/cn";
+import { useEscapeToClose } from "@/lib/hooks/useKeyboardShortcuts";
+import { useT } from "@/lib/i18n/client";
 
 interface GenerateModalProps {
   open: boolean;
@@ -17,6 +19,7 @@ interface GenerateModalProps {
 }
 
 export function GenerateModal({ open, onClose, onAccept }: GenerateModalProps) {
+  const t = useT();
   const [topic, setTopic] = useState("");
   const [count, setCount] = useState(5);
   const [difficulty, setDifficulty] = useState<Difficulty | "">("");
@@ -37,6 +40,8 @@ export function GenerateModal({ open, onClose, onAccept }: GenerateModalProps) {
     reset();
     onClose();
   }
+
+  useEscapeToClose(open && !showReview, handleClose);
 
   function toggleType(type: QuestionType) {
     setSelectedTypes((prev) =>
@@ -65,7 +70,7 @@ export function GenerateModal({ open, onClose, onAccept }: GenerateModalProps) {
     setLoading(false);
 
     if (!res.ok || data.error) {
-      setError(data.error ?? "Failed to generate questions.");
+      setError(data.error ?? t("aiGenerate.error.failed"));
       return;
     }
 
@@ -81,7 +86,7 @@ export function GenerateModal({ open, onClose, onAccept }: GenerateModalProps) {
     return (
       <AiReviewPanel
         open
-        title={`Generated: ${topic}`}
+        title={t("aiGenerate.reviewTitle", { topic })}
         questions={generated}
         loading={loading}
         onAccept={(qs) => { onAccept(qs); handleClose(); }}
@@ -109,11 +114,11 @@ export function GenerateModal({ open, onClose, onAccept }: GenerateModalProps) {
         <div className="p-7 space-y-5">
           <div className="flex items-center justify-between">
             <h2 id="gen-title" className="text-xl font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
-              Generate questions with AI
+              {t("aiGenerate.title")}
             </h2>
             <button
               onClick={handleClose}
-              aria-label="Close"
+              aria-label={t("newSheet.close")}
               className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-ink-soft hover:bg-muted-strong"
             >
               <X size={16} />
@@ -121,19 +126,19 @@ export function GenerateModal({ open, onClose, onAccept }: GenerateModalProps) {
           </div>
 
           <div>
-            <Label htmlFor="gen-topic">Topic</Label>
+            <Label htmlFor="gen-topic">{t("aiGenerate.topic.label")}</Label>
             <Input
               id="gen-topic"
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
-              placeholder="e.g. Integration by parts, Electrostatics, Cell respiration…"
+              placeholder={t("aiGenerate.topic.placeholder")}
               autoFocus
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="gen-count">No. of questions</Label>
+              <Label htmlFor="gen-count">{t("newSheet.ai.count")}</Label>
               <Input
                 id="gen-count"
                 type="number"
@@ -144,22 +149,22 @@ export function GenerateModal({ open, onClose, onAccept }: GenerateModalProps) {
               />
             </div>
             <div>
-              <Label htmlFor="gen-difficulty">Difficulty</Label>
+              <Label htmlFor="gen-difficulty">{t("newSheet.field.difficulty")}</Label>
               <Select
                 id="gen-difficulty"
                 value={difficulty}
                 onChange={(e) => setDifficulty(e.target.value as Difficulty | "")}
               >
-                <option value="">Mixed</option>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
+                <option value="">{t("difficulty.mixed")}</option>
+                <option value="easy">{t("difficulty.easy")}</option>
+                <option value="medium">{t("difficulty.medium")}</option>
+                <option value="hard">{t("difficulty.hard")}</option>
               </Select>
             </div>
           </div>
 
           <div>
-            <Label>Question types</Label>
+            <Label>{t("aiGenerate.types.label")}</Label>
             <div className="mt-1.5 flex flex-wrap gap-2">
               {QUESTION_TYPES.map((type) => (
                 <button
@@ -173,7 +178,7 @@ export function GenerateModal({ open, onClose, onAccept }: GenerateModalProps) {
                       : "border-line bg-canvas text-ink-soft hover:border-brand/40"
                   )}
                 >
-                  {QUESTION_TYPE_LABELS[type]}
+                  {t(`question.type.${type}` as const)}
                 </button>
               ))}
             </div>
@@ -183,7 +188,7 @@ export function GenerateModal({ open, onClose, onAccept }: GenerateModalProps) {
 
           <div className="flex justify-end gap-3">
             <Button type="button" variant="ghost" size="sm" onClick={handleClose}>
-              Cancel
+              {t("newSheet.btn.cancel")}
             </Button>
             <Button
               type="button"
@@ -192,7 +197,7 @@ export function GenerateModal({ open, onClose, onAccept }: GenerateModalProps) {
               onClick={handleGenerate}
               disabled={loading || !topic.trim() || selectedTypes.length === 0}
             >
-              {loading ? "Generating…" : "Generate questions"}
+              {loading ? t("aiGenerate.generating") : t("aiGenerate.submit")}
               {!loading && <Wand2 size={14} />}
             </Button>
           </div>

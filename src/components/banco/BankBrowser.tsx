@@ -21,6 +21,7 @@ import { BankQuestionCard } from "./BankQuestionCard";
 import { cn } from "@/lib/utils/cn";
 import { useT, useLocale } from "@/lib/i18n/client";
 import { translateTopicName } from "@/lib/i18n/translations";
+import { useConfirm } from "@/lib/hooks/useConfirm";
 import { deleteManyFromBankAction, pullManyFromBankAction, addManyToPersonalBankAction, getBankQuestionForEditAction, type BankQuestionForEdit } from "@/lib/actions/questions";
 import { AddToBankModal } from "./AddToBankModal";
 
@@ -290,6 +291,7 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
   const router = useRouter();
   const t = useT();
   const locale = useLocale();
+  const { confirm, dialog: confirmDialog } = useConfirm();
   const [, startTransition] = useTransition();
 
   // Filter state
@@ -354,8 +356,13 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
   }
 
   async function handleBulkDelete() {
-    const msg = t("bank.selection.deleteConfirm", { n: selectedIds.size } as Parameters<typeof t>[1]);
-    if (!confirm(msg)) return;
+    const ok = await confirm({
+      title: t("bank.selection.deleteTitle"),
+      message: t("bank.selection.deleteConfirm", { n: selectedIds.size }),
+      confirmLabel: t("common.delete"),
+      cancelLabel: t("common.cancel"),
+    });
+    if (!ok) return;
     setBulkWorking(true);
     startTransition(async () => {
       await deleteManyFromBankAction([...selectedIds]);
@@ -1023,6 +1030,8 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
           </div>
         </div>
       </div>
+
+      {confirmDialog}
     </div>
   );
 }

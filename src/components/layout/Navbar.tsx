@@ -3,11 +3,14 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { buttonStyles } from "@/components/ui/Button";
 import { signOutAction } from "@/lib/actions/auth";
+import { getLocale } from "@/lib/i18n/server";
+import { translate } from "@/lib/i18n/translations";
 
 export async function Navbar() {
   const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
+  const [{ data }, locale] = await Promise.all([supabase.auth.getUser(), getLocale()]);
   const user = data.user;
+  const t = (key: Parameters<typeof translate>[1]) => translate(locale, key);
 
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-surface/82 backdrop-blur-[8px]">
@@ -20,21 +23,21 @@ export async function Navbar() {
         {user ? (
           <nav className="flex items-center gap-2 sm:gap-4">
             <Link href="/dashboard" className="text-sm font-medium text-ink-soft transition-colors hover:text-ink">
-              My sheets
+              {t("nav.mySheets")}
             </Link>
             <form action={signOutAction}>
               <button type="submit" className={buttonStyles("ghost", "sm")}>
-                Sign out
+                {t("nav.signOut")}
               </button>
             </form>
           </nav>
         ) : (
           <nav className="flex items-center gap-2">
             <Link href="/login" className={buttonStyles("ghost", "sm")}>
-              Sign in
+              {t("nav.signIn")}
             </Link>
             <Link href="/signup" className={buttonStyles("primary", "sm")}>
-              Sign up
+              {t("nav.signUp")}
             </Link>
           </nav>
         )}

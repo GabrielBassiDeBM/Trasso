@@ -67,10 +67,10 @@ export default async function DashboardPage({
         <div className="min-w-0 flex-1 px-8 py-7">
           {/* Greeting */}
           <div className="mb-7">
-            <h2 className="text-[26px] font-extrabold text-ink" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-2xl font-extrabold tracking-heading text-ink">
               {getGreeting()}, {displayName} 👋
             </h2>
-            <p className="mt-1 text-[15px] text-ink-soft">
+            <p className="mt-1 text-base text-ink-soft">
               {sheets.length === 0 ? t("dashboard.createFirst") : sheetsFoundLabel}
             </p>
           </div>
@@ -126,7 +126,7 @@ export default async function DashboardPage({
 
         {/* Right panel — subject filter */}
         <aside className="hidden w-56 flex-shrink-0 border-l border-line px-5 py-7 lg:block">
-          <p className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-ink-faint">
+          <p className="mb-3 text-2xs font-semibold uppercase tracking-wider text-ink-faint">
             {t("dashboard.subject")}
           </p>
           <div className="flex flex-col gap-1">
@@ -138,7 +138,7 @@ export default async function DashboardPage({
                 <Link
                   href={`/dashboard?${params.toString()}`}
                   className={cn(
-                    "rounded-lg px-3 py-2 text-[13px] font-medium transition-colors",
+                    "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                     activeSubject === ""
                       ? "bg-brand-soft text-brand"
                       : "text-ink-soft hover:bg-muted hover:text-ink"
@@ -159,7 +159,7 @@ export default async function DashboardPage({
                   key={subject.id}
                   href={`/dashboard?${params.toString()}`}
                   className={cn(
-                    "rounded-lg px-3 py-2 text-[13px] font-medium transition-colors",
+                    "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                     activeSubject === subject.id
                       ? "bg-brand-soft text-brand"
                       : "text-ink-soft hover:bg-muted hover:text-ink"
@@ -195,9 +195,9 @@ function StatCard({
         <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${tintBg}`} aria-hidden="true">
           <Icon size={17} className={tintText} />
         </span>
-        <span className="text-[13px] font-semibold text-ink-soft">{label}</span>
+        <span className="text-sm font-semibold text-ink-soft">{label}</span>
       </div>
-      <span className="font-mono text-[32px] font-semibold leading-none tracking-tight text-ink">
+      <span className="font-mono text-3xl font-semibold leading-none tracking-tight text-ink">
         {value}
       </span>
     </div>

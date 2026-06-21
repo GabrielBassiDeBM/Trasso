@@ -5,6 +5,8 @@ import { Camera, Upload, X } from "lucide-react";
 import type { QuestionContent } from "@/lib/types/question";
 import { Button } from "@/components/ui/Button";
 import { AiReviewPanel } from "./AiReviewPanel";
+import { useEscapeToClose } from "@/lib/hooks/useKeyboardShortcuts";
+import { useT } from "@/lib/i18n/client";
 
 interface ScanModalProps {
   open: boolean;
@@ -13,6 +15,7 @@ interface ScanModalProps {
 }
 
 export function ScanModal({ open, onClose, onAccept }: ScanModalProps) {
+  const t = useT();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [mimeType, setMimeType] = useState("image/jpeg");
@@ -32,6 +35,8 @@ export function ScanModal({ open, onClose, onAccept }: ScanModalProps) {
     reset();
     onClose();
   }
+
+  useEscapeToClose(open && !showReview, handleClose);
 
   async function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -60,7 +65,7 @@ export function ScanModal({ open, onClose, onAccept }: ScanModalProps) {
     setLoading(false);
 
     if (!res.ok || data.error) {
-      setError(data.error ?? "Failed to scan questions.");
+      setError(data.error ?? t("aiScan.error.failed"));
       return;
     }
 
@@ -68,7 +73,7 @@ export function ScanModal({ open, onClose, onAccept }: ScanModalProps) {
       setScanned(data.questions);
       setShowReview(true);
     } else {
-      setError("No questions found in the image.");
+      setError(t("aiScan.error.noneFound"));
     }
   }
 
@@ -78,7 +83,7 @@ export function ScanModal({ open, onClose, onAccept }: ScanModalProps) {
     return (
       <AiReviewPanel
         open
-        title={`${scanned.length} question${scanned.length !== 1 ? "s" : ""} extracted`}
+        title={t(scanned.length === 1 ? "aiScan.extracted_one" : "aiScan.extracted_many", { n: scanned.length })}
         questions={scanned}
         loading={loading}
         onAccept={(qs) => { onAccept(qs); handleClose(); }}
@@ -106,11 +111,11 @@ export function ScanModal({ open, onClose, onAccept }: ScanModalProps) {
         <div className="p-7 space-y-5">
           <div className="flex items-center justify-between">
             <h2 id="scan-title" className="text-xl font-bold text-ink" style={{ letterSpacing: "-0.01em" }}>
-              Import questions from photo
+              {t("aiScan.title")}
             </h2>
             <button
               onClick={handleClose}
-              aria-label="Close"
+              aria-label={t("newSheet.close")}
               className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-ink-soft hover:bg-muted-strong"
             >
               <X size={16} />
@@ -118,7 +123,7 @@ export function ScanModal({ open, onClose, onAccept }: ScanModalProps) {
           </div>
 
           <p className="text-sm text-ink-soft">
-            Take a photo or upload an image of printed questions. AI extracts <strong>all</strong> questions found automatically — text, type, and answer choices.
+            {t("aiScan.desc.before")}<strong>{t("aiScan.desc.bold")}</strong>{t("aiScan.desc.after")}
           </p>
 
           {preview ? (
@@ -128,7 +133,7 @@ export function ScanModal({ open, onClose, onAccept }: ScanModalProps) {
               <button
                 onClick={reset}
                 className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
-                aria-label="Remove image"
+                aria-label={t("aiScan.removeImage")}
               >
                 <X size={14} />
               </button>
@@ -139,8 +144,8 @@ export function ScanModal({ open, onClose, onAccept }: ScanModalProps) {
               className="flex w-full flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-line bg-canvas py-12 text-ink-soft transition-colors hover:border-brand/40 hover:bg-brand-soft/30"
             >
               <Camera size={28} className="text-ink-faint" />
-              <span className="text-sm font-medium">Click to select a photo</span>
-              <span className="text-xs text-ink-faint">PNG, JPG, HEIC — up to 5 MB</span>
+              <span className="text-sm font-medium">{t("aiScan.dropzone.cta")}</span>
+              <span className="text-xs text-ink-faint">{t("aiScan.dropzone.hint")}</span>
             </button>
           )}
 
@@ -156,16 +161,16 @@ export function ScanModal({ open, onClose, onAccept }: ScanModalProps) {
 
           <div className="flex justify-end gap-3">
             <Button type="button" variant="ghost" size="sm" onClick={handleClose}>
-              Cancel
+              {t("newSheet.btn.cancel")}
             </Button>
             {!preview ? (
               <Button type="button" variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
                 <Upload size={14} />
-                Select file
+                {t("aiScan.selectFile")}
               </Button>
             ) : (
               <Button type="button" variant="primary" size="sm" onClick={handleScan} disabled={loading}>
-                {loading ? "Analyzing…" : "Extract all questions"}
+                {loading ? t("aiScan.analyzing") : t("aiScan.extractAll")}
                 {!loading && <Camera size={14} />}
               </Button>
             )}

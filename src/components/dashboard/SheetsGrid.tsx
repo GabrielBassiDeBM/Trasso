@@ -6,6 +6,7 @@ import { SheetCard } from "./SheetCard";
 import { deleteManySheetsAction } from "@/lib/actions/sheets";
 import { cn } from "@/lib/utils/cn";
 import { useT } from "@/lib/i18n/client";
+import { useConfirm } from "@/lib/hooks/useConfirm";
 import type { SheetWithTaxonomy, SubjectRow, TopicRow } from "@/lib/data/sheets";
 
 interface Props {
@@ -16,6 +17,7 @@ interface Props {
 
 export function SheetsGrid({ sheets, subjects, allTopics }: Props) {
   const t = useT();
+  const { confirm, dialog: confirmDialog } = useConfirm();
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [working, setWorking] = useState(false);
   const [, startTransition] = useTransition();
@@ -41,8 +43,13 @@ export function SheetsGrid({ sheets, subjects, allTopics }: Props) {
   }
 
   async function handleBulkDelete() {
-    const msg = t("dashboard.selection.deleteConfirm", { n: selectedIds.size });
-    if (!confirm(msg)) return;
+    const ok = await confirm({
+      title: t("dashboard.selection.deleteTitle"),
+      message: t("dashboard.selection.deleteConfirm", { n: selectedIds.size }),
+      confirmLabel: t("common.delete"),
+      cancelLabel: t("common.cancel"),
+    });
+    if (!ok) return;
     setWorking(true);
     startTransition(async () => {
       await deleteManySheetsAction([...selectedIds]);
@@ -98,7 +105,7 @@ export function SheetsGrid({ sheets, subjects, allTopics }: Props) {
         <div className="pointer-events-auto rounded-2xl border border-line bg-surface shadow-[0_12px_40px_rgba(27,20,48,0.13)]">
           <div className="h-[3px] rounded-t-2xl btn-gradient" />
           <div className="flex items-center gap-3 px-5 py-3">
-            <span className="flex h-6 min-w-[24px] items-center justify-center rounded-full bg-brand px-2 text-[11px] font-bold text-white">
+            <span className="flex h-6 min-w-[24px] items-center justify-center rounded-full bg-brand px-2 text-2xs font-bold text-white">
               {selectedIds.size}
             </span>
 
@@ -126,6 +133,8 @@ export function SheetsGrid({ sheets, subjects, allTopics }: Props) {
           </div>
         </div>
       </div>
+
+      {confirmDialog}
     </>
   );
 }
