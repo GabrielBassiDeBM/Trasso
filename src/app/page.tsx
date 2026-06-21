@@ -1,7 +1,16 @@
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { buttonStyles } from "@/components/ui/Button";
-import { SheetPreviewMock } from "@/components/marketing/SheetPreviewMock";
+import { HeroSheet } from "@/components/marketing/HeroSheet";
+import { PerforatedDivider } from "@/components/marketing/PerforatedDivider";
+import { Reveal } from "@/components/marketing/Reveal";
+import { QuestionStepLabel } from "@/components/marketing/QuestionStepLabel";
+import { ProblemMcq } from "@/components/marketing/ProblemMcq";
+import { ImportOrGenerate } from "@/components/marketing/ImportOrGenerate";
+import { BankFilterDemo } from "@/components/marketing/BankFilterDemo";
+import { CustomizeDemo } from "@/components/marketing/CustomizeDemo";
+import { AccessibilityDemo } from "@/components/marketing/AccessibilityDemo";
+import { ExportPreview } from "@/components/marketing/ExportPreview";
 import { getLocale } from "@/lib/i18n/server";
 import { translate } from "@/lib/i18n/translations";
 
@@ -9,93 +18,134 @@ export default async function Home() {
   const locale = await getLocale();
   const t = (key: Parameters<typeof translate>[1], vars?: Parameters<typeof translate>[2]) =>
     translate(locale, key, vars);
-
-  const STEPS = [
-    { number: "01", title: t("landing.howItWorks.step1.title"), description: t("landing.howItWorks.step1.desc") },
-    { number: "02", title: t("landing.howItWorks.step2.title"), description: t("landing.howItWorks.step2.desc") },
-    { number: "03", title: t("landing.howItWorks.step3.title"), description: t("landing.howItWorks.step3.desc") },
-  ];
+  const step = (n: number) => t("landing.step.label", { n });
 
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
 
       <main className="flex-1">
-        {/* Hero */}
-        <section className="relative overflow-hidden">
-          <div className="mx-auto grid w-full max-w-6xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-28">
-            <div className="max-w-xl">
-              <h1 className="font-display text-5xl font-extrabold leading-[1.04] tracking-[-0.02em] text-ink sm:text-6xl">
-                {t("landing.hero.heading1")}{" "}
-                <span className="text-brand">{t("landing.hero.heading2")}</span>
-              </h1>
-              <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink-soft">{t("landing.hero.subhead")}</p>
-              <div className="mt-9 flex flex-wrap gap-3">
-                <Link href="/signup" className={buttonStyles("primary", "lg")}>
-                  {t("landing.hero.ctaPrimary")}
-                </Link>
-                <Link href="/login" className={buttonStyles("outline", "lg")}>
-                  {t("landing.hero.ctaSecondary")}
-                </Link>
-              </div>
-              <p className="mt-4 text-sm text-ink-faint">{t("landing.hero.freeNote")}</p>
-            </div>
+        {/* Hero — the sheet itself is the hero, not a small accent beside the copy */}
+        <section className="bg-ruled-paper relative overflow-hidden">
+          <div className="mx-auto max-w-3xl px-4 pt-16 pb-20 text-center sm:px-6 sm:pt-20 sm:pb-28">
+            <p className="font-mono text-2xs tracking-[0.14em] text-brand-dark uppercase">{t("landing.hero.kicker")}</p>
+            <h1 className="mx-auto mt-3 max-w-2xl font-display text-4xl font-extrabold leading-[1.08] tracking-[-0.02em] text-ink sm:text-5xl">
+              {t("landing.hero.heading1")} <span className="text-brand-dark">{t("landing.hero.heading2")}</span>
+            </h1>
+            <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-ink-soft">{t("landing.hero.subhead")}</p>
 
-            <div className="relative">
+            <div className="relative mt-14">
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute -inset-x-10 -inset-y-16 -z-10 bg-[radial-gradient(closest-side,var(--color-brand-soft),transparent)] opacity-70"
               />
-              <SheetPreviewMock t={t} />
+              <Reveal>
+                <HeroSheet t={t} />
+              </Reveal>
             </div>
+
+            <div className="mt-12 flex flex-wrap justify-center gap-3">
+              <Link href="/signup" className={buttonStyles("primary", "lg")}>
+                {t("landing.hero.ctaPrimary")}
+              </Link>
+              <Link href="#questao-1" className={buttonStyles("outline", "lg")}>
+                {t("landing.hero.ctaSecondary")}
+              </Link>
+            </div>
+            <p className="mt-4 text-sm text-ink-faint">{t("landing.hero.freeNote")}</p>
           </div>
         </section>
 
-        {/* Capabilities */}
-        <section className="border-t border-line bg-surface/60 py-16 sm:py-20">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="max-w-md font-display text-3xl font-bold leading-tight text-ink sm:text-4xl">
-              {t("landing.capabilities.heading")}
-            </h2>
+        <PerforatedDivider />
 
-            <div className="mt-10 grid gap-10 lg:grid-cols-[0.55fr_0.45fr]">
-              <LatexShowcase t={t} />
+        {/* Questions 1–6 — each one demonstrates the feature it's asking about */}
+        <div className="relative border-t border-line py-4 sm:py-6">
+          <div
+            aria-hidden="true"
+            className="line-grow-v absolute top-0 bottom-0 left-[31px] hidden w-px bg-line sm:block"
+          />
 
-              <div className="flex flex-col gap-8 lg:pt-2">
-                <Capability title={t("landing.capabilities.bank.title")} description={t("landing.capabilities.bank.desc")} />
-                <Capability title={t("landing.capabilities.export.title")} description={t("landing.capabilities.export.desc")} />
-              </div>
-            </div>
-          </div>
-        </section>
+          <Question id="questao-1" label={step(1)} kicker={t("landing.q1.kicker")}>
+            <ProblemMcq
+              prompt={t("landing.q1.prompt")}
+              options={[t("landing.q1.optionA"), t("landing.q1.optionB"), t("landing.q1.optionC"), t("landing.q1.optionD")]}
+              note={t("landing.q1.note")}
+            />
+          </Question>
 
-        {/* How it works */}
-        <section className="py-16 sm:py-20">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{t("landing.howItWorks.heading")}</h2>
-            <div className="relative mt-10 grid gap-10 sm:grid-cols-3">
-              <div
-                aria-hidden="true"
-                className="absolute top-6 right-0 left-0 hidden h-px bg-line sm:block"
-              />
-              {STEPS.map((step) => (
-                <div key={step.number} className="relative">
-                  <p className="relative z-10 inline-block bg-canvas pr-4 font-display text-4xl font-extrabold text-brand sm:bg-transparent sm:pr-0">
-                    {step.number}
-                  </p>
-                  <h3 className="mt-4 font-display text-lg font-semibold text-ink">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">{step.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+          <Question id="questao-2" label={step(2)} kicker={t("landing.q2.kicker")} heading={t("landing.q2.heading")}>
+            <ImportOrGenerate
+              importTitle={t("landing.q2.import.title")}
+              importDesc={t("landing.q2.import.desc")}
+              aiTitle={t("landing.q2.ai.title")}
+              aiDesc={t("landing.q2.ai.desc")}
+              aiPrompt={t("landing.q2.ai.promptText")}
+              aiResultLabel={t("landing.q2.ai.resultLabel")}
+              aiResultChip={t("landing.q2.ai.resultChip")}
+            />
+          </Question>
 
-        {/* CTA */}
+          <Question id="questao-3" label={step(3)} kicker={t("landing.q3.kicker")} heading={t("landing.q3.heading")}>
+            <BankFilterDemo
+              filters={[
+                { label: t("landing.q3.filterSubject"), active: true },
+                { label: t("landing.q3.filterTopic") },
+                { label: t("landing.q3.filterDifficulty"), active: true },
+                { label: t("landing.q3.filterType") },
+                { label: t("landing.q3.filterSource") },
+                { label: t("landing.q3.filterSkills") },
+              ]}
+              resultsLabel={t("landing.q3.resultsLabel")}
+              addLabel={t("landing.q3.addLabel")}
+              results={[t("landing.bank.chip1"), t("landing.bank.chip2"), t("landing.bank.chip3")]}
+            />
+          </Question>
+
+          <Question id="questao-4" label={step(4)} kicker={t("landing.q4.kicker")} heading={t("landing.q4.heading")}>
+            <CustomizeDemo
+              difficultyLabel={t("landing.q4.difficultyLabel")}
+              difficulties={[
+                t("landing.q4.difficulty.easy"),
+                t("landing.q4.difficulty.medium"),
+                t("landing.q4.difficulty.hard"),
+              ]}
+              activeDifficulty={1}
+              shuffleLabel={t("landing.q4.shuffleLabel")}
+              versionLabel={t("landing.q4.versionLabel")}
+              regenerateLabel={t("landing.q4.regenerateLabel")}
+            />
+          </Question>
+
+          <Question id="questao-5" label={step(5)} kicker={t("landing.q5.kicker")} heading={t("landing.q5.heading")}>
+            <AccessibilityDemo
+              modes={[
+                { key: "standard", label: t("landing.q5.mode.standard") },
+                { key: "dyslexia", label: t("landing.q5.mode.dyslexia") },
+                { key: "adhd", label: t("landing.q5.mode.adhd") },
+                { key: "autism", label: t("landing.q5.mode.autism") },
+                { key: "lowVision", label: t("landing.q5.mode.lowVision") },
+              ]}
+              previewText={t("landing.preview.q4")}
+            />
+          </Question>
+
+          <Question id="questao-6" label={step(6)} kicker={t("landing.q6.kicker")} heading={t("landing.q6.heading")}>
+            <ExportPreview
+              pdfLabel={t("landing.q6.pdfLabel")}
+              keyLabel={t("landing.q6.keyLabel")}
+              versionsLabel={t("landing.q6.versionsLabel")}
+            />
+            <Reveal delayMs={120}>
+              <p className="mt-4 text-sm leading-relaxed text-ink-soft">{t("landing.q6.note")}</p>
+            </Reveal>
+          </Question>
+        </div>
+
+        {/* Final question — the CTA */}
         <section className="relative overflow-hidden border-t border-line py-20 sm:py-24">
           <div
             aria-hidden="true"
-            className="absolute inset-0 -z-10"
+            className="animate-gradient-drift absolute inset-0 -z-10"
             style={{ background: "linear-gradient(120deg, var(--color-brand-dark) 0%, var(--color-brand) 55%, var(--color-accent) 100%)" }}
           />
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -105,18 +155,19 @@ export default async function Home() {
             aria-hidden="true"
             className="pointer-events-none absolute -right-24 -bottom-24 w-[28rem] opacity-[0.12]"
           />
-          <div className="relative mx-auto max-w-2xl px-4 text-center sm:px-6">
-            <h2 className="font-display text-3xl font-bold text-white sm:text-4xl">{t("landing.cta.heading")}</h2>
-            <p className="mt-3 text-white/80">{t("landing.cta.subhead")}</p>
-            <div className="mt-7 flex justify-center">
+          <Reveal className="relative mx-auto max-w-2xl px-4 text-center sm:px-6">
+            <p className="font-mono text-2xs tracking-[0.14em] text-white/70 uppercase">{t("landing.step.final")}</p>
+            <h2 className="mt-2 font-display text-3xl font-bold text-white sm:text-4xl">{t("landing.final.prompt")}</h2>
+            <div className="mt-7 flex flex-col items-center gap-3">
+              <p className="text-sm text-white/60 line-through">{t("landing.final.optionA")}</p>
               <Link
                 href="/signup"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-7 text-base font-semibold text-brand-dark transition-opacity hover:opacity-90"
               >
-                {t("landing.cta.button")}
+                {t("landing.final.optionB")}
               </Link>
             </div>
-          </div>
+          </Reveal>
         </section>
       </main>
 
@@ -127,44 +178,34 @@ export default async function Home() {
   );
 }
 
-type T = (key: Parameters<typeof translate>[1], vars?: Parameters<typeof translate>[2]) => string;
-
-function Capability({ title, description }: { title: string; description: string }) {
+function Question({
+  id,
+  label,
+  kicker,
+  heading,
+  children,
+}: {
+  id: string;
+  label: string;
+  kicker: string;
+  heading?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div>
-      <h3 className="font-display text-xl font-bold text-ink">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-ink-soft">{description}</p>
-    </div>
-  );
-}
-
-/** Static facsimile of the LaTeX editor: raw input above, the rendered result below. */
-function LatexShowcase({ t }: { t: T }) {
-  return (
-    <div className="overflow-hidden rounded-2xl border border-line bg-canvas">
-      <div className="border-b border-line bg-surface px-5 py-3">
-        <h3 className="font-display text-xl font-bold text-ink">{t("landing.capabilities.latexHeading")}</h3>
-      </div>
-      <div className="grid divide-y divide-line sm:grid-cols-2 sm:divide-x sm:divide-y-0">
-        <div className="p-5">
-          <p className="text-xs font-semibold text-ink-faint">{t("landing.capabilities.youType")}</p>
-          <pre className="mt-2 overflow-x-auto rounded-lg bg-surface p-3 font-mono text-[13px] text-ink-soft">
-            x = \frac{"{"}-b \pm \sqrt{"{"}b^2-4ac{"}"}{"}"}{"{"}2a{"}"}
-          </pre>
-        </div>
-        <div className="flex flex-col p-5">
-          <p className="text-xs font-semibold text-ink-faint">{t("landing.capabilities.itPrints")}</p>
-          <div className="mt-2 flex flex-1 items-center justify-center rounded-lg bg-surface p-4">
-            <p className="font-display text-lg text-ink">
-              x ={" "}
-              <span className="mx-1 inline-flex flex-col items-center text-center align-middle text-base leading-none">
-                <span className="px-1">−b ± √(b² − 4ac)</span>
-                <span className="w-full border-t border-ink/60 px-1">2a</span>
-              </span>
-            </p>
-          </div>
+    <section id={id} className="py-10 sm:py-12">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <div className="sm:pl-16">
+          <Reveal>
+            <QuestionStepLabel label={label} kicker={kicker} />
+            {heading && (
+              <h2 className="mt-3 max-w-2xl font-display text-2xl font-bold leading-snug text-ink sm:text-3xl">
+                {heading}
+              </h2>
+            )}
+          </Reveal>
+          <div className="mt-6">{children}</div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

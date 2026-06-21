@@ -15,14 +15,20 @@ export async function Navbar() {
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-surface/82 backdrop-blur-[8px]">
       <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-3">
+        <Link
+          href={user ? "/dashboard" : "/"}
+          className="flex items-center gap-3 rounded-lg transition-transform duration-150 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+        >
           <Image src="/trasso-logo.svg" alt="trasso" width={52} height={52} className="h-13 w-13 rounded-xl" />
           <span className="hidden font-display text-2xl font-bold text-ink sm:inline">trasso</span>
         </Link>
 
         {user ? (
-          <nav className="flex items-center gap-2 sm:gap-4">
-            <Link href="/dashboard" className="text-sm font-medium text-ink-soft transition-colors hover:text-ink">
+          <nav className="flex items-center gap-3 sm:gap-5">
+            <Link
+              href="/dashboard"
+              className="rounded-md px-1 py-1.5 text-sm font-medium text-ink-soft transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+            >
               {t("nav.mySheets")}
             </Link>
             <form action={signOutAction}>
@@ -32,8 +38,11 @@ export async function Navbar() {
             </form>
           </nav>
         ) : (
-          <nav className="flex items-center gap-2">
-            <Link href="/login" className={buttonStyles("ghost", "sm")}>
+          <nav className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="rounded-md px-1 py-1.5 text-sm font-medium text-ink-soft transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+            >
               {t("nav.signIn")}
             </Link>
             <Link href="/signup" className={buttonStyles("primary", "sm")}>
