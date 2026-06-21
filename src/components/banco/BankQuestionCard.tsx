@@ -190,8 +190,9 @@ export function BankQuestionCard({
   return (
     <>
       <div
+        onClick={() => onToggleSelect?.(question.id)}
         className={cn(
-          "group relative flex flex-col rounded-2xl border transition-all duration-150",
+          "group relative flex cursor-pointer flex-col rounded-2xl border transition-all duration-150",
           selected
             ? "border-brand shadow-[0_0_0_3px_rgba(167,30,251,0.12)] hover:shadow-[0_0_0_3px_rgba(167,30,251,0.18)]"
             : "border-line bg-surface hover:-translate-y-0.5 hover:shadow-md",
@@ -288,7 +289,7 @@ export function BankQuestionCard({
               "flex-1 cursor-pointer text-[13px] leading-relaxed text-ink",
               !expanded && isLong && "line-clamp-3",
             )}
-            onClick={() => isLong && setExpanded((e) => !e)}
+            onClick={(e) => { if (isLong) { e.stopPropagation(); setExpanded((v) => !v); } }}
           >
             <Latex text={question.statement} />
           </div>
@@ -297,7 +298,7 @@ export function BankQuestionCard({
           {isLong && (
             <button
               type="button"
-              onClick={() => setExpanded((e) => !e)}
+              onClick={(e) => { e.stopPropagation(); setExpanded((v) => !v); }}
               className="mt-1.5 flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
             >
               {expanded ? (
