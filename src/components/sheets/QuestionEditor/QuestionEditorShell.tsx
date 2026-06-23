@@ -147,12 +147,13 @@ export function QuestionEditorShell({
                 variant="outline"
                 size="sm"
                 onClick={() => setAiMenuOpen((o) => !o)}
-                disabled={aiLoading}
-                className="gap-1"
-                aria-label="AI actions"
+                disabled
+                className="gap-1 opacity-50 grayscale cursor-not-allowed"
+                aria-label="AI actions (disabled)"
+                title="AI features are currently disabled"
               >
                 <Sparkles size={13} className="text-brand" />
-                {aiLoading ? "AI…" : "AI"}
+                AI
                 <ChevronDown size={12} />
               </Button>
 

@@ -410,6 +410,9 @@ export function QuestionList({
             variant="outline"
             size="sm"
             onClick={() => setGenerateOpen(true)}
+            disabled
+            className="opacity-50 grayscale cursor-not-allowed"
+            title="AI features are currently disabled"
           >
             <Wand2 size={14} className="text-brand" />
             Generate with AI
@@ -419,6 +422,9 @@ export function QuestionList({
             variant="outline"
             size="sm"
             onClick={() => setScanOpen(true)}
+            disabled
+            className="opacity-50 grayscale cursor-not-allowed"
+            title="AI features are currently disabled"
           >
             <Camera size={14} className="text-accent-dark" />
             Scan photo

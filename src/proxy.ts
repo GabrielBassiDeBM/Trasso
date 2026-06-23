@@ -1,10 +1,37 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PROTECTED_PREFIXES = ["/dashboard", "/sheets"];
+const PROTECTED_PREFIXES = ["/dashboard", "/sheets", "/banco", "/classes", "/gabarito", "/orgs", "/settings"];
 const AUTH_PAGES = ["/login", "/signup"];
 
+// API routes use cookie-based Supabase auth, so they're reachable from any
+// origin unless we check Origin ourselves (Server Actions get this for free
+// from Next.js's built-in CSRF check; route.ts handlers under /api don't).
+function isTrustedOrigin(request: NextRequest): boolean {
+  const origin = request.headers.get("origin");
+  if (!origin) return true; // same-origin browser navigations omit Origin on simple requests
+
+  const allowed = new Set([request.nextUrl.origin]);
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    try {
+      allowed.add(new URL(process.env.NEXT_PUBLIC_SITE_URL).origin);
+    } catch {
+      // ignore malformed env value
+    }
+  }
+  return allowed.has(origin);
+}
+
 export async function proxy(request: NextRequest) {
+  if (
+    request.nextUrl.pathname.startsWith("/api/") &&
+    request.method !== "GET" &&
+    request.method !== "HEAD" &&
+    !isTrustedOrigin(request)
+  ) {
+    return NextResponse.json({ error: "Cross-origin request blocked" }, { status: 403 });
+  }
+
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(

@@ -1,13 +1,26 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { getLocale } from "@/lib/i18n/server";
 import { translate } from "@/lib/i18n/translations";
+import { takeToken, getClientIp } from "@/lib/rateLimiter";
 
 export interface AuthActionState {
   error: string | null;
   success?: string;
+}
+
+const LOGIN_WINDOW_MS = 15 * 60 * 1000;
+const LOGIN_MAX_ATTEMPTS = 10;
+const SIGNUP_WINDOW_MS = 60 * 60 * 1000;
+const SIGNUP_MAX_ATTEMPTS = 5;
+
+/** Best-effort brute-force throttle keyed by IP+email — see rateLimiter.ts TODO re: multi-instance deploys. */
+async function checkAuthRateLimit(bucket: string, email: string, limit: number, windowMs: number) {
+  const ip = getClientIp(await headers());
+  return takeToken(`${bucket}:${ip}:${email.toLowerCase()}`, limit, windowMs);
 }
 
 function siteUrl() {
@@ -30,6 +43,11 @@ export async function signUpAction(_prev: AuthActionState, formData: FormData): 
   }
   if (password.length < 6) {
     return { error: translate(locale, "auth.error.passwordTooShort") };
+  }
+
+  const limit = await checkAuthRateLimit("signup", email, SIGNUP_MAX_ATTEMPTS, SIGNUP_WINDOW_MS);
+  if (!limit.ok) {
+    return { error: translate(locale, "auth.error.tooManyAttempts") };
   }
 
   const supabase = await createClient();
@@ -62,6 +80,11 @@ export async function signInAction(_prev: AuthActionState, formData: FormData): 
     return { error: translate(locale, "auth.error.emailPasswordRequired") };
   }
 
+  const limit = await checkAuthRateLimit("signin", email, LOGIN_MAX_ATTEMPTS, LOGIN_WINDOW_MS);
+  if (!limit.ok) {
+    return { error: translate(locale, "auth.error.tooManyAttempts") };
+  }
+
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
@@ -81,6 +104,11 @@ export async function sendMagicLinkAction(_prev: AuthActionState, formData: Form
 
   if (!email) {
     return { error: translate(locale, "auth.error.emailRequired") };
+  }
+
+  const limit = await checkAuthRateLimit("magic-link", email, LOGIN_MAX_ATTEMPTS, LOGIN_WINDOW_MS);
+  if (!limit.ok) {
+    return { error: translate(locale, "auth.error.tooManyAttempts") };
   }
 
   const supabase = await createClient();

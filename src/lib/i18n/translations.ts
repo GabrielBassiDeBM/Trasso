@@ -513,6 +513,7 @@ const en = {
   "auth.error.emailRequired": "Please enter your email.",
   "auth.error.confirmEmail": "Please confirm your email before signing in. Check your inbox (and spam).",
   "auth.error.invalidCredentials": "Invalid email or password.",
+  "auth.error.tooManyAttempts": "Too many attempts. Please wait a few minutes and try again.",
   "auth.success.signupConfirm": "Account created! Check your email to confirm your sign-up before logging in.",
   "auth.success.magicLinkSent": "We sent a login link to your email.",
 } as const;
@@ -1030,6 +1031,7 @@ const pt: Record<keyof typeof en, string> = {
   "auth.error.emailRequired": "Informe seu e-mail.",
   "auth.error.confirmEmail": "Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada (e o spam).",
   "auth.error.invalidCredentials": "E-mail ou senha inválidos.",
+  "auth.error.tooManyAttempts": "Muitas tentativas. Aguarde alguns minutos e tente novamente.",
   "auth.success.signupConfirm": "Conta criada! Verifique seu e-mail para confirmar o cadastro antes de entrar.",
   "auth.success.magicLinkSent": "Enviamos um link de acesso para o seu e-mail.",
 };

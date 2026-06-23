@@ -42,11 +42,17 @@ export async function updateGroupAction(
   updates: { passage?: string | null; instructions?: string | null; title?: string | null; level?: number }
 ): Promise<void> {
   const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
   await supabase.from("question_groups").update(updates).eq("id", groupId);
 }
 
 export async function removeGroupAction(groupId: string): Promise<void> {
   const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
   await supabase.from("question_groups").delete().eq("id", groupId);
 }
 
@@ -58,6 +64,9 @@ export async function reorderSheetEntitiesAction(
   entries: SheetEntityRef[],
 ): Promise<void> {
   const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
   await Promise.all(
     entries.map((entry, index) =>
       entry.kind === "item"

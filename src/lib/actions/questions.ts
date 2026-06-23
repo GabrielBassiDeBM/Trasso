@@ -165,7 +165,14 @@ export async function updateQuestionAction(
   content: QuestionContent,
 ): Promise<{ error: string | null }> {
   const supabase = await createClient();
-  const { error } = await supabase.from("questions").update(toDbColumns(content)).eq("id", questionId);
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return { error: "Session expired." };
+
+  const { error } = await supabase
+    .from("questions")
+    .update(toDbColumns(content))
+    .eq("id", questionId)
+    .eq("owner_id", userData.user.id);
 
   if (error) return { error: error.message };
   revalidatePath(`/sheets/${sheetId}`);
@@ -178,6 +185,9 @@ export async function updateQuestionPointsAction(
   points: number | null,
 ): Promise<void> {
   const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
   await supabase.from("sheet_questions").update({ points }).eq("id", sheetQuestionId);
   revalidatePath(`/sheets/${sheetId}`);
 }
@@ -187,6 +197,9 @@ export async function removeQuestionAction(
   sheetQuestionId: string,
 ): Promise<void> {
   const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
   await supabase.from("sheet_questions").delete().eq("id", sheetQuestionId);
   revalidatePath(`/sheets/${sheetId}`);
 }

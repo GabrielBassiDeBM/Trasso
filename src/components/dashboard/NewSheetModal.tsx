@@ -88,9 +88,9 @@ export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
   ];
 
   const MODES = [
-    { id: "blank" as CreationMode, label: t("newSheet.mode.blank"), icon: FileText, description: t("newSheet.mode.blankDesc") },
-    { id: "ai_generate" as CreationMode, label: t("newSheet.mode.ai"), icon: Wand2, description: t("newSheet.mode.aiDesc") },
-    { id: "scan" as CreationMode, label: t("newSheet.mode.scan"), icon: Camera, description: t("newSheet.mode.scanDesc") },
+    { id: "blank" as CreationMode, label: t("newSheet.mode.blank"), icon: FileText, description: t("newSheet.mode.blankDesc"), disabled: false },
+    { id: "ai_generate" as CreationMode, label: t("newSheet.mode.ai"), icon: Wand2, description: t("newSheet.mode.aiDesc"), disabled: true },
+    { id: "scan" as CreationMode, label: t("newSheet.mode.scan"), icon: Camera, description: t("newSheet.mode.scanDesc"), disabled: true },
   ];
 
   return (
@@ -128,10 +128,14 @@ export function NewSheetModal({ open, onClose, subjects, allTopics }: Props) {
               <button
                 key={m.id}
                 type="button"
-                onClick={() => setMode(m.id)}
+                disabled={m.disabled}
+                onClick={() => !m.disabled && setMode(m.id)}
+                title={m.disabled ? "AI features are currently disabled" : undefined}
                 className={cn(
                   "flex flex-col items-center gap-1.5 rounded-xl border p-3 text-center transition-colors",
-                  mode === m.id
+                  m.disabled
+                    ? "cursor-not-allowed border-line bg-canvas text-ink-faint opacity-50 grayscale"
+                    : mode === m.id
                     ? "border-brand bg-brand-soft text-brand"
                     : "border-line bg-canvas text-ink-soft hover:border-brand/40 hover:bg-brand-soft/50",
                 )}

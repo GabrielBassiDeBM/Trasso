@@ -65,7 +65,10 @@ export async function renameSheetAction(formData: FormData): Promise<void> {
   if (!id || !title) return;
 
   const supabase = await createClient();
-  await supabase.from("sheets").update({ title }).eq("id", id);
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
+  await supabase.from("sheets").update({ title }).eq("id", id).eq("owner_id", userData.user.id);
 
   revalidatePath("/dashboard");
   revalidatePath(`/sheets/${id}`);
@@ -111,7 +114,10 @@ export async function deleteSheetAction(formData: FormData): Promise<void> {
   if (!id) return;
 
   const supabase = await createClient();
-  await supabase.from("sheets").delete().eq("id", id);
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
+  await supabase.from("sheets").delete().eq("id", id).eq("owner_id", userData.user.id);
 
   revalidatePath("/dashboard");
 }
@@ -131,20 +137,28 @@ export async function deleteManySheetsAction(sheetIds: string[]): Promise<{ erro
 
 export async function updatePageSettingsAction(sheetId: string, settings: PageSettings): Promise<void> {
   const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
   await supabase
     .from("sheets")
     .update({ page_settings: settings as unknown as Json })
-    .eq("id", sheetId);
+    .eq("id", sheetId)
+    .eq("owner_id", userData.user.id);
 
   revalidatePath(`/sheets/${sheetId}`);
 }
 
 export async function updateCoverLayoutAction(sheetId: string, layout: CoverLayout): Promise<void> {
   const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
   await supabase
     .from("sheets")
     .update({ cover_layout: layout as unknown as Json })
-    .eq("id", sheetId);
+    .eq("id", sheetId)
+    .eq("owner_id", userData.user.id);
 
   revalidatePath(`/sheets/${sheetId}`);
 }
@@ -154,7 +168,10 @@ export async function updateSheetMetaAction(
   meta: { grade_level?: string | null; turma?: string | null; exam_type?: ExamType | null; categories?: string[] }
 ): Promise<void> {
   const supabase = await createClient();
-  await supabase.from("sheets").update(meta).eq("id", sheetId);
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
+  await supabase.from("sheets").update(meta).eq("id", sheetId).eq("owner_id", userData.user.id);
   revalidatePath(`/sheets/${sheetId}`);
 }
 
@@ -163,10 +180,14 @@ export async function updateAccessibilityAction(
   accessibility: Record<string, unknown>
 ): Promise<void> {
   const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
   await supabase
     .from("sheets")
     .update({ accessibility: accessibility as unknown as Json })
-    .eq("id", sheetId);
+    .eq("id", sheetId)
+    .eq("owner_id", userData.user.id);
   revalidatePath(`/sheets/${sheetId}`);
 }
 

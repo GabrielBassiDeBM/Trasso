@@ -103,6 +103,10 @@ export async function acceptInviteAction(token: string): Promise<{ error: string
     return { error: "This invitation has expired." };
   }
 
+  if (inv.email.trim().toLowerCase() !== userData.user.email?.trim().toLowerCase()) {
+    return { error: "This invitation was sent to a different email address." };
+  }
+
   // Add member
   const { error: memberError } = await supabase.from("organization_members").insert({
     org_id: inv.org_id,
@@ -124,12 +128,18 @@ export async function updateMemberRoleAction(
   role: OrgRole,
 ): Promise<void> {
   const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
   await supabase.from("organization_members").update({ role }).match({ org_id: orgId, user_id: userId });
   revalidatePath(`/orgs/${orgId}`);
 }
 
 export async function removeMemberAction(orgId: string, userId: string): Promise<void> {
   const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
   await supabase.from("organization_members").delete().match({ org_id: orgId, user_id: userId });
   revalidatePath(`/orgs/${orgId}`);
 }
@@ -160,6 +170,9 @@ export async function createFolderAction(
 
 export async function moveSheetToFolderAction(sheetId: string, folderId: string | null): Promise<void> {
   const supabase = await createClient();
-  await supabase.from("sheets").update({ folder_id: folderId }).eq("id", sheetId);
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+
+  await supabase.from("sheets").update({ folder_id: folderId }).eq("id", sheetId).eq("owner_id", userData.user.id);
   revalidatePath("/dashboard");
 }
