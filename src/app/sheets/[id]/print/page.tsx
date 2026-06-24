@@ -42,6 +42,7 @@ export default async function SheetPrintPage({
   const a11yClasses = isA11y && a11y?.enabled
     ? cn(
         "a11y-print",
+        a11y.font !== "none" && "a11y-dyslexic-font",
         a11y.fontSize === "large" && "a11y-font-large",
         a11y.fontSize === "xlarge" && "a11y-font-xlarge",
         a11y.lineSpacing === "relaxed" && "a11y-spacing-relaxed",

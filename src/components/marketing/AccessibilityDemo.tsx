@@ -7,10 +7,10 @@ type Mode = "standard" | "dyslexia" | "adhd" | "autism" | "lowVision";
 
 const MODE_CLASSES: Record<Mode, string> = {
   standard: "",
-  dyslexia: "a11y-print a11y-spacing-relaxed",
-  adhd: "a11y-print a11y-spacing-loose",
-  autism: "a11y-print a11y-spacing-relaxed",
-  lowVision: "a11y-print a11y-font-xlarge a11y-spacing-relaxed",
+  dyslexia: "a11y-print a11y-dyslexic-font a11y-spacing-relaxed",
+  adhd: "a11y-print a11y-dyslexic-font a11y-spacing-loose",
+  autism: "a11y-print a11y-dyslexic-font a11y-spacing-relaxed",
+  lowVision: "a11y-print a11y-dyslexic-font a11y-font-xlarge a11y-spacing-relaxed",
 };
 
 /**

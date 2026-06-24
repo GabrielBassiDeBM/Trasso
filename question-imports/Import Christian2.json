@@ -1,0 +1,706 @@
+{
+  "title": "Pre-Calculus: identity reference and graded questions",
+  "description": "A compact reference of the core algebraic and trig identities (rule plus a one-line note), followed by graded pre-calculus questions. Notes are kept short and plainly worded for a dyslexic reader.",
+  "subject": "Pre-Calculus",
+  "difficulty_levels": [
+    "easy",
+    "medium",
+    "hard"
+  ],
+  "identity_count": 27,
+  "question_count": 45,
+  "identities": [
+    {
+      "id": 1,
+      "category": "Fractions",
+      "statement": "\\dfrac{a}{b} \\times \\dfrac{c}{d} = \\dfrac{ac}{bd}",
+      "note": "Multiply tops, multiply bottoms."
+    },
+    {
+      "id": 2,
+      "category": "Fractions",
+      "statement": "\\dfrac{a/b}{c/d} = \\dfrac{a}{b} \\times \\dfrac{d}{c} = \\dfrac{ad}{bc}",
+      "note": "Dividing by a fraction flips it, then multiply."
+    },
+    {
+      "id": 3,
+      "category": "Fractions",
+      "statement": "\\dfrac{a}{b} + \\dfrac{c}{d} = \\dfrac{ad + bc}{bd}",
+      "note": "Common bottom first, then add tops."
+    },
+    {
+      "id": 4,
+      "category": "Powers",
+      "statement": "x^a \\cdot x^b = x^{a+b}",
+      "note": "Same base: add the exponents."
+    },
+    {
+      "id": 5,
+      "category": "Powers",
+      "statement": "\\dfrac{x^a}{x^b} = x^{a-b}",
+      "note": "Same base: subtract the exponents."
+    },
+    {
+      "id": 6,
+      "category": "Powers",
+      "statement": "(x^a)^b = x^{ab}",
+      "note": "Power of a power: multiply."
+    },
+    {
+      "id": 7,
+      "category": "Powers",
+      "statement": "(xy)^a = x^a\\, y^a",
+      "note": "The power spreads over a product."
+    },
+    {
+      "id": 8,
+      "category": "Powers",
+      "statement": "x^{-a} = \\dfrac{1}{x^a}, \\qquad x^0 = 1",
+      "note": "Negative power means reciprocal; anything to the 0 is 1."
+    },
+    {
+      "id": 9,
+      "category": "Powers",
+      "statement": "x^{1/n} = \\sqrt[n]{x}",
+      "note": "A fraction power is a root."
+    },
+    {
+      "id": 10,
+      "category": "Factoring",
+      "statement": "a^2 - b^2 = (a-b)(a+b)",
+      "note": "Difference of two squares."
+    },
+    {
+      "id": 11,
+      "category": "Factoring",
+      "statement": "a^2 \\pm 2ab + b^2 = (a \\pm b)^2",
+      "note": "Perfect square."
+    },
+    {
+      "id": 12,
+      "category": "Factoring",
+      "statement": "a^3 - b^3 = (a-b)(a^2 + ab + b^2)",
+      "note": "Difference of cubes."
+    },
+    {
+      "id": 13,
+      "category": "Factoring",
+      "statement": "a^3 + b^3 = (a+b)(a^2 - ab + b^2)",
+      "note": "Sum of cubes."
+    },
+    {
+      "id": 14,
+      "category": "Lines & functions",
+      "statement": "m = \\dfrac{y_2 - y_1}{x_2 - x_1}",
+      "note": "Slope between two points."
+    },
+    {
+      "id": 15,
+      "category": "Lines & functions",
+      "statement": "y - y_1 = m(x - x_1)",
+      "note": "Line through a point with known slope."
+    },
+    {
+      "id": 16,
+      "category": "Lines & functions",
+      "statement": "(f \\circ g)(x) = f\\big(g(x)\\big)",
+      "note": "Composition: do the inner rule first."
+    },
+    {
+      "id": 17,
+      "category": "Lines & functions",
+      "statement": "\\text{Inverse: swap } x \\text{ and } y,\\ \\text{then solve for } y",
+      "note": "How to find f inverse."
+    },
+    {
+      "id": 18,
+      "category": "Quadratics",
+      "statement": "x = \\dfrac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}",
+      "note": "Solves any quadratic ax^2 + bx + c = 0."
+    },
+    {
+      "id": 19,
+      "category": "Logarithms",
+      "statement": "\\log_b(xy) = \\log_b x + \\log_b y",
+      "note": "Log of a product is a sum."
+    },
+    {
+      "id": 20,
+      "category": "Logarithms",
+      "statement": "\\log_b\\!\\dfrac{x}{y} = \\log_b x - \\log_b y",
+      "note": "Log of a quotient is a difference."
+    },
+    {
+      "id": 21,
+      "category": "Logarithms",
+      "statement": "\\log_b(x^n) = n\\log_b x",
+      "note": "A power comes down to the front."
+    },
+    {
+      "id": 22,
+      "category": "Logarithms",
+      "statement": "\\log_b b = 1, \\qquad \\log_b 1 = 0",
+      "note": "Base to itself is 1; log of 1 is 0."
+    },
+    {
+      "id": 23,
+      "category": "Logarithms",
+      "statement": "\\log_b x = \\dfrac{\\log x}{\\log b}",
+      "note": "Change of base."
+    },
+    {
+      "id": 24,
+      "category": "Trigonometry",
+      "statement": "\\sin^2 x + \\cos^2 x = 1",
+      "note": "The main Pythagorean identity."
+    },
+    {
+      "id": 25,
+      "category": "Trigonometry",
+      "statement": "\\tan x = \\dfrac{\\sin x}{\\cos x}",
+      "note": "Tangent is sine over cosine."
+    },
+    {
+      "id": 26,
+      "category": "Trigonometry",
+      "statement": "\\sin 2x = 2\\sin x \\cos x",
+      "note": "Double angle for sine."
+    },
+    {
+      "id": 27,
+      "category": "Trigonometry",
+      "statement": "\\cos 2x = \\cos^2 x - \\sin^2 x = 1 - 2\\sin^2 x = 2\\cos^2 x - 1",
+      "note": "Three forms of the cosine double angle."
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "topic": "Functions",
+      "topics": [
+        "Functions",
+        "Even and odd"
+      ],
+      "difficulty": "medium",
+      "question": "Show that $f(x) = x^3 - x$ is an odd function.",
+      "answer": "It is odd, because $f(-x) = -f(x)$.",
+      "solution": "Replace $x$ with $-x$: $f(-x) = (-x)^3 - (-x) = -x^3 + x = -(x^3 - x) = -f(x)$. Since $f(-x) = -f(x)$, the function is odd."
+    },
+    {
+      "id": 2,
+      "topic": "Functions",
+      "topics": [
+        "Functions",
+        "Transformations"
+      ],
+      "difficulty": "medium",
+      "question": "Describe how the graph of $y = (x - 2)^2 + 3$ comes from $y = x^2$.",
+      "answer": "Shift right $2$, then up $3$.",
+      "solution": "The $(x - 2)$ moves the graph right by $2$. The $+3$ moves it up by $3$. So the vertex goes from $(0,0)$ to $(2, 3)$."
+    },
+    {
+      "id": 3,
+      "topic": "Functions",
+      "topics": [
+        "Functions",
+        "Composition",
+        "Domain"
+      ],
+      "difficulty": "medium",
+      "question": "Given $f(x) = \\sqrt{x}$ and $g(x) = x^2 + 1$, find $(f \\circ g)(x)$ and its domain.",
+      "answer": "$(f \\circ g)(x) = \\sqrt{x^2 + 1}$; domain is all real numbers.",
+      "solution": "$(f \\circ g)(x) = f(x^2 + 1) = \\sqrt{x^2 + 1}$. Since $x^2 + 1$ is always at least $1$, the square root is always defined. So the domain is every real number."
+    },
+    {
+      "id": 4,
+      "topic": "Domain and range",
+      "topics": [
+        "Range",
+        "Quadratics"
+      ],
+      "difficulty": "medium",
+      "question": "Find the range of $f(x) = x^2 + 1$.",
+      "answer": "$y \\geq 1$",
+      "solution": "The smallest value of $x^2$ is $0$, at $x = 0$. So the smallest output is $0 + 1 = 1$. The range is $y \\geq 1$."
+    },
+    {
+      "id": 5,
+      "topic": "Domain and range",
+      "topics": [
+        "Domain",
+        "Rational functions"
+      ],
+      "difficulty": "medium",
+      "question": "Find the domain of $f(x) = \\dfrac{x + 1}{x^2 - x - 6}$.",
+      "answer": "All numbers except $x = 3$ and $x = -2$.",
+      "solution": "The bottom cannot be zero. Factor it: $x^2 - x - 6 = (x - 3)(x + 2)$. This is zero at $x = 3$ and $x = -2$, so those are not allowed."
+    },
+    {
+      "id": 6,
+      "topic": "Inequalities",
+      "topics": [
+        "Absolute value inequalities"
+      ],
+      "difficulty": "medium",
+      "question": "Solve $|2x - 1| < 5$.",
+      "answer": "$-2 < x < 3$",
+      "solution": "An absolute value less than $5$ means the inside is between $-5$ and $5$: $-5 < 2x - 1 < 5$. Add $1$: $-4 < 2x < 6$. Divide by $2$: $-2 < x < 3$."
+    },
+    {
+      "id": 7,
+      "topic": "Inequalities",
+      "topics": [
+        "Absolute value inequalities"
+      ],
+      "difficulty": "medium",
+      "question": "Solve $|x + 3| \\geq 2$.",
+      "answer": "$x \\leq -5$ or $x \\geq -1$",
+      "solution": "An absolute value at least $2$ means the inside is $\\geq 2$ or $\\leq -2$. So $x + 3 \\geq 2$ gives $x \\geq -1$, and $x + 3 \\leq -2$ gives $x \\leq -5$."
+    },
+    {
+      "id": 8,
+      "topic": "Systems of equations",
+      "topics": [
+        "Linear systems"
+      ],
+      "difficulty": "easy",
+      "question": "Solve the system $\\begin{cases} 2x + y = 7 \\\\ x - y = 2 \\end{cases}$",
+      "answer": "$x = 3$, $y = 1$",
+      "solution": "Add the two equations to remove $y$: $3x = 9$, so $x = 3$. Put this into $x - y = 2$: $3 - y = 2$, so $y = 1$."
+    },
+    {
+      "id": 9,
+      "topic": "Systems of equations",
+      "topics": [
+        "Nonlinear systems"
+      ],
+      "difficulty": "hard",
+      "question": "Solve the system $\\begin{cases} y = x^2 \\\\ y = x + 2 \\end{cases}$",
+      "answer": "$(2, 4)$ and $(-1, 1)$",
+      "solution": "Set the two right sides equal: $x^2 = x + 2$, so $x^2 - x - 2 = 0$. Factor: $(x - 2)(x + 1) = 0$, giving $x = 2$ or $x = -1$. Then $y = x^2$ gives $(2, 4)$ and $(-1, 1)$."
+    },
+    {
+      "id": 10,
+      "topic": "Lines",
+      "topics": [
+        "Lines",
+        "Perpendicular"
+      ],
+      "difficulty": "medium",
+      "question": "Find the line perpendicular to $y = 2x + 1$ that passes through $(4, 3)$.",
+      "answer": "$y = -\\dfrac{1}{2}x + 5$",
+      "solution": "Perpendicular slopes multiply to $-1$, so the new slope is $-\\dfrac{1}{2}$. Use the point: $y - 3 = -\\dfrac{1}{2}(x - 4)$, which simplifies to $y = -\\dfrac{1}{2}x + 5$."
+    },
+    {
+      "id": 11,
+      "topic": "Factoring",
+      "topics": [
+        "Factoring",
+        "Difference of squares"
+      ],
+      "difficulty": "hard",
+      "question": "Factor $x^4 - 16$ completely.",
+      "answer": "$(x - 2)(x + 2)(x^2 + 4)$",
+      "solution": "This is a difference of squares: $x^4 - 16 = (x^2 - 4)(x^2 + 4)$. The first part factors again: $x^2 - 4 = (x - 2)(x + 2)$. The part $x^2 + 4$ does not factor with real numbers."
+    },
+    {
+      "id": 12,
+      "topic": "Factoring",
+      "topics": [
+        "Factoring",
+        "Common factor"
+      ],
+      "difficulty": "medium",
+      "question": "Factor $x^3 - 4x$ completely.",
+      "answer": "$x(x - 2)(x + 2)$",
+      "solution": "Take out the common $x$: $x(x^2 - 4)$. Then $x^2 - 4$ is a difference of squares: $(x - 2)(x + 2)$. So the answer is $x(x - 2)(x + 2)$."
+    },
+    {
+      "id": 13,
+      "topic": "Rational expressions",
+      "topics": [
+        "Rational expressions",
+        "Polynomial division"
+      ],
+      "difficulty": "medium",
+      "question": "Simplify $\\dfrac{2x^2 + 5x - 3}{x + 3}$.",
+      "answer": "$2x - 1$ (for $x \\neq -3$)",
+      "solution": "Factor the top: $2x^2 + 5x - 3 = (2x - 1)(x + 3)$. Cancel the common $(x + 3)$ to get $2x - 1$. This is valid as long as $x \\neq -3$."
+    },
+    {
+      "id": 14,
+      "topic": "Rational expressions",
+      "topics": [
+        "Complex fractions"
+      ],
+      "difficulty": "hard",
+      "question": "Simplify $\\dfrac{\\frac{1}{x} - \\frac{1}{3}}{x - 3}$.",
+      "answer": "$-\\dfrac{1}{3x}$",
+      "solution": "Combine the top over a common bottom: $\\dfrac{1}{x} - \\dfrac{1}{3} = \\dfrac{3 - x}{3x}$. Now divide by $(x - 3)$, which flips it: $\\dfrac{3 - x}{3x} \\times \\dfrac{1}{x - 3}$. Since $3 - x = -(x - 3)$, this becomes $-\\dfrac{1}{3x}$."
+    },
+    {
+      "id": 15,
+      "topic": "Quadratics",
+      "topics": [
+        "Completing the square",
+        "Vertex"
+      ],
+      "difficulty": "medium",
+      "question": "Write $x^2 + 6x + 5$ in the form $(x + p)^2 + q$, and give the vertex.",
+      "answer": "$(x + 3)^2 - 4$; vertex $(-3, -4)$.",
+      "solution": "Take half of $6$, which is $3$, and square it to get $9$. Write $x^2 + 6x + 9 - 9 + 5 = (x + 3)^2 - 4$. The vertex is $(-3, -4)$."
+    },
+    {
+      "id": 16,
+      "topic": "Quadratics",
+      "topics": [
+        "Discriminant"
+      ],
+      "difficulty": "medium",
+      "question": "How many real solutions does $x^2 + 2x + 5 = 0$ have?",
+      "answer": "None (no real solutions).",
+      "solution": "Check the discriminant $b^2 - 4ac = 2^2 - 4(1)(5) = 4 - 20 = -16$. It is negative, so there are no real solutions."
+    },
+    {
+      "id": 17,
+      "topic": "Exponentials & logarithms",
+      "topics": [
+        "Exponential equations"
+      ],
+      "difficulty": "easy",
+      "question": "Solve $5^x = \\dfrac{1}{25}$.",
+      "answer": "$x = -2$",
+      "solution": "Write $\\dfrac{1}{25}$ as a power of $5$: $\\dfrac{1}{25} = 5^{-2}$. So $5^x = 5^{-2}$, which means $x = -2$."
+    },
+    {
+      "id": 18,
+      "topic": "Exponentials & logarithms",
+      "topics": [
+        "Logarithms",
+        "Condensing"
+      ],
+      "difficulty": "medium",
+      "question": "Write $2\\log x + \\log y$ as a single logarithm.",
+      "answer": "$\\log(x^2 y)$",
+      "solution": "The $2$ in front becomes a power: $2\\log x = \\log x^2$. Then a sum of logs is the log of a product: $\\log x^2 + \\log y = \\log(x^2 y)$."
+    },
+    {
+      "id": 19,
+      "topic": "Exponentials & logarithms",
+      "topics": [
+        "Logarithmic equations",
+        "Domain restrictions"
+      ],
+      "difficulty": "hard",
+      "question": "Solve $\\log(x) + \\log(x - 3) = 1$ (base $10$).",
+      "answer": "$x = 5$",
+      "solution": "Combine: $\\log\\big(x(x - 3)\\big) = 1$, so $x(x - 3) = 10^1 = 10$. Then $x^2 - 3x - 10 = 0$, which factors to $(x - 5)(x + 2) = 0$. The logs need $x > 3$, so keep $x = 5$ and reject $x = -2$."
+    },
+    {
+      "id": 20,
+      "topic": "Trigonometry",
+      "topics": [
+        "Trigonometry",
+        "Radians"
+      ],
+      "difficulty": "easy",
+      "question": "Convert $120^\\circ$ to radians.",
+      "answer": "$\\dfrac{2\\pi}{3}$",
+      "solution": "Multiply by $\\dfrac{\\pi}{180}$: $120 \\times \\dfrac{\\pi}{180} = \\dfrac{120\\pi}{180} = \\dfrac{2\\pi}{3}$."
+    },
+    {
+      "id": 21,
+      "topic": "Trigonometry",
+      "topics": [
+        "Trigonometry",
+        "Trigonometric equations"
+      ],
+      "difficulty": "medium",
+      "question": "Solve $\\cos x = -\\dfrac{1}{2}$ for $x$ in $[0, 2\\pi)$.",
+      "answer": "$x = \\dfrac{2\\pi}{3}, \\ \\dfrac{4\\pi}{3}$",
+      "solution": "Cosine is negative in the second and third quadrants. The reference angle is $\\dfrac{\\pi}{3}$, so $x = \\pi - \\dfrac{\\pi}{3} = \\dfrac{2\\pi}{3}$ and $x = \\pi + \\dfrac{\\pi}{3} = \\dfrac{4\\pi}{3}$."
+    },
+    {
+      "id": 22,
+      "topic": "Trigonometry",
+      "topics": [
+        "Trigonometry",
+        "Trigonometric equations"
+      ],
+      "difficulty": "hard",
+      "question": "Solve $2\\cos^2 x - 1 = 0$ for $x$ in $[0, 2\\pi)$.",
+      "answer": "$x = \\dfrac{\\pi}{4}, \\ \\dfrac{3\\pi}{4}, \\ \\dfrac{5\\pi}{4}, \\ \\dfrac{7\\pi}{4}$",
+      "solution": "Rearrange: $\\cos^2 x = \\dfrac{1}{2}$, so $\\cos x = \\pm\\dfrac{1}{\\sqrt{2}}$. The angles with this cosine are $\\dfrac{\\pi}{4}, \\dfrac{3\\pi}{4}, \\dfrac{5\\pi}{4}, \\dfrac{7\\pi}{4}$."
+    },
+    {
+      "id": 23,
+      "topic": "Trigonometry",
+      "topics": [
+        "Trigonometry",
+        "Trigonometric equations",
+        "Double-angle"
+      ],
+      "difficulty": "hard",
+      "question": "Solve $\\sin 2x = \\sin x$ for $x$ in $[0, 2\\pi)$.",
+      "answer": "$x = 0, \\ \\dfrac{\\pi}{3}, \\ \\pi, \\ \\dfrac{5\\pi}{3}$",
+      "solution": "Use $\\sin 2x = 2\\sin x\\cos x$: $2\\sin x\\cos x - \\sin x = 0$, so $\\sin x(2\\cos x - 1) = 0$. Then $\\sin x = 0$ gives $x = 0, \\pi$, and $\\cos x = \\dfrac{1}{2}$ gives $x = \\dfrac{\\pi}{3}, \\dfrac{5\\pi}{3}$."
+    },
+    {
+      "id": 24,
+      "topic": "Trigonometry",
+      "topics": [
+        "Trigonometry",
+        "Graphs"
+      ],
+      "difficulty": "medium",
+      "question": "Find the amplitude and period of $y = 3\\sin(2x)$.",
+      "answer": "Amplitude $3$, period $\\pi$.",
+      "solution": "The number in front, $3$, is the amplitude. The period is $\\dfrac{2\\pi}{2} = \\pi$, because the $2$ inside speeds up the wave."
+    },
+    {
+      "id": 25,
+      "topic": "Sequences",
+      "topics": [
+        "Arithmetic sequences"
+      ],
+      "difficulty": "easy",
+      "question": "Find the 10th term of the sequence $3, 7, 11, 15, \\dots$",
+      "answer": "$39$",
+      "solution": "The common difference is $4$. The rule is $a_n = 3 + (n - 1)\\cdot 4$. So $a_{10} = 3 + 9 \\times 4 = 39$."
+    },
+    {
+      "id": 26,
+      "topic": "Sequences",
+      "topics": [
+        "Geometric sequences"
+      ],
+      "difficulty": "medium",
+      "question": "Find the 6th term of the sequence $2, 6, 18, 54, \\dots$",
+      "answer": "$486$",
+      "solution": "The common ratio is $3$. The rule is $a_n = 2 \\cdot 3^{\\,n-1}$. So $a_6 = 2 \\cdot 3^5 = 2 \\times 243 = 486$."
+    },
+    {
+      "id": 27,
+      "topic": "Functions",
+      "topics": [
+        "Functions",
+        "Piecewise"
+      ],
+      "difficulty": "medium",
+      "question": "For $f(x) = \\begin{cases} x^2 & x < 0 \\\\ 2x + 1 & x \\geq 0 \\end{cases}$, find $f(-3)$ and $f(2)$.",
+      "answer": "$f(-3) = 9$, $f(2) = 5$",
+      "solution": "For $x = -3$, use the top piece (since $-3 < 0$): $(-3)^2 = 9$. For $x = 2$, use the bottom piece (since $2 \\geq 0$): $2 \\times 2 + 1 = 5$."
+    },
+    {
+      "id": 28,
+      "topic": "Functions",
+      "topics": [
+        "Functions",
+        "Inverse functions"
+      ],
+      "difficulty": "hard",
+      "question": "Find the inverse of $f(x) = \\sqrt{x - 1} + 2$ (for $x \\geq 1$).",
+      "answer": "$f^{-1}(x) = (x - 2)^2 + 1$, for $x \\geq 2$",
+      "solution": "Set $y = \\sqrt{x - 1} + 2$. Take $2$ from both sides: $y - 2 = \\sqrt{x - 1}$. Square both sides: $(y - 2)^2 = x - 1$, so $x = (y - 2)^2 + 1$. Thus $f^{-1}(x) = (x - 2)^2 + 1$."
+    },
+    {
+      "id": 29,
+      "topic": "Functions",
+      "topics": [
+        "Functions",
+        "Difference quotient"
+      ],
+      "difficulty": "medium",
+      "question": "For $f(x) = x^2$, simplify the difference quotient $\\dfrac{f(x + h) - f(x)}{h}$.",
+      "answer": "$2x + h$",
+      "solution": "Work out the top: $(x + h)^2 - x^2 = x^2 + 2xh + h^2 - x^2 = 2xh + h^2$. Divide by $h$: $\\dfrac{2xh + h^2}{h} = 2x + h$."
+    },
+    {
+      "id": 30,
+      "topic": "Domain and range",
+      "topics": [
+        "Range",
+        "Quadratics"
+      ],
+      "difficulty": "medium",
+      "question": "Find the range of $f(x) = -x^2 + 4$.",
+      "answer": "$y \\leq 4$",
+      "solution": "The biggest value of $-x^2$ is $0$, at $x = 0$. So the largest output is $0 + 4 = 4$, and the graph goes down from there. The range is $y \\leq 4$."
+    },
+    {
+      "id": 31,
+      "topic": "Domain and range",
+      "topics": [
+        "Domain",
+        "Square roots"
+      ],
+      "difficulty": "medium",
+      "question": "Find the domain of $f(x) = \\sqrt{9 - x^2}$.",
+      "answer": "$-3 \\leq x \\leq 3$",
+      "solution": "The inside of a square root cannot be negative: $9 - x^2 \\geq 0$, so $x^2 \\leq 9$. This means $x$ is between $-3$ and $3$."
+    },
+    {
+      "id": 32,
+      "topic": "Inequalities",
+      "topics": [
+        "Quadratic inequalities"
+      ],
+      "difficulty": "medium",
+      "question": "Solve $x^2 + 2x - 8 \\leq 0$.",
+      "answer": "$-4 \\leq x \\leq 2$",
+      "solution": "Factor: $(x + 4)(x - 2) \\leq 0$. A product is zero or negative between its roots. The roots are $-4$ and $2$, so $-4 \\leq x \\leq 2$."
+    },
+    {
+      "id": 33,
+      "topic": "Inequalities",
+      "topics": [
+        "Absolute value inequalities"
+      ],
+      "difficulty": "hard",
+      "question": "Solve $|3x + 2| > 4$.",
+      "answer": "$x > \\dfrac{2}{3}$ or $x < -2$",
+      "solution": "An absolute value greater than $4$ means the inside is $> 4$ or $< -4$. From $3x + 2 > 4$: $x > \\dfrac{2}{3}$. From $3x + 2 < -4$: $x < -2$."
+    },
+    {
+      "id": 34,
+      "topic": "Lines",
+      "topics": [
+        "Lines",
+        "Intercepts"
+      ],
+      "difficulty": "easy",
+      "question": "Find the $x$-intercept and $y$-intercept of $3x - 4y = 12$.",
+      "answer": "$x$-intercept $(4, 0)$; $y$-intercept $(0, -3)$",
+      "solution": "For the $x$-intercept, set $y = 0$: $3x = 12$, so $x = 4$. For the $y$-intercept, set $x = 0$: $-4y = 12$, so $y = -3$."
+    },
+    {
+      "id": 35,
+      "topic": "Lines",
+      "topics": [
+        "Lines",
+        "Parallel"
+      ],
+      "difficulty": "medium",
+      "question": "Find the line parallel to $y = -3x + 2$ that passes through $(1, 5)$.",
+      "answer": "$y = -3x + 8$",
+      "solution": "Parallel lines share the same slope, so the slope is $-3$. Use the point: $y - 5 = -3(x - 1)$, which simplifies to $y = -3x + 8$."
+    },
+    {
+      "id": 36,
+      "topic": "Quadratics",
+      "topics": [
+        "Quadratics",
+        "Vertex"
+      ],
+      "difficulty": "medium",
+      "question": "Find the vertex of $y = 2x^2 - 8x + 5$.",
+      "answer": "$(2, -3)$",
+      "solution": "The $x$ of the vertex is $\\dfrac{-b}{2a} = \\dfrac{8}{4} = 2$. Put $x = 2$ back in: $y = 2(4) - 8(2) + 5 = -3$. So the vertex is $(2, -3)$."
+    },
+    {
+      "id": 37,
+      "topic": "Quadratics",
+      "topics": [
+        "Quadratics",
+        "Factoring"
+      ],
+      "difficulty": "hard",
+      "question": "Solve $3x^2 - 5x - 2 = 0$.",
+      "answer": "$x = -\\dfrac{1}{3}$ or $x = 2$",
+      "solution": "Factor: $(3x + 1)(x - 2) = 0$. Set each part to zero: $3x + 1 = 0$ gives $x = -\\dfrac{1}{3}$, and $x - 2 = 0$ gives $x = 2$."
+    },
+    {
+      "id": 38,
+      "topic": "Powers and radicals",
+      "topics": [
+        "Exponent rules"
+      ],
+      "difficulty": "medium",
+      "question": "Simplify $\\dfrac{(x^3 y^2)(x^2 y^4)}{x y^3}$.",
+      "answer": "$x^4 y^3$",
+      "solution": "Multiply the top by adding exponents: $x^{3+2} y^{2+4} = x^5 y^6$. Then divide by subtracting: $x^{5-1} y^{6-3} = x^4 y^3$."
+    },
+    {
+      "id": 39,
+      "topic": "Powers and radicals",
+      "topics": [
+        "Fractional exponents"
+      ],
+      "difficulty": "hard",
+      "question": "Simplify $(16x^4)^{3/4}$.",
+      "answer": "$8x^3$",
+      "solution": "Apply the power to each part. $16^{3/4} = (2^4)^{3/4} = 2^3 = 8$, and $(x^4)^{3/4} = x^3$. So the answer is $8x^3$."
+    },
+    {
+      "id": 40,
+      "topic": "Powers and radicals",
+      "topics": [
+        "Rationalizing"
+      ],
+      "difficulty": "medium",
+      "question": "Rationalize the denominator of $\\dfrac{3}{\\sqrt{5}}$.",
+      "answer": "$\\dfrac{3\\sqrt{5}}{5}$",
+      "solution": "Multiply the top and bottom by $\\sqrt{5}$: $\\dfrac{3}{\\sqrt{5}} \\times \\dfrac{\\sqrt{5}}{\\sqrt{5}} = \\dfrac{3\\sqrt{5}}{5}$."
+    },
+    {
+      "id": 41,
+      "topic": "Exponentials & logarithms",
+      "topics": [
+        "Logarithms",
+        "Expanding"
+      ],
+      "difficulty": "medium",
+      "question": "Expand $\\log\\!\\left(\\dfrac{x^3}{y}\\right)$ into separate logarithms.",
+      "answer": "$3\\log x - \\log y$",
+      "solution": "A quotient becomes a difference: $\\log x^3 - \\log y$. Then the power comes down to the front: $3\\log x - \\log y$."
+    },
+    {
+      "id": 42,
+      "topic": "Exponentials & logarithms",
+      "topics": [
+        "Logarithmic equations",
+        "Domain restrictions"
+      ],
+      "difficulty": "hard",
+      "question": "Solve $\\ln(x) + \\ln(x - 1) = \\ln(6)$.",
+      "answer": "$x = 3$",
+      "solution": "Combine the left side: $\\ln\\big(x(x - 1)\\big) = \\ln 6$, so $x(x - 1) = 6$. Then $x^2 - x - 6 = 0$, which factors to $(x - 3)(x + 2) = 0$. The logs need $x > 1$, so keep $x = 3$."
+    },
+    {
+      "id": 43,
+      "topic": "Trigonometry",
+      "topics": [
+        "Trigonometry",
+        "Exact values"
+      ],
+      "difficulty": "easy",
+      "question": "Find the exact values of $\\sin\\!\\left(\\dfrac{\\pi}{3}\\right)$ and $\\cos\\!\\left(\\dfrac{\\pi}{6}\\right)$.",
+      "answer": "Both equal $\\dfrac{\\sqrt{3}}{2}$.",
+      "solution": "These are standard angles. $\\dfrac{\\pi}{3}$ is $60^\\circ$ and $\\dfrac{\\pi}{6}$ is $30^\\circ$. Both $\\sin 60^\\circ$ and $\\cos 30^\\circ$ equal $\\dfrac{\\sqrt{3}}{2}$."
+    },
+    {
+      "id": 44,
+      "topic": "Trigonometry",
+      "topics": [
+        "Trigonometry",
+        "Identities"
+      ],
+      "difficulty": "hard",
+      "question": "Show that $1 + \\tan^2 x = \\sec^2 x$.",
+      "answer": "The identity is true.",
+      "solution": "Start from $\\sin^2 x + \\cos^2 x = 1$. Divide every term by $\\cos^2 x$: $\\dfrac{\\sin^2 x}{\\cos^2 x} + 1 = \\dfrac{1}{\\cos^2 x}$. This is $\\tan^2 x + 1 = \\sec^2 x$."
+    },
+    {
+      "id": 45,
+      "topic": "Trigonometry",
+      "topics": [
+        "Trigonometry",
+        "Right triangles"
+      ],
+      "difficulty": "medium",
+      "question": "A right triangle has legs $5$ and $12$. Find the hypotenuse and the sine of the angle opposite the side of length $5$.",
+      "answer": "Hypotenuse $= 13$; $\\sin = \\dfrac{5}{13}$",
+      "solution": "By the Pythagorean theorem, the hypotenuse is $\\sqrt{5^2 + 12^2} = \\sqrt{169} = 13$. Sine is opposite over hypotenuse: $\\dfrac{5}{13}$."
+    }
+  ]
+}

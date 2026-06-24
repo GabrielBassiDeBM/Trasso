@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils/cn";
 
 export interface AccessibilitySettings {
   enabled: boolean;
-  font: "opendyslexic";
+  font: "opendyslexic" | "none";
   fontSize: "normal" | "large" | "xlarge";
   lineSpacing: "normal" | "relaxed" | "loose";
   columns: 1;
@@ -199,10 +199,15 @@ export function PageSettingsPanel({ sheetId, settings, accessibility, onChange, 
               Generates a second print-ready version with an adapted font, increased spacing, and single column — same content, re-typeset for accessibility.
             </p>
 
-            <div>
-              <span className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Font</span>
-              <p className="mt-1 text-sm text-ink">OpenDyslexic</p>
-            </div>
+            <SegmentedField
+              label="Font"
+              value={a11y.font}
+              options={[
+                { value: "opendyslexic", label: "OpenDyslexic" },
+                { value: "none", label: "Default font" },
+              ]}
+              onChange={(v) => updateA11y({ font: v as "opendyslexic" | "none" })}
+            />
 
             <SegmentedField
               label="Text size"

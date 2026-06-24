@@ -20,13 +20,17 @@
 }
 
 /* Applied to the print wrapper when ?a11y=1 is present */
-.a11y-print {
-  font-family: 'OpenDyslexic', Arial, sans-serif !important;
-}
 .a11y-print * {
-  font-family: 'OpenDyslexic', Arial, sans-serif !important;
   letter-spacing: 0.05em !important;
   word-spacing: 0.15em !important;
+}
+/* Font swap is opt-out (AccessibilitySettings.font: "none") so spacing/size/line-height
+   stay in effect without forcing OpenDyslexic. */
+.a11y-print.a11y-dyslexic-font {
+  font-family: 'OpenDyslexic', Arial, sans-serif !important;
+}
+.a11y-print.a11y-dyslexic-font * {
+  font-family: 'OpenDyslexic', Arial, sans-serif !important;
 }
 .a11y-print.a11y-font-large { font-size: 14pt !important; }
 .a11y-print.a11y-font-large * { font-size: inherit !important; }
