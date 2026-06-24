@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Plus_Jakarta_Sans, Spline_Sans_Mono, Source_Serif_4 } from "next/font/google";
 import { getTheme, resolveTheme } from "@/lib/theme/server";
 import { ThemeProvider } from "@/lib/theme/client";
@@ -38,6 +39,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const theme = await getTheme();
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   return (
     <html
@@ -48,7 +50,7 @@ export default async function RootLayout({
       className={`${plusJakarta.variable} ${splineMono.variable} ${sourceSerif.variable} h-full`}
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body className="min-h-full flex flex-col font-sans antialiased">
         <ThemeProvider theme={theme}>{children}</ThemeProvider>

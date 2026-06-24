@@ -22,6 +22,33 @@ function isTrustedOrigin(request: NextRequest): boolean {
   return allowed.has(origin);
 }
 
+const supabaseOrigin = (() => {
+  try {
+    return new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").origin;
+  } catch {
+    return "";
+  }
+})();
+
+function buildCspHeader(nonce: string) {
+  const isDev = process.env.NODE_ENV === "development";
+  return `
+    default-src 'self';
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ""};
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' blob: data: ${supabaseOrigin};
+    font-src 'self' data: https://cdn.jsdelivr.net;
+    connect-src 'self' ${supabaseOrigin} https://generativelanguage.googleapis.com;
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+    upgrade-insecure-requests;
+  `
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 export async function proxy(request: NextRequest) {
   if (
     request.nextUrl.pathname.startsWith("/api/") &&
@@ -32,7 +59,14 @@ export async function proxy(request: NextRequest) {
     return NextResponse.json({ error: "Cross-origin request blocked" }, { status: 403 });
   }
 
-  let response = NextResponse.next({ request });
+  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+  const cspHeader = buildCspHeader(nonce);
+
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-nonce", nonce);
+
+  let response = NextResponse.next({ request: { headers: requestHeaders } });
+  response.headers.set("Content-Security-Policy", cspHeader);
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -46,7 +80,8 @@ export async function proxy(request: NextRequest) {
           for (const { name, value } of cookiesToSet) {
             request.cookies.set(name, value);
           }
-          response = NextResponse.next({ request });
+          response = NextResponse.next({ request: { headers: requestHeaders } });
+          response.headers.set("Content-Security-Policy", cspHeader);
           for (const { name, value, options } of cookiesToSet) {
             response.cookies.set(name, value, options);
           }
