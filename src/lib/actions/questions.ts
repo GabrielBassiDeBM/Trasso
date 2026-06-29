@@ -402,7 +402,7 @@ export async function addManyToPersonalBankAction(questionIds: string[]): Promis
   const { data: rows, error: fetchError } = await supabase
     .from("questions")
     .select(
-      "statement, statement_format, type, options, answer, subject_id, topic_id, difficulty, has_math, source, tags, bncc_code, solution, solution_format",
+      "statement, statement_format, type, options, answer, subject_id, topic_id, difficulty, has_math, tags, bncc_code, solution, solution_format",
     )
     .in("id", questionIds);
 
