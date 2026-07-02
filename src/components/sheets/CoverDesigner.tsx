@@ -7,7 +7,7 @@ import { computeSnap, GRID_SIZE_MM, type SnapRect } from "@/lib/sheets/snapping"
 import { uploadLogoAction } from "@/lib/actions/sheets";
 import { CoverBlockContent } from "./SheetDocument";
 import { Button } from "@/components/ui/Button";
-import { Input, Label, Textarea } from "@/components/ui/Input";
+import { Input, Label, NumberField, Textarea } from "@/components/ui/Input";
 import { Latex } from "@/components/math/Latex";
 import { cn } from "@/lib/utils/cn";
 
@@ -31,6 +31,7 @@ const BLOCK_LIBRARY: BlockPreset[] = [
   { type: "score_box", label: "Score box", w: 50, h: 10, props: { label: "Score" } },
   { type: "instructions", label: "Instructions", w: 174, h: 24, props: { text: "" } },
   { type: "logo", label: "Logo", w: 30, h: 30, props: {} },
+  { type: "image", label: "Photo / image", w: 70, h: 45, props: {} },
 ];
 
 const HANDLE_STYLE: React.CSSProperties = {
@@ -264,6 +265,8 @@ function blockTypeLabel(type: CoverBlockType): string {
       return "Instructions";
     case "logo":
       return "Logo";
+    case "image":
+      return "Photo / image";
   }
 }
 
@@ -285,6 +288,7 @@ const COLOR_FIELDS: Record<CoverBlockType, { key: string; label: string }[]> = {
     { key: "fill", label: "Background color" },
   ],
   logo: [{ key: "fill", label: "Placeholder color" }],
+  image: [],
 };
 
 function ColorFields({ block, onChangeProps }: { block: CoverBlock; onChangeProps: (props: Record<string, string>) => void }) {
@@ -333,13 +337,7 @@ function GeometryInput({ label, value, onChange }: { label: string; value: numbe
   return (
     <div>
       <Label>{label}</Label>
-      <Input
-        type="number"
-        min={0}
-        max={PAGE_WIDTH_MM}
-        value={value}
-        onChange={(event) => onChange(Number(event.target.value))}
-      />
+      <NumberField min={0} max={297} value={value} onValueChange={onChange} />
     </div>
   );
 }
@@ -401,11 +399,21 @@ function BlockFields({ block, onChangeProps }: { block: CoverBlock; onChangeProp
         </div>
       );
     case "logo":
-      return <LogoField block={block} onChangeProps={onChangeProps} />;
+      return <ImageUploadField block={block} onChangeProps={onChangeProps} label="Logo image" />;
+    case "image":
+      return <ImageUploadField block={block} onChangeProps={onChangeProps} label="Photo / image" />;
   }
 }
 
-function LogoField({ block, onChangeProps }: { block: CoverBlock; onChangeProps: (props: Record<string, string>) => void }) {
+function ImageUploadField({
+  block,
+  onChangeProps,
+  label,
+}: {
+  block: CoverBlock;
+  onChangeProps: (props: Record<string, string>) => void;
+  label: string;
+}) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -432,11 +440,11 @@ function LogoField({ block, onChangeProps }: { block: CoverBlock; onChangeProps:
 
   return (
     <div className="space-y-2">
-      <Label>Logo image</Label>
+      <Label>{label}</Label>
       {block.props.url ? (
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={block.props.url} alt="Logo" className="h-14 w-14 rounded-md border border-line object-contain" />
+          <img src={block.props.url} alt={label} className="h-14 w-14 rounded-md border border-line object-contain" />
           <Button type="button" variant="outline" size="sm" onClick={() => onChangeProps({ url: "" })}>
             Remove image
           </Button>

@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getNextSheetPosition } from "@/lib/actions/position";
 import type { BlockType, GroupItem } from "@/components/sheets/QuestionGroupEditor";
@@ -24,7 +23,6 @@ export async function addGroupAction(
 
   if (error || !data) return { error: error?.message ?? "Could not create block." };
 
-  revalidatePath(`/sheets/${sheetId}`);
   return {
     id: data.id,
     instructions: data.instructions,
@@ -67,6 +65,7 @@ export async function reorderSheetEntitiesAction(
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return;
 
+  // No revalidatePath: the editor reorders locally; revalidating re-renders the route mid-drag.
   await Promise.all(
     entries.map((entry, index) =>
       entry.kind === "item"
@@ -74,5 +73,4 @@ export async function reorderSheetEntitiesAction(
         : supabase.from("question_groups").update({ position: index }).eq("id", entry.id)
     ),
   );
-  revalidatePath(`/sheets/${sheetId}`);
 }

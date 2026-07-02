@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { PAPER_SIZES, type CoverBlock, type CoverLayout, type PageSettings } from "@/lib/sheets/defaults";
 import type { QuestionItem } from "@/components/sheets/QuestionList";
 import type { GroupItem } from "./QuestionGroupEditor";
@@ -147,13 +148,27 @@ function SectionHeaderBlock({ group }: { group: GroupItem }) {
   );
 }
 
-function PassageBlock({ group }: { group: GroupItem }) {
+/** Memoized: reference passages can be huge KaTeX documents; only re-render when the group itself changes. */
+const PassageBlock = memo(function PassageBlock({ group }: { group: GroupItem }) {
   if (!group.passage && !group.instructions) return null;
 
+  // A near-page-tall passage with `break-inside: avoid` gets pushed whole to the
+  // next page, leaving the previous page blank — so only short passages are kept
+  // unsplittable; long ones flow across pages with the border cloned per fragment.
+  const keepTogether = (group.passage?.length ?? 0) <= 600;
+
   return (
-    <div className="mb-5 break-inside-avoid">
+    <div className={cn("mb-5", keepTogether && "break-inside-avoid")}>
+      {group.title && (
+        <p className="font-print-serif mb-1.5 text-[10.5pt] font-semibold uppercase tracking-wide text-black">
+          {group.title}
+        </p>
+      )}
       {group.passage && (
-        <div className="font-print-serif mb-3 rounded-md border border-black/15 bg-black/[0.02] p-3 text-[10.5pt] leading-relaxed text-black">
+        <div
+          className="font-print-serif mb-3 rounded-md border border-black/15 bg-black/[0.02] p-3 text-[10.5pt] leading-relaxed text-black"
+          style={{ boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone" }}
+        >
           <Latex text={group.passage} />
         </div>
       )}
@@ -164,7 +179,7 @@ function PassageBlock({ group }: { group: GroupItem }) {
       )}
     </div>
   );
-}
+});
 
 interface CoverSectionProps {
   blocks: CoverBlock[];
@@ -260,6 +275,16 @@ export function CoverBlockContent({ block, title }: { block: CoverBlock; title: 
       return (
         <div className="flex h-full items-center justify-center rounded-md border border-dashed border-black/30 text-xs text-black/60">
           Logo
+        </div>
+      );
+    case "image":
+      if (block.props.url) {
+        // eslint-disable-next-line @next/next/no-img-element
+        return <img src={block.props.url} alt="" className="h-full w-full rounded-sm object-contain" />;
+      }
+      return (
+        <div className="flex h-full items-center justify-center rounded-md border border-dashed border-black/30 text-xs text-black/60">
+          Photo / image
         </div>
       );
   }

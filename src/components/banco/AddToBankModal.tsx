@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { X, Check, Plus, Trash2, Search, BookOpen } from "lucide-react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
+import { X, Check, Plus, Trash2, Search, BookOpen, ImagePlus } from "lucide-react";
 import { createBankQuestionAction, updateBankQuestionAction } from "@/lib/actions/questions";
 import { pullManyFromBankAction } from "@/lib/actions/questions";
+import { uploadQuestionImageAction } from "@/lib/actions/sheets";
 import { useT } from "@/lib/i18n/client";
 import { cn } from "@/lib/utils/cn";
 import { SearchableSelect } from "@/components/ui/SearchableSelect";
+import { NumberField } from "@/components/ui/Input";
 import { QUESTION_TYPES } from "@/lib/types/question";
 import type { McqOption, MatchingItem, QuestionContent } from "@/lib/types/question";
 import type { QuestionType } from "@/lib/types/database";
@@ -240,9 +243,8 @@ function MatchingEditor({
         </span>
         <span />
         {left.map((lItem, idx) => (
-          <>
+          <Fragment key={lItem.key}>
             <input
-              key={`l-${lItem.key}`}
               type="text"
               value={lItem.text}
               onChange={(e) => updateLeft(idx, e.target.value)}
@@ -251,7 +253,6 @@ function MatchingEditor({
             />
             <span className="text-xs font-bold text-ink-faint" aria-hidden="true">↔</span>
             <input
-              key={`r-${right[idx]?.key ?? idx}`}
               type="text"
               value={right[idx]?.text ?? ""}
               onChange={(e) => updateRight(idx, e.target.value)}
@@ -267,7 +268,7 @@ function MatchingEditor({
             >
               <Trash2 size={12} aria-hidden="true" />
             </button>
-          </>
+          </Fragment>
         ))}
       </div>
       <button
@@ -284,13 +285,12 @@ function MatchingEditor({
 
 function LinesInput({ value, onChange }: { value: number; onChange: (n: number) => void }) {
   return (
-    <input
-      type="number"
+    <NumberField
       min={1}
       max={20}
       value={value}
-      onChange={(e) => onChange(Math.max(1, Math.min(20, Number(e.target.value))))}
-      className="h-8 w-20 rounded-lg border border-line bg-canvas px-3 text-center text-sm text-ink focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
+      onValueChange={onChange}
+      className="h-8 w-20 rounded-lg bg-canvas px-3 text-center"
     />
   );
 }
@@ -308,6 +308,13 @@ export function AddToBankModal({ open, onClose, subjects, allTopics, sheets, edi
   const [subjectId, setSubjectId] = useState("");
   const [topicId, setTopicId] = useState("");
   const [difficulty, setDifficulty] = useState("");
+
+  // Stimulus material (any type)
+  const [passage, setPassage] = useState("");
+  const [images, setImages] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   // MCQ
   const [mcqOptions, setMcqOptions] = useState<McqOption[]>([
@@ -393,6 +400,9 @@ export function AddToBankModal({ open, onClose, subjects, allTopics, sheets, edi
     setSampleAnswer(content?.type === "open" ? content.sampleAnswer : "");
     setOpenLines(content?.type === "open" ? content.answerLines : 3);
     setEssayLines(content?.type === "essay" ? content.answerLines : 8);
+    setPassage(content?.passage ?? "");
+    setImages(content?.images ?? []);
+    setUploadError(null);
     setAddToSheet(false);
     setSheetId("");
     setSheetSearch("");
@@ -412,23 +422,52 @@ export function AddToBankModal({ open, onClose, subjects, allTopics, sheets, edi
   if (!open) return null;
 
   function buildContent(): QuestionContent {
+    // Included only when used (or being cleared on edit) so saves keep working
+    // against databases that haven't run migration 0017 yet.
+    const extras = {
+      ...(passage.trim() || editing?.content.passage ? { passage } : {}),
+      ...(images.length > 0 || editing?.content.images?.length ? { images } : {}),
+    };
+
     switch (type) {
       case "multiple_choice":
-        return { type, statement, options: mcqOptions };
+        return { ...extras, type, statement, options: mcqOptions };
       case "true_false":
-        return { type, statement, answer: tfAnswer };
+        return { ...extras, type, statement, answer: tfAnswer };
       case "fill_blank":
-        return { type, statement, blanks };
+        return { ...extras, type, statement, blanks };
       case "matching": {
         const pairs: Record<string, string> = {};
         matchLeft.forEach((l, i) => { if (matchRight[i]) pairs[l.key] = matchRight[i].key; });
-        return { type, statement, left: matchLeft, right: matchRight, pairs };
+        return { ...extras, type, statement, left: matchLeft, right: matchRight, pairs };
       }
       case "open":
-        return { type, statement, answerLines: openLines, sampleAnswer };
+        return { ...extras, type, statement, answerLines: openLines, sampleAnswer };
       case "essay":
-        return { type, statement, answerLines: essayLines };
+        return { ...extras, type, statement, answerLines: essayLines };
     }
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setUploadError(null);
+
+    const fd = new FormData();
+    fd.append("file", file);
+    const result = await uploadQuestionImageAction(fd);
+
+    setUploading(false);
+
+    if ("error" in result) {
+      setUploadError(result.error);
+    } else {
+      setImages((prev) => [...prev, result.url]);
+    }
+
+    if (imageInputRef.current) imageInputRef.current.value = "";
   }
 
   async function handleSave() {
@@ -582,6 +621,69 @@ export function AddToBankModal({ open, onClose, subjects, allTopics, sheets, edi
                 )}
               />
               {error && <p className="mt-1.5 text-xs font-medium text-danger">{error}</p>}
+            </div>
+
+            {/* Reading passage */}
+            <div>
+              <label
+                htmlFor="bank-q-passage"
+                className="mb-2 block text-[11px] font-semibold uppercase tracking-widest text-ink-faint"
+              >
+                {t("bank.addModal.passage")}
+              </label>
+              <textarea
+                id="bank-q-passage"
+                value={passage}
+                onChange={(e) => setPassage(e.target.value)}
+                placeholder={t("bank.addModal.passagePlaceholder")}
+                rows={3}
+                className="w-full resize-y rounded-xl border border-line bg-canvas px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint transition-[border-color,box-shadow] focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
+              />
+            </div>
+
+            {/* Images */}
+            <div>
+              <SectionLabel>{t("bank.addModal.images")}</SectionLabel>
+              <input
+                ref={imageInputRef}
+                type="file"
+                accept="image/*"
+                className="sr-only"
+                onChange={handleImageUpload}
+                aria-hidden="true"
+              />
+              <div className="flex flex-wrap items-center gap-2">
+                {images.map((url) => (
+                  <div key={url} className="group relative inline-block overflow-hidden rounded-lg border border-line">
+                    <Image
+                      src={url}
+                      alt="Question image"
+                      width={120}
+                      height={80}
+                      className="h-20 w-auto object-cover"
+                      unoptimized
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setImages((prev) => prev.filter((img) => img !== url))}
+                      className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100"
+                      aria-label="Remove image"
+                    >
+                      <X size={10} />
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => imageInputRef.current?.click()}
+                  disabled={uploading}
+                  className="flex h-20 w-24 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-line text-xs font-medium text-ink-faint transition-colors hover:border-brand/50 hover:text-brand disabled:pointer-events-none disabled:opacity-50"
+                >
+                  <ImagePlus size={16} aria-hidden="true" />
+                  {uploading ? t("bank.addModal.uploading") : t("bank.addModal.addImage")}
+                </button>
+              </div>
+              {uploadError && <p className="mt-1.5 text-xs font-medium text-danger">{uploadError}</p>}
             </div>
 
             {/* Per-type answer editor */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useDeferredValue, useEffect, useRef, useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import type { SheetRow, SubjectRow, TopicRow } from "@/lib/data/sheets";
@@ -155,6 +155,14 @@ export function SheetEditor({
     }
   }
 
+  // The live preview re-typesets the whole document (KaTeX included); deferring
+  // its inputs keeps typing in the editor responsive while the preview catches up.
+  const previewTitle = useDeferredValue(title);
+  const previewItems = useDeferredValue(items);
+  const previewGroups = useDeferredValue(groups);
+  const previewPageSettings = useDeferredValue(pageSettings);
+  const previewCoverLayout = useDeferredValue(coverLayout);
+
   const examLabel = sheet.exam_type ? t(EXAM_TYPE_KEYS[sheet.exam_type]) : null;
   const hasAccessibility = !!(accessibility?.enabled);
   const defaultSubjectIds = sheet.subject_ids?.length ? sheet.subject_ids : sheet.subject_id ? [sheet.subject_id] : [];
@@ -289,11 +297,11 @@ export function SheetEditor({
           <div className="overflow-hidden rounded-2xl border border-line bg-canvas p-4">
             <div style={{ zoom: 0.5 }}>
               <SheetDocument
-                title={title}
-                pageSettings={pageSettings}
-                coverLayout={coverLayout}
-                items={items}
-                groups={groups}
+                title={previewTitle}
+                pageSettings={previewPageSettings}
+                coverLayout={previewCoverLayout}
+                items={previewItems}
+                groups={previewGroups}
                 mode="preview"
               />
             </div>

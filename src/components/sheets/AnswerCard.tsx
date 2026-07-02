@@ -63,7 +63,7 @@ export function AnswerCard({
         </div>
         <div className="space-y-1 text-[9pt]">
           <div>
-            <span className="font-bold">Nome: </span>
+            <span className="font-bold">Name: </span>
             <span className="inline-block min-w-[60mm] border-b border-black">
               {studentName ?? ""}
             </span>

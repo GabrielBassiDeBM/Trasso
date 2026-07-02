@@ -17,7 +17,7 @@ export function TrueFalseEditor({ content, onChange }: TrueFalseEditorProps) {
       <StatementEditor value={content.statement} onChange={(statement) => onChange({ ...content, statement })} />
 
       <div>
-        <span className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Resposta correta</span>
+        <span className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Correct answer</span>
         <div className="mt-2 inline-flex rounded-full border border-line bg-canvas p-1 text-sm">
           <button
             type="button"
@@ -27,7 +27,7 @@ export function TrueFalseEditor({ content, onChange }: TrueFalseEditorProps) {
               content.answer ? "bg-surface text-ink shadow-sm" : "text-ink-soft hover:text-ink",
             )}
           >
-            Verdadeiro
+            True
           </button>
           <button
             type="button"
@@ -37,7 +37,7 @@ export function TrueFalseEditor({ content, onChange }: TrueFalseEditorProps) {
               !content.answer ? "bg-surface text-ink shadow-sm" : "text-ink-soft hover:text-ink",
             )}
           >
-            Falso
+            False
           </button>
         </div>
       </div>

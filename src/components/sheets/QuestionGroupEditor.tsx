@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useDeferredValue, useEffect, useRef, useState, type ReactNode } from "react";
 import { BookText, ChevronDown, ChevronUp, Heading, Trash2 } from "lucide-react";
 import { removeGroupAction, updateGroupAction } from "@/lib/actions/groups";
 import { Latex } from "@/components/math/Latex";
@@ -43,6 +43,8 @@ function PassageEditor({ group, onGroupChange, onGroupRemove, dragHandle }: Ques
   const [collapsed, setCollapsed] = useState(false);
   const [localPassage, setLocalPassage] = useState(group.passage ?? "");
   const [localInstructions, setLocalInstructions] = useState(group.instructions ?? "");
+  // KaTeX preview of a long passage is expensive; defer so typing stays responsive.
+  const previewPassage = useDeferredValue(localPassage);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -112,9 +114,9 @@ function PassageEditor({ group, onGroupChange, onGroupRemove, dragHandle }: Ques
                 placeholder="Paste or write the reading passage here…"
                 className="w-full rounded-xl border border-line bg-surface px-3 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20 resize-y"
               />
-              {localPassage && (
+              {previewPassage && (
                 <div className="rounded-lg border border-line bg-canvas px-3 py-2 text-sm text-ink">
-                  <Latex text={localPassage} />
+                  <Latex text={previewPassage} />
                 </div>
               )}
             </div>

@@ -9,13 +9,13 @@ Ferramenta para professores criarem listas de exercícios e provas em PDF: banco
 
 ```bash
 npm install
-cp .env.local.example .env.local   # preencha com as chaves do seu projeto Supabase — veja SETUP.md
+cp .env.local.example .env.local   # preencha com as chaves do seu projeto Supabase — veja docs/SETUP.md
 npm run dev
 ```
 
 Abra http://localhost:3000.
 
-Sem as chaves do Supabase preenchidas, as páginas carregam mas login, cadastro e qualquer operação no banco vão falhar. Siga o **[SETUP.md](./SETUP.md)** para criar o projeto Supabase, rodar a migração e configurar o `.env.local`.
+Sem as chaves do Supabase preenchidas, as páginas carregam mas login, cadastro e qualquer operação no banco vão falhar. Siga o **[SETUP.md](./docs/SETUP.md)** para criar o projeto Supabase, rodar a migração e configurar o `.env.local`.
 
 ## Estrutura
 
@@ -50,4 +50,4 @@ supabase/migrations/0001_init.sql  # schema + RLS
 
 ## Deploy
 
-Veja **[SETUP.md](./SETUP.md)** para o passo a passo de deploy na Vercel e limites dos planos gratuitos.
+Veja **[SETUP.md](./docs/SETUP.md)** para o passo a passo de deploy na Vercel e limites dos planos gratuitos.

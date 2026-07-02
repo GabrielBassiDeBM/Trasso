@@ -40,6 +40,8 @@
 .a11y-print.a11y-spacing-relaxed * { line-height: inherit !important; }
 .a11y-print.a11y-spacing-loose { line-height: 2.2 !important; }
 .a11y-print.a11y-spacing-loose * { line-height: inherit !important; }
+/* "Extra answer space" — wider gaps between answer lines for motor accessibility */
+.a11y-print.a11y-extra-space .answer-lines > * + * { margin-top: 2.25rem !important; }
 
 :root {
   /* Violet (primary brand) */
@@ -381,5 +383,10 @@ h1, h2, h3 {
   }
   body {
     background-color: #fff;
+  }
+  /* Never slice a display equation across a page break */
+  .sheet-page .katex-display,
+  .sheet-page .katex {
+    break-inside: avoid;
   }
 }

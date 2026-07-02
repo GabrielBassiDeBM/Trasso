@@ -631,13 +631,13 @@ export function BankBrowser({ questions, subjects, allTopics, sheets, activeTab,
       {/* Collapsible filter bar */}
       <div
         style={{
-          maxHeight: filtersOpen ? "800px" : "0px",
+          display: "grid",
+          gridTemplateRows: filtersOpen ? "1fr" : "0fr",
           opacity: filtersOpen ? 1 : 0,
-          overflow: "hidden",
-          transition: "max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.18s ease-out",
+          transition: "grid-template-rows 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.18s ease-out",
         }}
       >
-        <div className="border-b border-line bg-panel px-8 py-5">
+        <div className="min-h-0 overflow-hidden border-b border-line bg-panel px-8 py-5">
           <div className="space-y-4">
 
             {/* Subjects — multi-select chips */}

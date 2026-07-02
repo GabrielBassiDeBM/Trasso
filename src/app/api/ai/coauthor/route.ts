@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     const parsed = await parseJsonBody(req, coauthorSchema);
     if ("response" in parsed) return parsed.response;
 
-    const result = await transformQuestion(parsed.data.content as QuestionContent, parsed.data.action);
+    const result = await transformQuestion(parsed.data.content as unknown as QuestionContent, parsed.data.action);
     await recordUsage("generate");
 
     return NextResponse.json(result);

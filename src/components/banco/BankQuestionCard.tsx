@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import {
   Tag, Globe, Trash2, ChevronDown, ChevronUp, Check, Plus, Search, BookOpen,
   ListChecks, Pencil, ToggleLeft, Underline, ArrowLeftRight, AlignLeft,
+  BookText, Image as ImageIcon,
 } from "lucide-react";
 import { deleteQuestionFromBankAction, pullManyFromBankAction } from "@/lib/actions/questions";
 import { useT, useLocale } from "@/lib/i18n/client";
@@ -23,6 +24,8 @@ type BankQuestion = {
   subject?: { id: string; name: string } | null;
   topic?: { id: string; name: string } | null;
   owner_id: string | null;
+  passage?: string | null;
+  images?: string[] | null;
 };
 
 interface BankQuestionCardProps {
@@ -245,6 +248,18 @@ export function BankQuestionCard({
 
           {/* Badges (bottom-right) */}
           <div className="absolute bottom-2.5 right-3 flex gap-1">
+            {question.passage && (
+              <span className="flex items-center gap-0.5 rounded-md bg-white/20 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                <BookText size={8} aria-hidden="true" />
+                {t("bank.question.passage")}
+              </span>
+            )}
+            {(question.images?.length ?? 0) > 0 && (
+              <span className="flex items-center gap-0.5 rounded-md bg-white/20 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                <ImageIcon size={8} aria-hidden="true" />
+                {question.images!.length}
+              </span>
+            )}
             {question.is_adapted && (
               <span className="rounded-md bg-white/20 px-1.5 py-0.5 text-[10px] font-semibold text-white">
                 {t("bank.question.adapted")}

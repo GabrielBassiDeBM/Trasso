@@ -16,12 +16,13 @@ import { useConfirm } from "@/lib/hooks/useConfirm";
 interface QuestionEditorShellProps {
   sheetId: string;
   sheetQuestionId: string;
-  questionId: string;
   index: number;
   content: QuestionContent;
   points: number | null;
   showPoints: boolean;
   onContentChange: (content: QuestionContent) => void;
+  /** Fired when an edit to a shared-bank question was saved as a private copy. */
+  onQuestionIdChange?: (questionId: string) => void;
   onRemoved: () => void;
   dragHandle?: ReactNode;
 }
@@ -39,24 +40,55 @@ const COAUTHOR_ACTIONS: { action: CoauthorAction; label: string }[] = [
 export function QuestionEditorShell({
   sheetId,
   sheetQuestionId,
-  questionId,
   index,
   content,
   points,
   showPoints,
   onContentChange,
+  onQuestionIdChange,
   onRemoved,
   dragHandle,
 }: QuestionEditorShellProps) {
   const { confirm, dialog: confirmDialog } = useConfirm();
   const [localPoints, setLocalPoints] = useState(points ?? 1);
-  const [status, setStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [aiMenuOpen, setAiMenuOpen] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const skipFirstSave = useRef(true);
   const menuRef = useRef<HTMLDivElement>(null);
+  // Serialized save pipeline: one request in flight at a time, always followed
+  // by the latest pending content. Overlapping saves once raced copy-on-edit
+  // and stranded edits on orphaned question copies.
+  const saveInFlight = useRef(false);
+  const pendingContent = useRef<QuestionContent | null>(null);
+
+  function runSave(nextContent: QuestionContent) {
+    if (saveInFlight.current) {
+      pendingContent.current = nextContent;
+      return;
+    }
+    saveInFlight.current = true;
+    updateQuestionAction(sheetId, sheetQuestionId, nextContent)
+      .then((result) => {
+        if (result.error) {
+          setStatus("error");
+        } else {
+          if (result.newQuestionId) onQuestionIdChange?.(result.newQuestionId);
+          setStatus("saved");
+        }
+      })
+      .catch(() => setStatus("error"))
+      .finally(() => {
+        saveInFlight.current = false;
+        if (pendingContent.current) {
+          const next = pendingContent.current;
+          pendingContent.current = null;
+          runSave(next);
+        }
+      });
+  }
 
   useEffect(() => {
     if (skipFirstSave.current) {
@@ -66,9 +98,7 @@ export function QuestionEditorShell({
 
     setStatus("saving");
     if (saveTimer.current) clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(() => {
-      updateQuestionAction(sheetId, questionId, content).then(() => setStatus("saved"));
-    }, 700);
+    saveTimer.current = setTimeout(() => runSave(content), 700);
 
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current);
@@ -200,8 +230,8 @@ export function QuestionEditorShell({
           <QuestionTypeEditor content={content} onChange={onContentChange} />
         </div>
 
-        <p className="mt-3 text-right text-xs text-ink-faint">
-          {status === "saving" ? "Saving…" : status === "saved" ? "Saved" : " "}
+        <p className={cn("mt-3 text-right text-xs", status === "error" ? "font-medium text-danger" : "text-ink-faint")}>
+          {status === "saving" ? "Saving…" : status === "saved" ? "Saved" : status === "error" ? "Couldn't save — check your connection and try again" : " "}
         </p>
       </Card>
       {confirmDialog}

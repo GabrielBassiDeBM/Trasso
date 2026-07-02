@@ -5,7 +5,7 @@ import { Accessibility, Check, ChevronDown } from "lucide-react";
 import { PAPER_SIZES, type PageSettings, type PaperSize } from "@/lib/sheets/defaults";
 import { updatePageSettingsAction, updateAccessibilityAction } from "@/lib/actions/sheets";
 import { Card } from "@/components/ui/Card";
-import { Input, Label } from "@/components/ui/Input";
+import { Label, NumberField } from "@/components/ui/Input";
 import { cn } from "@/lib/utils/cn";
 
 export interface AccessibilitySettings {
@@ -143,23 +143,25 @@ export function PageSettingsPanel({ sheetId, settings, accessibility, onChange, 
             onChange={(event) => onChange({ ...settings, showAnswerLines: event.target.checked })}
             className="h-4 w-4 rounded border-line accent-brand"
           />
-          <span className="text-sm text-ink">Show lines for short-answer questions</span>
+          <span className="text-sm text-ink">Show answer lines</span>
         </label>
+        {!settings.showAnswerLines && (
+          <p className="mt-1 pl-7 text-xs text-ink-faint">
+            Lines are invisible but each question still keeps its answer space.
+          </p>
+        )}
       </div>
 
-      {settings.showAnswerLines && (
-        <div className="max-w-[10rem]">
-          <Label htmlFor="default-answer-lines">Answer lines (default)</Label>
-          <Input
-            id="default-answer-lines"
-            type="number"
-            min={0}
-            max={20}
-            value={settings.answerLines}
-            onChange={(event) => onChange({ ...settings, answerLines: Number(event.target.value) })}
-          />
-        </div>
-      )}
+      <div className="max-w-[10rem]">
+        <Label htmlFor="default-answer-lines">Answer lines (default)</Label>
+        <NumberField
+          id="default-answer-lines"
+          min={0}
+          max={20}
+          value={settings.answerLines}
+          onValueChange={(answerLines) => onChange({ ...settings, answerLines })}
+        />
+      </div>
 
       {/* Accessibility variant */}
       <div className="border-t border-line pt-4">
@@ -179,7 +181,7 @@ export function PageSettingsPanel({ sheetId, settings, accessibility, onChange, 
             }}
             className={cn(
               "relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors",
-              showA11y ? "bg-brand" : "bg-[#d1d5db]"
+              showA11y ? "bg-brand" : "bg-muted-strong"
             )}
             role="switch"
             aria-checked={showA11y}
@@ -319,7 +321,7 @@ function MarginInput({ label, value, onChange }: { label: string; value: number;
   return (
     <div>
       <Label>{label}</Label>
-      <Input type="number" min={0} max={50} value={value} onChange={(event) => onChange(Number(event.target.value))} />
+      <NumberField min={0} max={50} value={value} onValueChange={onChange} />
     </div>
   );
 }

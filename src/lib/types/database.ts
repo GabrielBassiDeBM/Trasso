@@ -87,6 +87,8 @@ export interface Database {
           is_public: boolean;
           adaptation_type: AdaptationType | null;
           adapted_from: string | null;
+          passage: string | null;
+          images: string[];
           created_at: string;
         };
         Insert: {
@@ -112,6 +114,8 @@ export interface Database {
           is_public?: boolean;
           adaptation_type?: AdaptationType | null;
           adapted_from?: string | null;
+          passage?: string | null;
+          images?: string[];
         };
         Update: {
           statement?: string;
@@ -132,6 +136,8 @@ export interface Database {
           is_public?: boolean;
           adaptation_type?: AdaptationType | null;
           adapted_from?: string | null;
+          passage?: string | null;
+          images?: string[];
         };
         Relationships: [];
       };

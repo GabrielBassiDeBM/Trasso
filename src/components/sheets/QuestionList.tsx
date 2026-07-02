@@ -290,6 +290,10 @@ export function QuestionList({
     onItemsChange(items.map((item) => (item.sheetQuestionId === sheetQuestionId ? { ...item, content } : item)));
   }
 
+  function updateItemQuestionId(sheetQuestionId: string, questionId: string) {
+    onItemsChange(items.map((item) => (item.sheetQuestionId === sheetQuestionId ? { ...item, questionId } : item)));
+  }
+
   function removeItem(sheetQuestionId: string) {
     onItemsChange(items.filter((item) => item.sheetQuestionId !== sheetQuestionId));
   }
@@ -335,6 +339,7 @@ export function QuestionList({
                   index={questionIndex}
                   sheetId={sheetId}
                   onContentChange={(content) => updateItemContent(entry.item.sheetQuestionId, content)}
+                  onQuestionIdChange={(questionId) => updateItemQuestionId(entry.item.sheetQuestionId, questionId)}
                   onRemoved={() => removeItem(entry.item.sheetQuestionId)}
                   pointsPerQuestion={pointsPerQuestion}
                 />
@@ -493,10 +498,11 @@ interface SortableQuestionItemProps {
   sheetId: string;
   pointsPerQuestion: boolean;
   onContentChange: (content: QuestionContent) => void;
+  onQuestionIdChange: (questionId: string) => void;
   onRemoved: () => void;
 }
 
-function SortableQuestionItem({ dndId, item, index, sheetId, pointsPerQuestion, onContentChange, onRemoved }: SortableQuestionItemProps) {
+function SortableQuestionItem({ dndId, item, index, sheetId, pointsPerQuestion, onContentChange, onQuestionIdChange, onRemoved }: SortableQuestionItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: dndId });
 
   const style = {
@@ -510,12 +516,12 @@ function SortableQuestionItem({ dndId, item, index, sheetId, pointsPerQuestion, 
       <QuestionEditorShell
         sheetId={sheetId}
         sheetQuestionId={item.sheetQuestionId}
-        questionId={item.questionId}
         index={index}
         content={item.content}
         points={item.points}
         showPoints={pointsPerQuestion}
         onContentChange={onContentChange}
+        onQuestionIdChange={onQuestionIdChange}
         onRemoved={onRemoved}
         dragHandle={<DragHandle attributes={attributes} listeners={listeners} label="Reorder question" />}
       />

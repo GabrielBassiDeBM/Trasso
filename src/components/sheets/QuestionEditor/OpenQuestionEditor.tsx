@@ -2,7 +2,7 @@
 
 import { useId } from "react";
 import type { QuestionContent } from "@/lib/types/question";
-import { Input, Label, Textarea } from "@/components/ui/Input";
+import { Label, NumberField, Textarea } from "@/components/ui/Input";
 import { StatementEditor } from "./StatementEditor";
 
 type OpenContent = Extract<QuestionContent, { type: "open" }>;
@@ -22,14 +22,13 @@ export function OpenQuestionEditor({ content, onChange }: OpenQuestionEditorProp
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
-          <Label htmlFor={linesId}>Linhas para resposta</Label>
-          <Input
+          <Label htmlFor={linesId}>Answer lines</Label>
+          <NumberField
             id={linesId}
-            type="number"
             min={0}
             max={20}
             value={content.answerLines}
-            onChange={(event) => onChange({ ...content, answerLines: Number(event.target.value) })}
+            onValueChange={(answerLines) => onChange({ ...content, answerLines })}
           />
         </div>
       </div>

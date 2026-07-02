@@ -65,7 +65,7 @@ export async function addQuestionAction(
     return { error: linkError?.message ?? "Could not add question to sheet." };
   }
 
-  revalidatePath(`/sheets/${sheetId}`);
+  // No revalidatePath: the editor appends the new question to local state itself.
   return {
     sheetQuestionId: link.id,
     questionId: question.id,
@@ -154,29 +154,95 @@ export async function addQuestionsBatchAction(
       difficulty: null,
     }));
 
-  if (added.length > 0) revalidatePath(`/sheets/${sheetId}`);
-
   return { added, failed: items.length - added.length };
 }
 
+export interface UpdateQuestionResult {
+  error: string | null;
+  /** Set when the edit was saved to a new private copy (bank questions aren't editable in place). */
+  newQuestionId?: string;
+}
+
+/**
+ * Saves an edit to the question behind a sheet entry. Keyed by the stable
+ * `sheet_questions.id` (not the question id): copy-on-edit can swap the
+ * underlying question between two debounced saves, and a save keyed by a stale
+ * question id would write to an orphaned copy and silently lose the edit.
+ * No revalidatePath — the editor holds the state locally, and revalidating on
+ * every debounced keystroke re-renders the whole route (major editor lag).
+ */
 export async function updateQuestionAction(
   sheetId: string,
-  questionId: string,
+  sheetQuestionId: string,
   content: QuestionContent,
-): Promise<{ error: string | null }> {
+): Promise<UpdateQuestionResult> {
   const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return { error: "Session expired." };
 
-  const { error } = await supabase
-    .from("questions")
-    .update(toDbColumns(content))
-    .eq("id", questionId)
-    .eq("owner_id", userData.user.id);
+  const { data: link } = await supabase
+    .from("sheet_questions")
+    .select("id, sheet_id, question_id")
+    .eq("id", sheetQuestionId)
+    .maybeSingle();
 
-  if (error) return { error: error.message };
-  revalidatePath(`/sheets/${sheetId}`);
-  return { error: null };
+  if (!link || link.sheet_id !== sheetId || !link.question_id) {
+    return { error: "Question not found on this sheet." };
+  }
+
+  const { data: existing } = await supabase
+    .from("questions")
+    .select("*")
+    .eq("id", link.question_id)
+    .maybeSingle();
+
+  if (!existing) return { error: "Question not found." };
+
+  if (existing.owner_id === userData.user.id) {
+    const { error } = await supabase
+      .from("questions")
+      .update(toDbColumns(content))
+      .eq("id", existing.id)
+      .eq("owner_id", userData.user.id);
+
+    if (error) return { error: error.message };
+    return { error: null };
+  }
+
+  // The question belongs to the shared bank (or another user): RLS rejects an
+  // in-place update — and used to do so silently, so edits like "answer lines"
+  // never reached the printed sheet. Save the edit as a private copy instead
+  // and point this sheet's link at the copy.
+  const { data: copy, error: copyError } = await supabase
+    .from("questions")
+    .insert({
+      owner_id: userData.user.id,
+      ...toDbColumns(content),
+      subject_id: existing.subject_id,
+      topic_id: existing.topic_id,
+      difficulty: existing.difficulty,
+      tags: existing.tags,
+      bncc_code: existing.bncc_code,
+      solution: existing.solution,
+      solution_format: existing.solution_format,
+      source: existing.source,
+      is_public: false,
+    })
+    .select("id")
+    .single();
+
+  if (copyError || !copy) return { error: copyError?.message ?? "Could not save changes." };
+
+  // Repoint by the link's primary key so concurrent saves can never strand the
+  // copy on a stale question_id match.
+  const { error: linkError } = await supabase
+    .from("sheet_questions")
+    .update({ question_id: copy.id })
+    .eq("id", link.id);
+
+  if (linkError) return { error: linkError.message };
+
+  return { error: null, newQuestionId: copy.id };
 }
 
 export async function updateQuestionPointsAction(
@@ -188,8 +254,8 @@ export async function updateQuestionPointsAction(
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return;
 
+  // No revalidatePath: the editor holds points locally; revalidating per edit lags the route.
   await supabase.from("sheet_questions").update({ points }).eq("id", sheetQuestionId);
-  revalidatePath(`/sheets/${sheetId}`);
 }
 
 export async function removeQuestionAction(
@@ -200,8 +266,8 @@ export async function removeQuestionAction(
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return;
 
+  // No revalidatePath: the editor removes the question from local state itself.
   await supabase.from("sheet_questions").delete().eq("id", sheetQuestionId);
-  revalidatePath(`/sheets/${sheetId}`);
 }
 
 // ─── Question bank actions ────────────────────────────────────────────────────
@@ -401,16 +467,29 @@ export async function addManyToPersonalBankAction(questionIds: string[]): Promis
 
   const { data: rows, error: fetchError } = await supabase
     .from("questions")
-    .select(
-      "statement, statement_format, type, options, answer, subject_id, topic_id, difficulty, has_math, tags, bncc_code, solution, solution_format",
-    )
+    .select("*")
     .in("id", questionIds);
 
   if (fetchError) return { error: fetchError.message };
   if (!rows || rows.length === 0) return { error: "Questions not found." };
 
   const copies = rows.map((row) => ({
-    ...row,
+    statement: row.statement,
+    statement_format: row.statement_format,
+    type: row.type,
+    options: row.options,
+    answer: row.answer,
+    subject_id: row.subject_id,
+    topic_id: row.topic_id,
+    difficulty: row.difficulty,
+    has_math: row.has_math,
+    tags: row.tags,
+    bncc_code: row.bncc_code,
+    solution: row.solution,
+    solution_format: row.solution_format,
+    // Carried over only when stored, so this keeps working pre-migration 0017
+    ...(row.passage != null ? { passage: row.passage } : {}),
+    ...(Array.isArray(row.images) && row.images.length > 0 ? { images: row.images } : {}),
     owner_id: userData.user!.id,
     is_public: false,
   }));
@@ -443,7 +522,6 @@ export async function pullManyFromBankAction(
   );
 
   if (error) return { error: error.message };
-  revalidatePath(`/sheets/${sheetId}`);
   return { error: null };
 }
 
@@ -480,7 +558,6 @@ export async function pullFromBankAction(
   if (linkError || !link) return { error: linkError?.message ?? "Failed to add question." };
 
   const { fromDbRow } = await import("@/lib/types/question");
-  revalidatePath(`/sheets/${sheetId}`);
   return {
     sheetQuestionId: link.id,
     questionId: bankQuestionId,

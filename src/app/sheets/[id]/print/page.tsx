@@ -47,6 +47,7 @@ export default async function SheetPrintPage({
         a11y.fontSize === "xlarge" && "a11y-font-xlarge",
         a11y.lineSpacing === "relaxed" && "a11y-spacing-relaxed",
         a11y.lineSpacing === "loose" && "a11y-spacing-loose",
+        a11y.extraAnswerSpace && "a11y-extra-space",
       )
     : "";
 

@@ -30,7 +30,8 @@ export type CoverBlockType =
   | "student_field"
   | "score_box"
   | "instructions"
-  | "logo";
+  | "logo"
+  | "image";
 
 export interface CoverBlock {
   id: string;

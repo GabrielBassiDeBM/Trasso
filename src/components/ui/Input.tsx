@@ -1,5 +1,7 @@
+"use client";
+
 import { ChevronDown } from "lucide-react";
-import { forwardRef, type InputHTMLAttributes, type SelectHTMLAttributes, type TextareaHTMLAttributes } from "react";
+import { forwardRef, useState, type InputHTMLAttributes, type SelectHTMLAttributes, type TextareaHTMLAttributes } from "react";
 import { cn } from "@/lib/utils/cn";
 
 const fieldStyles =
@@ -7,6 +9,63 @@ const fieldStyles =
 
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(fieldStyles, "h-10", className)} {...props} />;
+}
+
+interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "onChange" | "type" | "min" | "max"> {
+  value: number;
+  onValueChange: (value: number) => void;
+  min: number;
+  max: number;
+}
+
+/**
+ * Numeric input that buffers what the user types: the field can be cleared and
+ * retyped freely (a plain controlled `type="number"` snaps to a clamped value on
+ * every keystroke, forcing the spinner arrows). Commits valid in-range integers
+ * as typed; clamps/restores on blur.
+ */
+export function NumberField({ value, onValueChange, min, max, className, ...props }: NumberFieldProps) {
+  const [text, setText] = useState(String(value));
+  const [prevValue, setPrevValue] = useState(value);
+
+  // Adjust buffered text when the committed value changes from outside
+  // (React's sanctioned "adjust state during render" pattern).
+  if (value !== prevValue) {
+    setPrevValue(value);
+    if (Number(text) !== value) setText(String(value));
+  }
+
+  return (
+    <input
+      type="number"
+      inputMode="numeric"
+      min={min}
+      max={max}
+      value={text}
+      onChange={(event) => {
+        const raw = event.target.value;
+        setText(raw);
+        const parsed = Number(raw);
+        if (raw !== "" && Number.isInteger(parsed) && parsed >= min && parsed <= max) {
+          setPrevValue(parsed);
+          onValueChange(parsed);
+        }
+      }}
+      onBlur={(event) => {
+        const parsed = Number(event.target.value);
+        const clamped = event.target.value === "" || Number.isNaN(parsed)
+          ? value
+          : Math.max(min, Math.min(max, Math.round(parsed)));
+        setText(String(clamped));
+        if (clamped !== value) {
+          setPrevValue(clamped);
+          onValueChange(clamped);
+        }
+      }}
+      className={cn(fieldStyles, "h-10", className)}
+      {...props}
+    />
+  );
 }
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaHTMLAttributes<HTMLTextAreaElement>>(

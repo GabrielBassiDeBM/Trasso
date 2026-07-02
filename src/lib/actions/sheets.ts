@@ -140,13 +140,12 @@ export async function updatePageSettingsAction(sheetId: string, settings: PageSe
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return;
 
+  // No revalidatePath: fires on debounced keystrokes; the editor holds this state locally.
   await supabase
     .from("sheets")
     .update({ page_settings: settings as unknown as Json })
     .eq("id", sheetId)
     .eq("owner_id", userData.user.id);
-
-  revalidatePath(`/sheets/${sheetId}`);
 }
 
 export async function updateCoverLayoutAction(sheetId: string, layout: CoverLayout): Promise<void> {
@@ -154,13 +153,12 @@ export async function updateCoverLayoutAction(sheetId: string, layout: CoverLayo
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return;
 
+  // No revalidatePath: fires on debounced drags/keystrokes; the editor holds this state locally.
   await supabase
     .from("sheets")
     .update({ cover_layout: layout as unknown as Json })
     .eq("id", sheetId)
     .eq("owner_id", userData.user.id);
-
-  revalidatePath(`/sheets/${sheetId}`);
 }
 
 export async function updateSheetMetaAction(
@@ -183,12 +181,12 @@ export async function updateAccessibilityAction(
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return;
 
+  // No revalidatePath: fires on debounced toggles; the editor holds this state locally.
   await supabase
     .from("sheets")
     .update({ accessibility: accessibility as unknown as Json })
     .eq("id", sheetId)
     .eq("owner_id", userData.user.id);
-  revalidatePath(`/sheets/${sheetId}`);
 }
 
 export async function uploadLogoAction(formData: FormData): Promise<{ url: string } | { error: string }> {

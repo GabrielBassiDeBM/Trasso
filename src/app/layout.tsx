@@ -50,7 +50,10 @@ export default async function RootLayout({
       className={`${plusJakarta.variable} ${splineMono.variable} ${sourceSerif.variable} h-full`}
     >
       <head>
-        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        {/* suppressHydrationWarning: browsers censor the `nonce` content attribute
+            after parsing (it's only exposed via the IDL property), so the client
+            always reads nonce="" and hydration flags a false mismatch. */}
+        <script nonce={nonce} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body className="min-h-full flex flex-col font-sans antialiased">
         <ThemeProvider theme={theme}>{children}</ThemeProvider>

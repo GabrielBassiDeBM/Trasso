@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useDeferredValue, useRef, useState } from "react";
 import Image from "next/image";
 import { ImagePlus, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -24,7 +24,7 @@ export function StatementEditor({
   onChange,
   rows = 3,
   placeholder,
-  label = "Enunciado",
+  label = "Statement",
   inlineImages = [],
   onImagesChange,
 }: StatementEditorProps) {
@@ -34,6 +34,7 @@ export function StatementEditor({
   const [mathValues, setMathValues] = useState<string[]>([""]);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const previewValue = useDeferredValue(value);
 
   function addEquationField() {
     setMathValues((values) => [...values, ""]);
@@ -111,7 +112,7 @@ export function StatementEditor({
               size="sm"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
-              aria-label="Inserir imagem"
+              aria-label="Insert image"
             >
               <ImagePlus size={14} />
               {uploading ? "Uploading…" : "Image"}
@@ -211,16 +212,16 @@ export function StatementEditor({
                 onClick={insertMath}
                 disabled={!mathValues.some((v) => v.trim())}
               >
-                Inserir no enunciado
+                Insert into statement
               </Button>
             </div>
           </div>
         </div>
       )}
 
-      {value.trim() && (
+      {previewValue.trim() && (
         <div className="rounded-lg border border-line bg-canvas px-3 py-2 text-sm text-ink">
-          <Latex text={value} />
+          <Latex text={previewValue} />
         </div>
       )}
     </div>
